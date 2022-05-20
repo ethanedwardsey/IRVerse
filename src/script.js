@@ -21,7 +21,11 @@ let camera, scene, dummyscene, renderer, controls;
 
 const objects = [];
 
+let collision;
+
 let raycaster;
+let fraycaster;
+let braycaster;
 
 let moveForward = false;
 let moveBackward = false;
@@ -101,6 +105,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
     camera.position.y = 1.5;
+    
 
     scene = new THREE.Scene();
     //#000000
@@ -113,8 +118,29 @@ function init() {
 /**
  * Materials
  */
-
 loadFullModels();
+collision = new THREE.Object3D();
+gltfLoader.load(
+    'exports/Collision_Boundary_wall.glb',
+    (gltf) =>
+    {
+        collision = gltf.scene;
+        const bakedTexture = textureLoader.load('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_opaque/CR_2035_blanket.jpg')
+            bakedTexture.flipY = false
+            bakedTexture.encoding = THREE.sRGBEncoding
+            const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
+        var tempMaterial = new THREE.MeshStandardMaterial({color: 0xffffff});
+        collision.traverse((o) => {
+            if(o.isMesh){
+            console.log("traversing")
+            console.log(o)
+            o.material = tempMaterial;
+            }
+          });
+        collision.name = 'collision'
+        scene.add(collision)
+    }
+)
 
 
     controls = new PointerLockControls( camera, document.body );
@@ -209,7 +235,8 @@ loadFullModels();
     document.addEventListener( 'keyup', onKeyUp );
 
     raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-
+    fraycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
+    braycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
     // floor
 
 
@@ -240,9 +267,22 @@ function animate() {
         raycaster.ray.origin.copy( controls.getObject().position );
         raycaster.ray.origin.y -= 1.5;
 
+        fraycaster.ray.origin.copy( controls.getObject().position );
+        let d = new THREE.Vector3();
+        fraycaster.ray.direction.copy( camera.getWorldDirection(d));
+        fraycaster.ray.direction.y = 0;
+
+        braycaster.ray.origin.copy( controls.getObject().position );
+        braycaster.ray.direction = -fraycaster.ray.direction;
+        let collisions = [collision]
         const intersections = raycaster.intersectObjects( objects, false );
+        const fintersections = raycaster.intersectObjects( collisions, false);
+        const bintersections = raycaster.intersectObjects( collisions, false);
 
         const onObject = intersections.length > 0;
+        const fonObject = fintersections.length > 0;
+        const bonObject = bintersections.length > 0;
+        console.log(fonObject);
 
         const delta = ( time - prevTime ) / 2000;
 
@@ -262,7 +302,12 @@ function animate() {
 
             velocity.y = Math.max( 0, velocity.y );
             canJump = true;
+            console.log("bo!")
 
+        }
+
+        if( fonObject === true ){
+            console.log("ba!");
         }
 
         controls.moveRight( - velocity.x * delta );
