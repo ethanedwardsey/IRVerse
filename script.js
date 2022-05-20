@@ -1,4 +1,4 @@
-import './style.css'
+import 'style.css'
 import * as dat from 'lil-gui'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
