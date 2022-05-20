@@ -16,7 +16,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 // const SPECTOR = require('spectorjs')
 // const spector = new SPECTOR.Spector()
 // spector.displayUI()
-
+console.log("yo it's me")
 let camera, scene, dummyscene, renderer, controls;
 
 const objects = [];
