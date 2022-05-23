@@ -1,7 +1,7 @@
 import './style.css'
 import * as dat from 'lil-gui'
 import * as THREE from 'three'
-import { Euler, Vector2 } from 'three'
+import { Euler, Vector2, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js'
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
@@ -22,7 +22,6 @@ let camera, scene, dummyscene, renderer, controls;
 
 const objects = [];
 
-var collision;
 let camMoveX = 0;
 let camMoveY = 0;
 
@@ -53,7 +52,9 @@ let braycaster = new THREE.Raycaster();;
 const pointer = new THREE.Vector2();
 var click = false;
 
-
+var collision;
+var mapButtons = [];
+var TZmaps = [];
 
 /**
  * Base
@@ -135,6 +136,7 @@ function init() {
  */
 loadFullModels();
 collision = new THREE.Object3D();
+/*
 gltfLoader.load(
     'exports/Collision_Boundary_wall.glb',
     (gltf) =>
@@ -156,6 +158,7 @@ gltfLoader.load(
         scene.add(collision)
     }
 )
+*/
 
 
     controls = new PointerLockControls( camera, document.body );
@@ -364,20 +367,62 @@ function animate() {
 
 
         //Handle raycasting
-        if(click){
+    if(click){
             //Set to false so that held down click doesn't cast multiple rays
+            console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
             click = false;
-            console.log("pointer: " + pointer.x + " " + pointer.y)
+            //console.log("pointer: " + pointer.x + " " + pointer.y)
         clickraycaster.setFromCamera( pointer, camera );
 
         // calculate objects intersecting the picking ray
-        const intersects = clickraycaster.intersectObjects( [collision] );
-        console.log([collision])
-        console.log(scene.children)
+        const intersects = clickraycaster.intersectObjects( mapButtons );
+        //console.log([collision])
+        //console.log(scene.children)
+        //console.log(mapButtons);
 
         for ( let i = 0; i < intersects.length; i ++ ) {
             console.log("yaaaay");
             console.log(intersects[i])
+            console.log(intersects[i].object.name)
+            if(intersects[i].object.name.includes('IZ_map_button')){
+                var newPos = new Vector3(0, 0, 0);
+
+                if(intersects[i].object.name.includes('01')){
+                    newPos = new Vector3(-4.913926124799983,1.5,3.1473119049575);
+                }
+                else if(intersects[i].object.name.includes('02')){
+                    newPos = new Vector3(-14.763254846552549,1.5,3.381983248102806);
+                }
+                else if(intersects[i].object.name.includes('03')){
+                    newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
+                }
+                
+                else if(intersects[i].object.name.includes('04')){
+                    newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
+                }
+                else if(intersects[i].object.name.includes('05')){
+                    newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
+                }
+                else if(intersects[i].object.name.includes('06')){
+                    newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+                }
+                else if(intersects[i].object.name.includes('07')){
+                    newPos = new Vector3(44.73183653949032,1.5,4.082937851489276);
+                }
+                else if(intersects[i].object.name.includes('08')){
+                    newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
+                }
+                else if(intersects[i].object.name.includes('09')){
+                    newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
+                }
+                
+
+
+                //No y because height shouldn't be changed
+                camera.position.x = newPos.x;
+                camera.position.z = newPos.z;
+            }
+            
             
 
             intersects[ i ].object.material.color.set( 0xff0000 );
@@ -469,6 +514,7 @@ function interact(e){
 
     pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+    click = true;
     console.log("interacting");
 }
 
@@ -493,7 +539,7 @@ function mouseUp()
             camMoveY = -ypos;
             console.log(xpos + " " + ypos);
         }
-        click = true;
+        //click = true;
     }
 
     function divMove(e){
@@ -528,7 +574,7 @@ function loadFullModels(){
 
     //IZ
     var IZListO = ['IR_Map_screen.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg']
-    loadTextureModel('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_opaque.glb', IZListO, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_Textures/IZ_Opaque/')
+    loadTextureModelInteractive('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_opaque.glb', IZListO, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_textures/IZ_BAKED_textures_opaque/', 'IZ_map_button', mapButtons)
     //var IZListT = ['IZ_directions.png']
     //loadTextureModel('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_transparent.glb', IZListT, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_Textures/IZ_Transparent/')
 
@@ -592,6 +638,42 @@ function loadTextureModel(model, textureList, texturepath){
             }
             catch(error){
                 console.log("error!" + basename)
+            }
+            
+        }
+        
+        scene.add(gltf.scene)
+        }
+    )
+}
+
+function loadTextureModelInteractive(model, textureList, texturepath, intstr, intobjs){
+    gltfLoader.load(
+        model,
+        (gltf) =>
+        {
+        
+                   //var textureList = ['Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_Floor.jpg', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text 1.jpg', 'market_innovation_text 2.jpg', 'Market_overhead_screen_1.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_walls.jpg', 'Market_waterfall_screen.jpg']       
+        for (var i = 0; i < textureList.length; i++){
+            var texturename = textureList[i];
+            var basename = texturename.slice(0, -4);
+            console.log(basename)
+            texturename = texturepath + texturename;
+            const bakedMesh = gltf.scene.children.find(child => child.name === basename)
+            const bakedTexture = textureLoader.load(texturename)
+            bakedTexture.flipY = false
+            bakedTexture.encoding = THREE.sRGBEncoding
+            const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
+            console.log(basename)
+            try{
+            bakedMesh.material = bakedMaterial
+            }
+            catch(error){
+                console.log("error!" + basename)
+            }
+            if(texturename.includes(intstr)){
+                console.log("adding" + bakedMesh)
+                intobjs.push(bakedMesh);
             }
             
         }
