@@ -24,6 +24,8 @@ const objects = [];
 
 let camMoveX = 0;
 let camMoveY = 0;
+var clickmovepoint;
+var clickmoving = false;
 
 let raycaster;
 
@@ -36,6 +38,7 @@ let canJump = false;
 
 let prevTime = performance.now();
 const velocity = new THREE.Vector3();
+const camVelocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 const vertex = new THREE.Vector3();
 const color = new THREE.Color();
@@ -51,10 +54,16 @@ let braycaster = new THREE.Raycaster();;
 
 const pointer = new THREE.Vector2();
 var click = false;
+var dblclick = false;
 
 var collision;
 var mapButtons = [];
 var TZmaps = [];
+
+
+
+
+
 
 /**
  * Base
@@ -82,6 +91,14 @@ dracoLoader.setDecoderPath('draco/')
 // GLTF loader
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
+
+
+
+//Slides
+const slides = []
+let currentSlide = 0;
+const backTexture = textureLoader.load('/exports/buttons/back.png')
+const nextTexture = textureLoader.load('/exports/buttons/next.png')
 
 /**
  * Textures
@@ -135,6 +152,7 @@ function init() {
  * Materials
  */
 loadFullModels();
+loadSlides();
 collision = new THREE.Object3D();
 /*
 gltfLoader.load(
@@ -170,6 +188,7 @@ gltfLoader.load(
     window.addEventListener("mouseup", mouseUp);
 
     document.addEventListener( 'click', interact );
+    document.addEventListener( 'dblclick', clickmove)
 
     controls.addEventListener( 'lock', function () {
 
@@ -430,6 +449,18 @@ function animate() {
         }
     }
 
+    if(dblclick){
+        dblclick = false;
+        clickraycaster.setFromCamera( pointer, camera );
+        const intersects = clickraycaster.intersectObjects( scene.children );
+
+        for ( let i = 0; i < intersects.length; i ++ ) {
+            clickmoving = true;
+            clickmovepoint = intersects[i].point;
+            break;
+        }
+    }
+
     //Collision
     fraycaster.setFromCamera(new Vector2(0, 0), camera);
     const coll = fraycaster.intersectObjects( [collision]);
@@ -449,12 +480,18 @@ function animate() {
 
         //Controls stuff
 
-    
+
+
+
+        //Keyboard controls
 
         const delta = ( time - prevTime ) / 2000;
 
+
+
         velocity.x -= velocity.x * 10.0 * delta;
         velocity.z -= velocity.z * 10.0 * delta;
+        camVelocity.x -= camVelocity.x * 10.0 * delta;
 
         velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
@@ -463,9 +500,12 @@ function animate() {
         direction.normalize(); // this ensures consistent movements in all directions
 
         if ( moveForward || moveBackward ) velocity.z -= direction.z * 100.0 * delta;
-        if ( moveLeft || moveRight ) velocity.x -= direction.x * 100.0 * delta;
+        
+        
+        //disable strafing, just cameramovement
+        if ( moveLeft || moveRight ) camVelocity.x -= direction.x * 100.0 * delta;
 
-        //controls.moveRight( - velocity.x * delta );
+        
 
 
         //Camera move
@@ -473,14 +513,41 @@ function animate() {
         _euler.setFromQuaternion( camera.quaternion );
 
         //Add camera and mouse (ideally one should be 0)
-        _euler.y += velocity.x * 0.002 + camMoveX * 0.0002;
+        _euler.y += camVelocity.x * 0.002 + camMoveX * 0.0002;
         //Just from mouse
         _euler.x += camMoveY * 0.0002;
 		camera.quaternion.setFromEuler( _euler );
 
 
 
+        //intercept with dblclick move
+        if(clickmoving){
+            var curPos = controls.getObject().position;
+            if(curPos.distanceTo(clickmovepoint)<2){
+                clickmoving = false;
+            }
+            
+            else{
+                if(Math.abs(clickmovepoint.z - curPos.z)<1){
+                    velocity.z = 0;
+                }
+                else{
+                    velocity.z = clickmovepoint.z - curPos.z;
+                }
+                if(Math.abs(clickmovepoint.x - curPos.x)<1){
+                    velocity.x = 0;
+                }
+                else{
+                    velocity.x = clickmovepoint.x - curPos.x;
+                }
+            }
+            console.log(clickmovepoint.z - curPos.z);
+        }
+
+
+
         controls.moveForward( - velocity.z * delta );
+        controls.moveRight( - velocity.x * delta );
 
         controls.getObject().position.y += ( velocity.y * delta ); // new behavior
         if ( controls.getObject().position.y < 1.5 ) {
@@ -516,6 +583,13 @@ function interact(e){
 	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
     click = true;
     console.log("interacting");
+}
+
+function clickmove(e){
+    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+    dblclick = true;
+    click = false;
 }
 
 function mouseUp()
@@ -567,7 +641,7 @@ function loadFullModels(){
     loadTextureModel('exports/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_.glb', EYVerseList, 'exports/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_GLB_TEXTURES/')
 
     //Forum
-    var forumListO = ['Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_Lower Benches_02.jpg', 'Forum_Main Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear wall.jpg', 'Forum_Screens.jpg', 'Forum_Stage and Walls.jpg', 'Forum_stage.jpg', 'Forum_Tables_32.jpg', 'Forum_Upper Benches_01.jpg', 'Forum_wall panels.jpg']
+    var forumListO = ['Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg']
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_opaque.glb', forumListO, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_opaque/')
     var forumListT = ['Forum_light_truss.png']
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_transparent.glb', forumListT, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_transparent/')
@@ -681,6 +755,36 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
         scene.add(gltf.scene)
         }
     )
+}
+
+
+
+function loadSlides(){
+    
+slides[0] = textureLoader.load('/exports/slides/slide1.png')
+slides[1] = textureLoader.load('/exports/slides/slide2.png')
+slides[2] = textureLoader.load('/exports/slides/slide3.png')
+
+const slides_plane = new THREE.PlaneGeometry( 1, 1)
+const slides_plane_material = new THREE.MeshBasicMaterial({ map: slides[currentSlide] })
+const slides_mesh = new THREE.Mesh(slides_plane, slides_plane_material)
+
+const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+back_plane.translate(-0.55, 0, 0)
+const back_plane_material = new THREE.MeshBasicMaterial({ map: backTexture })
+const back_mesh = new THREE.Mesh(back_plane, back_plane_material)
+
+const next_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+next_plane.translate(0.55, 0, 0)
+const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
+const next_mesh = new THREE.Mesh(next_plane, next_plane_material)
+
+scene.add(slides_mesh)
+scene.add(back_mesh)
+scene.add(next_mesh)
+
+
+
 }
 
 function makeColor(){
