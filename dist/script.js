@@ -19,6 +19,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 console.log("yo it's me")
 let camera, scene, dummyscene, renderer, controls;
 
+let camx, camy;
+
 const objects = [];
 
 let raycaster;
@@ -122,9 +124,11 @@ loadFullModels();
     //const blocker = document.getElementById( 'blocker' );
     //const instructions = document.getElementById( 'instructions' );
 
+    window.addEventListener("mousedown", mouseDown);
+
     document.addEventListener( 'click', function () {
 
-        controls.lock();
+        //controls.lock();
 
     } );
 
@@ -286,6 +290,25 @@ function animate() {
     renderer.render( scene, camera );
 
 }
+
+function mouseUp()
+    {
+        window.removeEventListener('mousemove', divMove, true);
+        //firstClick = true;
+    }
+
+    function mouseDown(e){
+        window.addEventListener('mousemove', divMove, true);
+        xpos = e.pageX;
+        ypos = e.pageY;
+        console.log(xpos + " " + ypos);
+    }
+
+    function divMove(e){
+        
+    }
+
+
 
 init()
 animate()

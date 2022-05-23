@@ -10,6 +10,18 @@ body
     overflow: hidden;
 }
 
+.controller
+{
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    bottom: 0;
+    right: 0;
+    background-color: transparent;
+    opacity: 0.5;
+    
+}
+
 .webgl
 {
     position: fixed;

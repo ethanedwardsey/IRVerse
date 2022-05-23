@@ -1,6 +1,7 @@
 import './style.css'
 import * as dat from 'lil-gui'
 import * as THREE from 'three'
+import { Euler } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js'
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
@@ -22,6 +23,8 @@ let camera, scene, dummyscene, renderer, controls;
 const objects = [];
 
 let collision;
+let camMoveX = 0;
+let camMoveY = 0;
 
 let raycaster;
 let fraycaster;
@@ -148,9 +151,12 @@ gltfLoader.load(
     //const blocker = document.getElementById( 'blocker' );
     //const instructions = document.getElementById( 'instructions' );
 
+    window.addEventListener("mousedown", mouseDown);
+    window.addEventListener("mouseup", mouseUp);
+
     document.addEventListener( 'click', function () {
 
-        controls.lock();
+        //controls.lock();
 
     } );
 
@@ -234,6 +240,9 @@ gltfLoader.load(
     document.addEventListener( 'keydown', onKeyDown );
     document.addEventListener( 'keyup', onKeyUp );
 
+    
+
+
     raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
     fraycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
     braycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
@@ -262,6 +271,8 @@ function animate() {
 
     const time = performance.now();
 
+
+    /*
     if ( controls.isLocked === true ) {
 
         raycaster.ray.origin.copy( controls.getObject().position );
@@ -310,7 +321,20 @@ function animate() {
             console.log("ba!");
         }
 
-        controls.moveRight( - velocity.x * delta );
+        //controls.moveRight( - velocity.x * delta );
+        //Camera move
+        const _euler = new Euler( 0, 0, 0, 'YXZ' );
+        _euler.setFromQuaternion( camera.quaternion );
+
+		_euler.y += velocity.x * 0.002;
+
+		//_euler.y = Math.max( Math.PI / 2 - Math.PI, Math.min(Math.PI / 2  - 0, _euler.y ) );
+
+		camera.quaternion.setFromEuler( _euler );
+
+
+
+
         controls.moveForward( - velocity.z * delta );
 
         controls.getObject().position.y += ( velocity.y * delta ); // new behavior
@@ -325,6 +349,59 @@ function animate() {
         }
 
     }
+    */
+
+    //Controls stuff
+
+    
+
+    const delta = ( time - prevTime ) / 2000;
+
+        velocity.x -= velocity.x * 10.0 * delta;
+        velocity.z -= velocity.z * 10.0 * delta;
+
+        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+        direction.z = Number( moveForward ) - Number( moveBackward );
+        direction.x = Number( moveRight ) - Number( moveLeft );
+        direction.normalize(); // this ensures consistent movements in all directions
+
+        if ( moveForward || moveBackward ) velocity.z -= direction.z * 100.0 * delta;
+        if ( moveLeft || moveRight ) velocity.x -= direction.x * 100.0 * delta;
+
+        //controls.moveRight( - velocity.x * delta );
+
+
+        //Camera move
+        const _euler = new Euler( 0, 0, 0, 'YXZ' );
+        _euler.setFromQuaternion( camera.quaternion );
+
+        //Add camera and mouse (ideally one should be 0)
+        _euler.y += velocity.x * 0.002 + camMoveX * 0.0002;
+        //Just from mouse
+        _euler.x += camMoveY * 0.0002;
+		camera.quaternion.setFromEuler( _euler );
+
+
+
+
+        controls.moveForward( - velocity.z * delta );
+
+        controls.getObject().position.y += ( velocity.y * delta ); // new behavior
+        if ( controls.getObject().position.y < 1.5 ) {
+
+            velocity.y = 0;
+            controls.getObject().position.y = 1.5;
+
+        }
+
+    
+
+
+
+
+
+
 
     prevTime = time;
 
@@ -335,7 +412,29 @@ function animate() {
 init()
 animate()
 
+function mouseUp()
+    {
+        window.removeEventListener('mousemove', divMove, true);
+        //firstClick = true;
+        camMoveX = 0;
+        camMoveY = 0;
+    }
 
+    function mouseDown(e){
+        window.addEventListener('mousemove', divMove, true);
+        var xpos = e.pageX;
+        var ypos = e.pageY;
+        console.log(window.innerWidth-ypos)
+        xpos = 100-(window.innerWidth-xpos);
+        ypos = 100-(window.innerHeight-ypos);
+        camMoveX = -xpos;
+        camMoveY = -ypos;
+        console.log(xpos + " " + ypos);
+    }
+
+    function divMove(e){
+        
+    }
 
 function makeTexture(filename){
     const forumTexture = textureLoader.load(filename)
