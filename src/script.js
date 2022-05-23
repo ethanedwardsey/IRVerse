@@ -1,7 +1,7 @@
 import './style.css'
 import * as dat from 'lil-gui'
 import * as THREE from 'three'
-import { Euler } from 'three'
+import { Euler, Vector2 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js'
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
@@ -22,13 +22,12 @@ let camera, scene, dummyscene, renderer, controls;
 
 const objects = [];
 
-let collision;
+var collision;
 let camMoveX = 0;
 let camMoveY = 0;
 
 let raycaster;
-let fraycaster;
-let braycaster;
+
 
 let moveForward = false;
 let moveBackward = false;
@@ -42,6 +41,19 @@ const direction = new THREE.Vector3();
 const vertex = new THREE.Vector3();
 const color = new THREE.Color();
 //var fs = require('fs');
+
+
+
+//Raycasting
+const clickraycaster = new THREE.Raycaster();
+let fraycaster = new THREE.Raycaster();
+let braycaster = new THREE.Raycaster();;
+
+
+const pointer = new THREE.Vector2();
+var click = false;
+
+
 
 /**
  * Base
@@ -137,7 +149,7 @@ gltfLoader.load(
             if(o.isMesh){
             console.log("traversing")
             console.log(o)
-            o.material = tempMaterial;
+            o.material = bakedMaterial;
             }
           });
         collision.name = 'collision'
@@ -154,11 +166,7 @@ gltfLoader.load(
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
 
-    document.addEventListener( 'click', function () {
-
-        //controls.lock();
-
-    } );
+    document.addEventListener( 'click', interact );
 
     controls.addEventListener( 'lock', function () {
 
@@ -243,9 +251,11 @@ gltfLoader.load(
     
 
 
-    raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-    fraycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
-    braycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
+    //raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+    fraycaster.far = 2;
+    braycaster.far = 2;
+    //fraycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
+    //braycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
     // floor
 
 
@@ -351,11 +361,52 @@ function animate() {
     }
     */
 
-    //Controls stuff
+
+
+        //Handle raycasting
+        if(click){
+            //Set to false so that held down click doesn't cast multiple rays
+            click = false;
+            console.log("pointer: " + pointer.x + " " + pointer.y)
+        clickraycaster.setFromCamera( pointer, camera );
+
+        // calculate objects intersecting the picking ray
+        const intersects = clickraycaster.intersectObjects( [collision] );
+        console.log([collision])
+        console.log(scene.children)
+
+        for ( let i = 0; i < intersects.length; i ++ ) {
+            console.log("yaaaay");
+            console.log(intersects[i])
+            
+
+            intersects[ i ].object.material.color.set( 0xff0000 );
+
+        }
+    }
+
+    //Collision
+    fraycaster.setFromCamera(new Vector2(0, 0), camera);
+    const coll = fraycaster.intersectObjects( [collision]);
+    //console.log(coll);
+    if(coll.length>0){
+        //console.log("collide!!!")
+        moveForward = false;
+    }
+
+    braycaster.setFromCamera(new Vector2(0, 0), camera);
+    braycaster.direction = -braycaster.direction;
+    const bcoll = braycaster.intersectObjects( [collision] );
+    if(bcoll.length>0){
+        moveBackward = false;
+    }
+
+
+        //Controls stuff
 
     
 
-    const delta = ( time - prevTime ) / 2000;
+        const delta = ( time - prevTime ) / 2000;
 
         velocity.x -= velocity.x * 10.0 * delta;
         velocity.z -= velocity.z * 10.0 * delta;
@@ -384,7 +435,6 @@ function animate() {
 
 
 
-
         controls.moveForward( - velocity.z * delta );
 
         controls.getObject().position.y += ( velocity.y * delta ); // new behavior
@@ -394,6 +444,8 @@ function animate() {
             controls.getObject().position.y = 1.5;
 
         }
+
+
 
     
 
@@ -412,12 +464,21 @@ function animate() {
 init()
 animate()
 
+function interact(e){
+    //TO DO: If it's on the div, it should do nothing
+
+    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+    console.log("interacting");
+}
+
 function mouseUp()
     {
         window.removeEventListener('mousemove', divMove, true);
         //firstClick = true;
         camMoveX = 0;
         camMoveY = 0;
+        click = false;
     }
 
     function mouseDown(e){
@@ -427,9 +488,12 @@ function mouseUp()
         console.log(window.innerWidth-ypos)
         xpos = 100-(window.innerWidth-xpos);
         ypos = 100-(window.innerHeight-ypos);
-        camMoveX = -xpos;
-        camMoveY = -ypos;
-        console.log(xpos + " " + ypos);
+        if(xpos>-200 && ypos>-200){
+            camMoveX = -xpos;
+            camMoveY = -ypos;
+            console.log(xpos + " " + ypos);
+        }
+        click = true;
     }
 
     function divMove(e){
@@ -463,10 +527,10 @@ function loadFullModels(){
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_transparent.glb', forumListT, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_transparent/')
 
     //IZ
-    var IZListO = ['IR_Map_screen.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.png', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg']
+    var IZListO = ['IR_Map_screen.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg']
     loadTextureModel('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_opaque.glb', IZListO, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_Textures/IZ_Opaque/')
-    var IZListT = ['IZ_directions.png']
-    loadTextureModel('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_transparent.glb', IZListT, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_Textures/IZ_Transparent/')
+    //var IZListT = ['IZ_directions.png']
+    //loadTextureModel('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_transparent.glb', IZListT, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_Textures/IZ_Transparent/')
 
     //PurplePod
     var PurpList = ['Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg']
