@@ -457,7 +457,7 @@ function loadFullModels(){
     loadTextureModel('exports/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_.glb', EYVerseList, 'exports/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_GLB/EY_VERSE_BAKED_GLB_TEXTURES/')
 
     //Forum
-    var forumListO = ['Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Lower Benches_02.jpg', 'Forum_Main Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear wall.jpg', 'Forum_Screens.jpg', 'Forum_Stage and Walls.jpg', 'Forum_stage.jpg', 'Forum_Tables_32.jpg', 'Forum_Upper Benches_01.jpg', 'Forum_wall panels.jpg']
+    var forumListO = ['Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_Lower Benches_02.jpg', 'Forum_Main Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear wall.jpg', 'Forum_Screens.jpg', 'Forum_Stage and Walls.jpg', 'Forum_stage.jpg', 'Forum_Tables_32.jpg', 'Forum_Upper Benches_01.jpg', 'Forum_wall panels.jpg']
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_opaque.glb', forumListO, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_opaque/')
     var forumListT = ['Forum_light_truss.png']
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_transparent.glb', forumListT, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_transparent/')
@@ -479,7 +479,7 @@ function loadFullModels(){
     loadTextureModel('exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_transparent.glb', SpaceListT, 'exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_textures/Space_Pod_textures_transparent/')
 
     //Speakeasy
-    var SpeakEasyListO = ['SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back Bottles.jpg', 'SpeakEasy_Bar_Back Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_floor.jpg', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table and Chairs.jpg', 'SpeakEasy_walls.jpg']
+    var SpeakEasyListO = ['SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_floor.jpg', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg']
     loadTextureModel('exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_opaque.glb', SpeakEasyListO, 'exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_textures/SpeakEasy_BAKED_textures_opaque/')
     var SpeakEasyListT = ['SpeakEasy_edison_lamps.png', 'SpeakEasy_liquor_bottles.png']
     loadTextureModel('exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_transparent.glb', SpeakEasyListT, 'exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_textures/SpeakEasy_BAKED_textures_transparent/')
@@ -489,9 +489,9 @@ function loadFullModels(){
     loadTextureModel('exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_opaque.glb', TZListO, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_Textures/TZ_BAKED_opaque/')
 
     //VRBar
-    var VRBarListO = ['VR_Bar_back_wall_fix.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
+    var VRBarListO = ['VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_opaque.glb', VRBarListO, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_opaque/')
-    var VRBarListT = ['VR_Bar_Direction Graphic.png', 'VR_Bar_shooters.png']
+    var VRBarListT = ['VR_Bar_shooters.png']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_transparent.glb', VRBarListT, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_transparent/')
 
     //Market
