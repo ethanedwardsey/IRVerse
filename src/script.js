@@ -19,8 +19,12 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 // spector.displayUI()
 
 let camera, scene, dummyscene, renderer, controls;
-
+let pcamera, ocamera;
 const objects = [];
+var displaying = false;
+
+var back_mesh;
+var next_mesh;
 
 let camMoveX = 0;
 let camMoveY = 0;
@@ -97,6 +101,10 @@ gltfLoader.setDRACOLoader(dracoLoader)
 //Slides
 const slides = []
 let currentSlide = 0;
+slides[0] = '/exports/slides/slide1.png'
+slides[1] = '/exports/slides/slide2.png'
+slides[2] = '/exports/slides/slide3.png'
+
 const backTexture = textureLoader.load('/exports/buttons/back.png')
 const nextTexture = textureLoader.load('/exports/buttons/next.png')
 
@@ -152,7 +160,15 @@ function init() {
  * Materials
  */
 loadFullModels();
-loadSlides();
+//loadSlides();
+ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
+    ocamera.position.z = 1;
+    scene.add(ocamera);
+
+
+
+
+
 collision = new THREE.Object3D();
 /*
 gltfLoader.load(
@@ -186,6 +202,11 @@ gltfLoader.load(
 
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
+    window.addEventListener('mousemove', (e) =>
+{
+    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+})
 
     document.addEventListener( 'click', interact );
     document.addEventListener( 'dblclick', clickmove)
@@ -233,6 +254,10 @@ gltfLoader.load(
             case 'Space':
                 if ( canJump === true ) velocity.y += 350;
                 canJump = false;
+                break;
+
+            case 'Escape':
+                switchCamera(true);
                 break;
 
         }
@@ -303,90 +328,57 @@ function animate() {
 
     const time = performance.now();
 
-
-    /*
-    if ( controls.isLocked === true ) {
-
-        raycaster.ray.origin.copy( controls.getObject().position );
-        raycaster.ray.origin.y -= 1.5;
-
-        fraycaster.ray.origin.copy( controls.getObject().position );
-        let d = new THREE.Vector3();
-        fraycaster.ray.direction.copy( camera.getWorldDirection(d));
-        fraycaster.ray.direction.y = 0;
-
-        braycaster.ray.origin.copy( controls.getObject().position );
-        braycaster.ray.direction = -fraycaster.ray.direction;
-        let collisions = [collision]
-        const intersections = raycaster.intersectObjects( objects, false );
-        const fintersections = raycaster.intersectObjects( collisions, false);
-        const bintersections = raycaster.intersectObjects( collisions, false);
-
-        const onObject = intersections.length > 0;
-        const fonObject = fintersections.length > 0;
-        const bonObject = bintersections.length > 0;
-        console.log(fonObject);
-
-        const delta = ( time - prevTime ) / 2000;
-
-        velocity.x -= velocity.x * 10.0 * delta;
-        velocity.z -= velocity.z * 10.0 * delta;
-
-        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
-        direction.z = Number( moveForward ) - Number( moveBackward );
-        direction.x = Number( moveRight ) - Number( moveLeft );
-        direction.normalize(); // this ensures consistent movements in all directions
-
-        if ( moveForward || moveBackward ) velocity.z -= direction.z * 100.0 * delta;
-        if ( moveLeft || moveRight ) velocity.x -= direction.x * 100.0 * delta;
-
-        if ( onObject === true ) {
-
-            velocity.y = Math.max( 0, velocity.y );
-            canJump = true;
-            console.log("bo!")
-
-        }
-
-        if( fonObject === true ){
-            console.log("ba!");
-        }
-
-        //controls.moveRight( - velocity.x * delta );
-        //Camera move
-        const _euler = new Euler( 0, 0, 0, 'YXZ' );
-        _euler.setFromQuaternion( camera.quaternion );
-
-		_euler.y += velocity.x * 0.002;
-
-		//_euler.y = Math.max( Math.PI / 2 - Math.PI, Math.min(Math.PI / 2  - 0, _euler.y ) );
-
-		camera.quaternion.setFromEuler( _euler );
-
-
-
-
-        controls.moveForward( - velocity.z * delta );
-
-        controls.getObject().position.y += ( velocity.y * delta ); // new behavior
-
-        if ( controls.getObject().position.y < 1.5 ) {
-
-            velocity.y = 0;
-            controls.getObject().position.y = 1.5;
-
-            canJump = true;
-
-        }
-
+    //select buttons
+    // Cast a ray
+    var currentIntersect;
+    if(displaying){
+    const objectsForRayCast = [back_mesh, next_mesh]
+    clickraycaster.setFromCamera( pointer, camera );
+    const intersecto = clickraycaster.intersectObjects(objectsForRayCast)
+    
+    for(const object of objectsForRayCast){
+        object.material.color.set('#ffffff')
     }
-    */
 
+    for(const intersect of intersecto){
+        console.log("setting color")
+        intersect.object.material.color.set('#ffff00')
+    }
+    currentIntersect = intersecto[0];
+    }
 
 
         //Handle raycasting
     if(click){
+
+
+        //Just for testing slides
+        if(displaying){
+        if(currentIntersect){
+            if (currentIntersect.object === back_mesh){
+                if(currentSlide > 0){
+                    currentSlide--;
+                } else {
+                    console.log('at the beginning of the deck, no more slides for back')                
+                }
+            } 
+            else if (currentIntersect.object === next_mesh){
+                if(currentSlide < slides.length-1){
+                    currentSlide++;
+                } else {
+                    console.log('at the end of the deck, no more slides next')  
+                }
+                
+            }
+            console.log(TZmaps[0]);
+
+            TZmaps[0].material = makeTexture(slides[currentSlide]);
+        }
+        }
+
+
+
+        //switchCamera(false);
             //Set to false so that held down click doesn't cast multiple rays
             console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
             click = false;
@@ -444,9 +436,22 @@ function animate() {
             
             
 
-            intersects[ i ].object.material.color.set( 0xff0000 );
+            //intersects[ i ].object.material.color.set( 0xff0000 );
 
         }
+
+        const bintersects = clickraycaster.intersectObjects( TZmaps );
+        //console.log([collision])
+        //console.log(scene.children)
+        //console.log(mapButtons);
+
+        for ( let i = 0; i < bintersects.length; i ++ ) {
+            console.log(bintersects[i].object.position)
+            displaySlides(bintersects[i].object.position);
+            switchCamera(false);
+            console.log("hi blockchain")
+        }
+
     }
 
     if(dblclick){
@@ -517,7 +522,8 @@ function animate() {
         //Just from mouse
         _euler.x += camMoveY * 0.0002;
 		camera.quaternion.setFromEuler( _euler );
-
+        //console.log(_euler);
+        //console.log("Euler : " + _euler.x + ", " + _euler.y + ", " + _euler.z)
 
 
         //intercept with dblclick move
@@ -678,8 +684,9 @@ function loadFullModels(){
     loadTextureModel('exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_transparent.glb', SpeakEasyListT, 'exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_textures/SpeakEasy_BAKED_textures_transparent/')
  
     //TZ
-    var TZListO = ['TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Curved_screens_06.png', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_wall_monitors.jpg']
-    loadTextureModel('exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_opaque.glb', TZListO, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_Textures/TZ_BAKED_opaque/')
+    //
+    var TZListO = ['TZ_blockchain.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Curved_screens_06.png', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_wall_monitors.jpg']
+    loadTextureModelInteractive('exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Experiment2.glb', TZListO, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_Textures/TZ_BAKED_opaque/', 'blockchain', TZmaps)
 
     //VRBar
     var VRBarListO = ['VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
@@ -708,12 +715,26 @@ function loadTextureModel(model, textureList, texturepath){
             bakedTexture.encoding = THREE.sRGBEncoding
             const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
             console.log(basename)
+           
+            
+
             try{
             bakedMesh.material = bakedMaterial
             }
             catch(error){
                 console.log("error!" + basename)
             }
+
+             //TO DO: make this less silly
+            if(texturename.includes('ey_verse_screen')){
+                var video = document.getElementById( 'video' );
+                var videotexture = new THREE.VideoTexture( video );
+                const videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
+                videomaterial.flipY = true;
+                bakedMesh.material = videomaterial;
+                console.log("video")
+            }
+                
             
         }
         
@@ -747,7 +768,7 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
                 console.log("error!" + basename)
             }
             if(texturename.includes(intstr)){
-                console.log("adding" + bakedMesh)
+                console.log("adding the " + bakedMesh.position.x)
                 intobjs.push(bakedMesh);
             }
             
@@ -761,28 +782,32 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
 
 
 function loadSlides(){
+
+    ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
+    ocamera.position.z = 1;
+    scene.add(ocamera);
     
-slides[0] = textureLoader.load('/exports/slides/slide1.png')
-slides[1] = textureLoader.load('/exports/slides/slide2.png')
-slides[2] = textureLoader.load('/exports/slides/slide3.png')
+    slides[0] = textureLoader.load('/exports/slides/slide1.png')
+    slides[1] = textureLoader.load('/exports/slides/slide2.png')
+    slides[2] = textureLoader.load('/exports/slides/slide3.png')
 
-const slides_plane = new THREE.PlaneGeometry( 1, 1)
-const slides_plane_material = new THREE.MeshBasicMaterial({ map: slides[currentSlide] })
-const slides_mesh = new THREE.Mesh(slides_plane, slides_plane_material)
+    const slides_plane = new THREE.PlaneGeometry( 1, 1)
+    const slides_plane_material = new THREE.MeshBasicMaterial({ map: slides[currentSlide] })
+    const slides_mesh = new THREE.Mesh(slides_plane, slides_plane_material)
 
-const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
-back_plane.translate(-0.55, 0, 0)
-const back_plane_material = new THREE.MeshBasicMaterial({ map: backTexture })
-const back_mesh = new THREE.Mesh(back_plane, back_plane_material)
+    const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+    back_plane.translate(-0.55, 0, 0)
+    const back_plane_material = new THREE.MeshBasicMaterial({ map: backTexture })
+    back_mesh = new THREE.Mesh(back_plane, back_plane_material)
 
-const next_plane = new THREE.PlaneGeometry( 0.1, 0.1)
-next_plane.translate(0.55, 0, 0)
-const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
-const next_mesh = new THREE.Mesh(next_plane, next_plane_material)
+    const next_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+    next_plane.translate(0.55, 0, 0)
+    const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
+    next_mesh = new THREE.Mesh(next_plane, next_plane_material)
 
-scene.add(slides_mesh)
-scene.add(back_mesh)
-scene.add(next_mesh)
+    scene.add(slides_mesh)
+    scene.add(back_mesh)
+    scene.add(next_mesh)
 
 
 
@@ -793,4 +818,54 @@ function makeColor(){
     color.setHex( Math.random() * 0xffffff );
     const portalLightMaterial = new THREE.MeshBasicMaterial({ color: color })
     return portalLightMaterial;
+}
+
+function switchCamera(p){
+    if(p){
+        camera = pcamera;
+        
+    }
+    else{
+        pcamera = camera;
+        camera = ocamera;
+    }
+}
+
+function displaySlides(p){
+
+    
+    
+    //Set pcamera, should probably change
+    pcamera = camera;
+    console.log(p)
+    console.log(p.x)
+    console.log(ocamera)
+    ocamera.position.x = p.x;
+    ocamera.position.y = p.y;
+    ocamera.position.z = p.z-3;
+    ocamera.quaternion.setFromEuler( new Euler( 0, -Math.PI/4, 0, 'YXZ' ));
+    //ocamera.quaternion
+
+
+    //const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+    const back_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
+    //back_plane.translate(-0.55, 0, 0)
+    const back_plane_material = new THREE.MeshBasicMaterial({ map: backTexture })
+    back_mesh = new THREE.Mesh(back_plane, back_plane_material)
+    
+    //const next_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+    const next_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
+    //next_plane.translate(0.55, 0, 0)
+    const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
+    next_mesh = new THREE.Mesh(next_plane, next_plane_material)
+
+    scene.add(back_mesh)
+    scene.add(next_mesh)
+    back_mesh.position.set(37-1.2, p.y, -9.4)
+    next_mesh.position.set(37, p.y, -9.4)
+    console.log("back mesh " + back_mesh);
+
+    displaying = true;
+
+
 }
