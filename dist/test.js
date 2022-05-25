@@ -758,12 +758,14 @@ function loadTextureModel(model, textureList, texturepath){
 
              //TO DO: make this less silly
             if(texturename.includes('ey_verse_screen')){
+                /*
                 var video = document.getElementById( 'video' );
                 var videotexture = new THREE.VideoTexture( video );
                 const videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
                 videomaterial.flipY = true;
                 bakedMesh.material = videomaterial;
                 console.log("video")
+                */
             }
                 
             
