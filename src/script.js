@@ -1,7 +1,8 @@
-import './style.css'
-import * as dat from 'lil-gui'
+//import './style.css' assert { type: 'css' }
+
 import * as THREE from 'three'
-import { Euler, Vector2, Vector3 } from 'three'
+//import { Euler, Vector2, Vector3 } from 'three'
+/*
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js'
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
@@ -10,6 +11,13 @@ import { CSS3DObject } from 'three-css3drenderer';
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+*/
+//import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js'
+//import { Euler, Vector2, Vector3 } from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js'
+//import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.101.1/examples/js/controls/PointerLockControls.js'
+//import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.101.1/examples/js/loaders/GLTFLoader.js'
+//import { DRACOLoader } from 'https://cdn.jsdelivr.net/npm/three@0.140.2/examples/jsm/loaders/DRACOLoader.js'
+
 
 // /**
 //  * Spector JS
@@ -73,27 +81,65 @@ var TZmaps = [];
  * Base
  */
 // Debug
+/*
 const gui = new dat.GUI({
     width: 400
 })
+*/
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 
+//Loading Manager
+const manager = new THREE.LoadingManager();
+manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+
+	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+};
+
+manager.onLoad = function ( ) {
+
+	console.log( 'Loading complete!');
+    var load = document.getElementById("loadingScreen");
+    load.style.display = "none";
+    var threecanvas = document.getElementById("three");
+    //threecanvas.style.display = "inline"
+    var controller = document.getElementById("controller");
+    controller.style.display = "inline"
+
+};
+
+
+manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+
+    //TO DO: update hardcoding
+	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+    var progressBar = document.getElementById("loadingBar")
+    progressBar.style.width = (itemsLoaded / 365 * 100) + '%';
+
+};
+
+manager.onError = function ( url ) {
+
+	console.log( 'There was an error loading ' + url );
+
+};
+
 /**
  * Loaders
  */
 // Texture loader
-const textureLoader = new THREE.TextureLoader()
+const textureLoader = new THREE.TextureLoader(manager)
 
 // Draco loader
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('draco/')
 
 // GLTF loader
-const gltfLoader = new GLTFLoader()
+const gltfLoader = new GLTFLoader(manager)
 gltfLoader.setDRACOLoader(dracoLoader)
 
 
@@ -122,25 +168,6 @@ const nextTexture = textureLoader.load('/exports/buttons/next.png')
  * Camera
  */
 // Base camera
-function createCSS3DObject(content) 
-    {
-      // convert the string to dome elements
-      var wrapper = document.createElement('div');
-      wrapper.innerHTML = content;
-      var div = wrapper.firstChild;
-
-      // set some values on the div to style it.
-      // normally you do this directly in HTML and 
-      // CSS files.
-      div.style.width = '370px';
-      div.style.height = '370px';
-      div.style.opacity = 0.7;
-      div.style.background = new THREE.Color(Math.random() * 0xffffff).getStyle();
-
-      // create a CSS3Dobject and return it.
-      var object = new CSS3DObject(div);
-      return object;
-    }
 
 function init() {
 
@@ -159,7 +186,8 @@ function init() {
 /**
  * Materials
  */
-loadFullModels();
+//loadFullModels();
+JSONloader();
 //loadSlides();
 ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
     ocamera.position.z = 1;
@@ -867,5 +895,32 @@ function displaySlides(p){
 
     displaying = true;
 
+
+}
+
+function JSONloader(){
+    const loader = new THREE.ObjectLoader();
+
+loader.load(
+	// resource URL
+	"IR_full_Lighting_TEST.json",
+
+	// onLoad callback
+	// Here the loaded data is assumed to be an object
+	function ( obj ) {
+		// Add the loaded object to the scene
+		scene.add( obj );
+	},
+
+	// onProgress callback
+	function ( xhr ) {
+		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+
+	// onError callback
+	function ( err ) {
+		console.error( 'An error happened' );
+	}
+);
 
 }

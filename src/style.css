@@ -19,7 +19,7 @@ body
     right: 0;
     background-color: transparent;
     opacity: 0.5;
-    
+    display: none;
 }
 
 .webgl
