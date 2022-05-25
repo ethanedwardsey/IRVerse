@@ -134,8 +134,8 @@ slides[0] = '/exports/slides/slide1.png'
 slides[1] = '/exports/slides/slide2.png'
 slides[2] = '/exports/slides/slide3.png'
 
-const backTexture = textureLoader.load('/exports/buttons/back.png')
-const nextTexture = textureLoader.load('/exports/buttons/next.png')
+const backTexture = textureLoader.load('/exports/buttons/backb.png')
+const nextTexture = textureLoader.load('/exports/buttons/nextb.png')
 
 /**
  * Textures
