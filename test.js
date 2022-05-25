@@ -694,9 +694,9 @@ function loadFullModels(){
 
     //Market
     var mtextureListO = ['Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'Market_mound.jpg', 'Market_overhead_screen_5.jpg', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_walls.jpg', 'Market_waterfall_screen.jpg']
-    loadTextureModel('exports/MARKET_BAKED_FINAL/MARKET_BAKED_FINAL/Market_BAKED_FINAL_Opaque2.glb', mtextureListO, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_opaque/')
+    loadTextureModel('exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_Opaque2.glb', mtextureListO, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_opaque/')
     var mtextureListT = ['Market_baklava_1.png', 'Market_baklava_2.png', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_pink_treats.png', 'Market_trellis.png']
-    loadTextureModel('exports/MARKET_BAKED_FINAL/MARKET_BAKED_FINAL/Market_BAKED_FINAL_Transparent2.glb', mtextureListT, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_transparent/')
+    loadTextureModel('exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_Transparent2.glb', mtextureListT, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_transparent/')
 
     //PurplePod
     var PurpList = ['Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg']
