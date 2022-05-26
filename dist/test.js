@@ -12,7 +12,7 @@ console.log("here")
 let camera, scene, dummyscene, renderer, controls;
 let pcamera, ocamera;
 const objects = [];
-var displaying = false;
+var slideMode = false;
 
 var back_mesh;
 var next_mesh;
@@ -23,7 +23,9 @@ var clickmovepoint;
 var clickmoving = false;
 
 let raycaster;
-
+let loaded = false;
+let modelsloaded = false;
+let spun = false;
 
 let moveForward = false;
 let moveBackward = false;
@@ -72,12 +74,8 @@ manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 manager.onLoad = function ( ) {
 
 	console.log( 'Loading complete!');
-    var load = document.getElementById("loadingScreen");
-    load.style.display = "none";
-    var threecanvas = document.getElementById("three");
-    //threecanvas.style.display = "inline"
-    var controller = document.getElementById("controller");
-    //controller.style.display = "inline"
+    modelsloaded = true;
+    beginScene();
 
 };
 
@@ -120,8 +118,7 @@ slides[0] = '/exports/slides/slide1.png'
 slides[1] = '/exports/slides/slide2.png'
 slides[2] = '/exports/slides/slide3.png'
 
-const backTexture = textureLoader.load('./exports/buttons/backb.png')
-const nextTexture = textureLoader.load('./exports/buttons/nextb.png')
+
 
 function init() {
 
@@ -136,6 +133,8 @@ function init() {
     scene.background = new THREE.Color( 0x5c5c5c );
     scene.fog = new THREE.Fog( 0x5c5c5c, 0, 750 );
 
+
+    loadSlideButtons();
 
 /**
  * Materials
@@ -238,7 +237,8 @@ gltfLoader.load(
                 break;
 
             case 'Escape':
-                switchCamera(true);
+                exitSlideMode();
+                
                 break;
 
         }
@@ -298,54 +298,50 @@ function animate() {
 
     //select buttons
     // Cast a ray
-    var currentIntersect;
-    if(displaying){
-    const objectsForRayCast = [back_mesh, next_mesh]
-    clickraycaster.setFromCamera( pointer, camera );
-    const intersecto = clickraycaster.intersectObjects(objectsForRayCast)
+
+    if(loaded){
+        if(slideMode){
+            SlideInteract();
+        } else{
+            handleMove(time);
+        }
+    } else{
+        camSpin();
+    }
+
+
+
     
-    for(const object of objectsForRayCast){
-        object.material.color.set('#ffffff')
-    }
-
-    for(const intersect of intersecto){
-        console.log("setting color")
-        intersect.object.material.color.set('#ffff00')
-    }
-    currentIntersect = intersecto[0];
-    }
 
 
-        //Handle raycasting
+
+
+
+
+
+    prevTime = time;
+
+    renderer.render( scene, camera );
+
+}
+
+
+
+
+
+
+
+
+init();
+animate();
+
+console.log("huh")
+
+
+
+
+function handleMove(time){
     if(click){
-
-
-        //Just for testing slides
-        if(displaying){
-        if(currentIntersect){
-            if (currentIntersect.object === back_mesh){
-                if(currentSlide > 0){
-                    currentSlide--;
-                } else {
-                    console.log('at the beginning of the deck, no more slides for back')                
-                }
-            } 
-            else if (currentIntersect.object === next_mesh){
-                if(currentSlide < slides.length-1){
-                    currentSlide++;
-                } else {
-                    console.log('at the end of the deck, no more slides next')  
-                }
-                
-            }
-            console.log(TZmaps[0]);
-
-            TZmaps[0].material = makeTexture(slides[currentSlide]);
-        }
-        }
-
-
-
         //switchCamera(false);
             //Set to false so that held down click doesn't cast multiple rays
             console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
@@ -426,10 +422,10 @@ function animate() {
             switchCamera(false);
             console.log("hi blockchain")
         }
-
     }
 
-    
+
+
     if(dblclick){
         dblclick = false;
         clickraycaster.setFromCamera( pointer, camera );
@@ -581,39 +577,61 @@ function animate() {
             controls.getObject().position.y = 1.5;
 
         }
-
-
-
-    
-
-
-
-
-
-
-
-    prevTime = time;
-
-    renderer.render( scene, camera );
-
 }
 
+function SlideInteract(){
+    var currentIntersect;
+    if(slideMode){
+    const objectsForRayCast = [back_mesh, next_mesh]
+    clickraycaster.setFromCamera( pointer, camera );
+    const intersecto = clickraycaster.intersectObjects(objectsForRayCast)
+    
+    for(const object of objectsForRayCast){
+        object.material.color.set('#ffffff')
+    }
+
+    for(const intersect of intersecto){
+        console.log("setting color")
+        intersect.object.material.color.set('#ffff00')
+    }
+    currentIntersect = intersecto[0];
+    }
+
+
+        //Handle raycasting
+    if(click){
+
+
+        //Just for testing slides
+        if(slideMode){
+        if(currentIntersect){
+            if (currentIntersect.object === back_mesh){
+                if(currentSlide > 0){
+                    currentSlide--;
+                } else {
+                    console.log('at the beginning of the deck, no more slides for back')                
+                }
+            } 
+            else if (currentIntersect.object === next_mesh){
+                if(currentSlide < slides.length-1){
+                    currentSlide++;
+                } else {
+                    console.log('at the end of the deck, no more slides next')  
+                }
+                
+            }
+            console.log(TZmaps[0]);
+
+            TZmaps[0].material = makeTexture(slides[currentSlide]);
+        }
+        }
 
 
 
+        
 
-
-
-
-init();
-animate();
-
-console.log("huh")
-
-
-
-
-
+    }
+}
 
 
 
@@ -678,6 +696,7 @@ function makeTexture(filename){
 }
 
 function loadFullModels(){
+    
     //CR
     var crList = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg']
     loadTextureModel('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_BAKED_opaque.glb', crList, 'exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_opaque/')
@@ -728,14 +747,14 @@ function loadFullModels(){
     loadTextureModelInteractive('exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Experiment2.glb', TZListO, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_Textures/TZ_BAKED_opaque/', 'blockchain', TZmaps)
     var TZListScreens = ['TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg']
     loadScreens(TZListScreens, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Screens_Geometry/TZ_Screens_Geometry/', 'dist/exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Screens_Textures/TZ_Screens_Textures/')
-
+    
 
     //VRBar
     var VRBarListO = ['VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_opaque.glb', VRBarListO, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_opaque/')
     var VRBarListT = ['VR_Bar_shooters.png']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_transparent.glb', VRBarListT, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_transparent/')
-
+    
     
 }
 
@@ -927,30 +946,16 @@ function displaySlides(p, a, dist){
     ocamera.position.z = p.z-Math.cos(a)*dist;
     ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
     //ocamera.quaternion
-
-
-    //const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
-    const back_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
-    //back_plane.translate(-0.55, 0, 0)
-    const back_plane_material = new THREE.MeshBasicMaterial({ map: backTexture })
-    back_mesh = new THREE.Mesh(back_plane, back_plane_material)
-    
-    //const next_plane = new THREE.PlaneGeometry( 0.1, 0.1)
-    const next_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
-    //next_plane.translate(0.55, 0, 0)
-    const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
-    next_mesh = new THREE.Mesh(next_plane, next_plane_material)
-
-    scene.add(back_mesh)
-    scene.add(next_mesh)
-    back_mesh.position.set(p.x+0.25*Math.cos(a), p.y, p.z+0.5*Math.sin(a));
+    back_mesh.position.set(p.x+0.33*Math.cos(a), p.y, p.z-0.33*Math.sin(a));
     back_mesh.rotation.set(0, a, 0);
-    next_mesh.position.set(p.x-0.25*Math.cos(a), p.y, p.z-0.5*Math.sin(a));
+    next_mesh.position.set(p.x-0.33*Math.cos(a), p.y, p.z+0.33*Math.sin(a));
     next_mesh.rotation.set(0, a, 0);
+    back_mesh.visible = true;
+    next_mesh.visible = true;
     
     console.log("backmesh" + back_mesh.position.x+","+back_mesh.position.y+","+back_mesh.position.z);
 
-    displaying = true;
+    slideMode = true;
 
 
 }
@@ -982,3 +987,64 @@ loader.load(
 
 }
 
+function loadSlideButtons(){
+    //Add buttons
+    const backTexture = textureLoader.load('./exports/buttons/backb.png')
+    const nextTexture = textureLoader.load('./exports/buttons/nextb.png')
+        //const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+        const back_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
+        //back_plane.translate(-0.55, 0, 0)
+        const back_plane_material = new THREE.MeshBasicMaterial({ map: backTexture })
+        back_mesh = new THREE.Mesh(back_plane, back_plane_material)
+        
+        //const next_plane = new THREE.PlaneGeometry( 0.1, 0.1)
+        const next_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
+        //next_plane.translate(0.55, 0, 0)
+        const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
+        next_mesh = new THREE.Mesh(next_plane, next_plane_material)
+    
+        scene.add(back_mesh)
+        scene.add(next_mesh)
+        back_mesh.visible = false;
+        next_mesh.visible = false;
+       
+
+}
+
+function exitSlideMode(){
+    switchCamera(true);
+    next_mesh.visible = false;
+    back_mesh.visible = false;
+    slideMode = false;
+
+}
+
+function camSpin(){
+    const _euler = new Euler( 0, 0, 0, 'YXZ' );
+        _euler.setFromQuaternion( camera.quaternion );
+
+        //Add camera and mouse (ideally one should be 0)
+        _euler.y += 0.1;
+        //Just from mouse
+		camera.quaternion.setFromEuler( _euler );
+        //console.log(_euler);
+        if(_euler.y>-0.2&&_euler.y<0){
+            spun = true;
+            beginScene();
+        }
+}
+
+function beginScene(){
+    if(spun&&modelsloaded){
+        loaded = true;
+        const _euler = new Euler( 0, 0, 0, 'YXZ' );
+            camera.quaternion.setFromEuler( _euler );
+            var load = document.getElementById("loadingScreen");
+            load.style.display = "none";
+            var threecanvas = document.getElementById("three");
+            //threecanvas.style.display = "inline"
+            var controller = document.getElementById("controller");
+            //controller.style.display = "inline"
+            //console.log(_euler);
+    }
+}
