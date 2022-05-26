@@ -16,11 +16,14 @@ var slideMode = false;
 
 var back_mesh;
 var next_mesh;
+var x_mesh;
 
 let camMoveX = 0;
 let camMoveY = 0;
 var clickmovepoint;
 var clickmoving = false;
+
+var slideMesh;
 
 let raycaster;
 let loaded = false;
@@ -153,6 +156,7 @@ function init() {
  */
 loadFullModels();
 addLights();
+loadBSlides();
 //loadSlides();
 ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
     ocamera.position.z = 1;
@@ -474,6 +478,9 @@ function handleMove(time){
             console.log(bintersects[i].object.rotation);
             console.log(bintersects[i].object.name);
             displaySlides(bintersects[i].object.position, monitorsangles[bintersects[i].object.name]);
+            slideMesh = bintersects[i].object;
+            console.log(slideMesh);
+            console.log(bintersects[i]);
             switchCamera(false);
             console.log("hi blockchain")
         }
@@ -637,7 +644,7 @@ function handleMove(time){
 function SlideInteract(){
     var currentIntersect;
     if(slideMode){
-    const objectsForRayCast = [back_mesh, next_mesh]
+    const objectsForRayCast = [back_mesh, next_mesh, x_mesh]
     clickraycaster.setFromCamera( pointer, camera );
     const intersecto = clickraycaster.intersectObjects(objectsForRayCast)
     
@@ -646,7 +653,7 @@ function SlideInteract(){
     }
 
     for(const intersect of intersecto){
-        console.log("setting color")
+        //console.log("setting color")
         intersect.object.material.color.set('#ffff00')
     }
     currentIntersect = intersecto[0];
@@ -658,7 +665,9 @@ function SlideInteract(){
 
 
         //Just for testing slides
-        if(slideMode){
+    if(slideMode){
+
+        
         if(currentIntersect){
             if (currentIntersect.object === back_mesh){
                 if(currentSlide > 0){
@@ -675,13 +684,23 @@ function SlideInteract(){
                 }
                 
             }
-            console.log(TZmaps[0]);
+            else if (currentIntersect.object === x_mesh){
+                exitSlideMode();
+                
+            }
+            console.log(currentSlide);
+            console.log("slide change")
+            console.log(slideMesh)
 
-            TZmaps[0].material = makeTexture(slides[currentSlide]);
+            slideMesh.material = slides[currentSlide];
+            slideMesh.visible = false;
         }
+
+        
+        
         }
 
-
+        click = false;
 
         
 
@@ -944,6 +963,15 @@ function loadScreens(textureList, modelPath, texturepath){
 }
 }
 
+function loadBSlides(){
+    var bslides = ['/exports/slides/blockchain/blockchain_01.jpg', '/exports/slides/blockchain/blockchain_02.jpg', '/exports/slides/blockchain/blockchain_03.jpg', '/exports/slides/blockchain/blockchain_04.jpg', '/exports/slides/blockchain/blockchain_05.jpg', '/exports/slides/blockchain/blockchain_06.jpg', '/exports/slides/blockchain/blockchain_07.jpg', '/exports/slides/blockchain/blockchain_08.jpg', '/exports/slides/blockchain/blockchain_09.jpg', '/exports/slides/blockchain/blockchain_10.jpg', '/exports/slides/blockchain/blockchain_11.jpg', '/exports/slides/blockchain/blockchain_12.jpg', '/exports/slides/blockchain/blockchain_13.jpg', '/exports/slides/blockchain/blockchain_14.jpg', '/exports/slides/blockchain/blockchain_15.jpg', '/exports/slides/blockchain/blockchain_16.jpg', '/exports/slides/blockchain/blockchain_17.jpg', '/exports/slides/blockchain/blockchain_18.jpg', '/exports/slides/blockchain/blockchain_19.jpg', '/exports/slides/blockchain/blockchain_20.jpg']
+    for(var i = 0; i < bslides.length; i++){
+        slides[i] = textureLoader.load(bslides[i]);
+    }
+    //slides[0] = textureLoader.load('/exports/slides/slide1.png')
+    //slides[1] = textureLoader.load('/exports/slides/slide2.png')
+    //slides[2] = textureLoader.load('/exports/slides/slide3.png')
+}
 
 function loadSlides(){
 
@@ -1013,8 +1041,12 @@ function displaySlides(p, a, dist){
     back_mesh.rotation.set(0, a, 0);
     next_mesh.position.set(p.x-0.33*Math.cos(a), p.y, p.z+0.33*Math.sin(a));
     next_mesh.rotation.set(0, a, 0);
+
+    x_mesh.position.set(p.x+0.33*Math.cos(a), p.y+0.25, p.z-0.33*Math.sin(a));
+    x_mesh.rotation.set(0, a, 0);
     back_mesh.visible = true;
     next_mesh.visible = true;
+    x_mesh.visible = true;
     
     console.log("backmesh" + back_mesh.position.x+","+back_mesh.position.y+","+back_mesh.position.z);
 
@@ -1054,6 +1086,7 @@ function loadSlideButtons(){
     //Add buttons
     const backTexture = textureLoader.load('./exports/buttons/backb.png')
     const nextTexture = textureLoader.load('./exports/buttons/nextb.png')
+    const xTexture = textureLoader.load('./exports/buttons/xbutton.png')
         //const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
         const back_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
         //back_plane.translate(-0.55, 0, 0)
@@ -1065,11 +1098,18 @@ function loadSlideButtons(){
         //next_plane.translate(0.55, 0, 0)
         const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
         next_mesh = new THREE.Mesh(next_plane, next_plane_material)
+
+        const x_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
+        //next_plane.translate(0.55, 0, 0)
+        const x_plane_material = new THREE.MeshBasicMaterial({ map: xTexture })
+        x_mesh = new THREE.Mesh(x_plane, x_plane_material)
     
         scene.add(back_mesh)
         scene.add(next_mesh)
+        scene.add(x_mesh)
         back_mesh.visible = false;
         next_mesh.visible = false;
+        x_mesh.visible = false;
        
 
 }
@@ -1078,6 +1118,7 @@ function exitSlideMode(){
     switchCamera(true);
     next_mesh.visible = false;
     back_mesh.visible = false;
+    x_mesh.visible = false;
     slideMode = false;
 
 }

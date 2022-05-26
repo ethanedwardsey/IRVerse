@@ -1,4 +1,4 @@
 import os
-modelList = os.listdir('./dist/exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Screens_Textures/TZ_Screens_Textures')
-#pre_res = ['models/' + sub for sub in modelList]
-print(modelList)
+modelList = os.listdir('./dist/exports/slides/blockchain')
+pre_res = ['/exports/slides/blockchain/' + sub for sub in modelList]
+print(pre_res)
