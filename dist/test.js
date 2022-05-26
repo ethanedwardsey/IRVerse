@@ -693,7 +693,7 @@ function SlideInteract(){
             console.log(slideMesh)
 
             slideMesh.material = slides[currentSlide];
-            slideMesh.visible = false;
+            //slideMesh.visible = false;
         }
 
         
@@ -966,7 +966,7 @@ function loadScreens(textureList, modelPath, texturepath){
 function loadBSlides(){
     var bslides = ['/exports/slides/blockchain/blockchain_01.jpg', '/exports/slides/blockchain/blockchain_02.jpg', '/exports/slides/blockchain/blockchain_03.jpg', '/exports/slides/blockchain/blockchain_04.jpg', '/exports/slides/blockchain/blockchain_05.jpg', '/exports/slides/blockchain/blockchain_06.jpg', '/exports/slides/blockchain/blockchain_07.jpg', '/exports/slides/blockchain/blockchain_08.jpg', '/exports/slides/blockchain/blockchain_09.jpg', '/exports/slides/blockchain/blockchain_10.jpg', '/exports/slides/blockchain/blockchain_11.jpg', '/exports/slides/blockchain/blockchain_12.jpg', '/exports/slides/blockchain/blockchain_13.jpg', '/exports/slides/blockchain/blockchain_14.jpg', '/exports/slides/blockchain/blockchain_15.jpg', '/exports/slides/blockchain/blockchain_16.jpg', '/exports/slides/blockchain/blockchain_17.jpg', '/exports/slides/blockchain/blockchain_18.jpg', '/exports/slides/blockchain/blockchain_19.jpg', '/exports/slides/blockchain/blockchain_20.jpg']
     for(var i = 0; i < bslides.length; i++){
-        slides[i] = textureLoader.load(bslides[i]);
+        slides[i] = makeTexture(bslides[i]);
     }
     //slides[0] = textureLoader.load('/exports/slides/slide1.png')
     //slides[1] = textureLoader.load('/exports/slides/slide2.png')
@@ -1037,12 +1037,12 @@ function displaySlides(p, a, dist){
     ocamera.position.z = p.z-Math.cos(a)*dist;
     ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
     //ocamera.quaternion
-    back_mesh.position.set(p.x+0.33*Math.cos(a), p.y, p.z-0.33*Math.sin(a));
+    back_mesh.position.set(p.x+0.5*Math.cos(a), p.y, p.z-0.5*Math.sin(a));
     back_mesh.rotation.set(0, a, 0);
-    next_mesh.position.set(p.x-0.33*Math.cos(a), p.y, p.z+0.33*Math.sin(a));
+    next_mesh.position.set(p.x-0.5*Math.cos(a), p.y, p.z+0.5*Math.sin(a));
     next_mesh.rotation.set(0, a, 0);
 
-    x_mesh.position.set(p.x+0.33*Math.cos(a), p.y+0.25, p.z-0.33*Math.sin(a));
+    x_mesh.position.set(p.x+0.5*Math.cos(a), p.y+0.4, p.z-0.5*Math.sin(a));
     x_mesh.rotation.set(0, a, 0);
     back_mesh.visible = true;
     next_mesh.visible = true;
