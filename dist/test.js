@@ -302,7 +302,7 @@ gltfLoader.load(
 
     //
 
-    //window.addEventListener( 'resize', onWindowResize );
+    window.addEventListener( 'resize', onWindowResize );
 
 }
 
@@ -345,6 +345,29 @@ function animate() {
 
 }
 
+function onWindowResize(){
+    var three = document.getElementById( 'three' );
+    //three.canvas.innerWidth = window.innerWidth;
+    //three.canvas.innerHeight = window.innerHeight;
+    // Update camera
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    if(slideMode){
+        pcamera.aspect = width / height;
+        pcamera.updateProjectionMatrix();
+    }
+    else{
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    }
+
+    // Update renderer
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    console.log("resize!");
+}
+
 
 
 
@@ -384,34 +407,44 @@ function handleMove(time){
             console.log(intersects[i].object.name)
             if(intersects[i].object.name.includes('IZ_map_button')){
                 var newPos = new Vector3(0, 0, 0);
+                var newRot = 0;
 
                 if(intersects[i].object.name.includes('01')){
                     newPos = new Vector3(-4.913926124799983,1.5,3.1473119049575);
+                    newRot = -Math.PI;
                 }
                 else if(intersects[i].object.name.includes('02')){
                     newPos = new Vector3(-14.763254846552549,1.5,3.381983248102806);
+                    newRot = -Math.PI;
                 }
                 else if(intersects[i].object.name.includes('03')){
                     newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
+                    newRot = -Math.PI/2;
                 }
                 
                 else if(intersects[i].object.name.includes('04')){
                     newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
+                    newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('05')){
                     newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
+                    newRot = Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('06')){
                     newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+                    newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('07')){
                     newPos = new Vector3(44.73183653949032,1.5,4.082937851489276);
+                    newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('08')){
                     newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
+                    newRot = 0;
                 }
                 else if(intersects[i].object.name.includes('09')){
                     newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
+                    newRot = 0;
                 }
                 
 
@@ -419,6 +452,8 @@ function handleMove(time){
                 //No y because height shouldn't be changed
                 camera.position.x = newPos.x;
                 camera.position.z = newPos.z;
+                const neuler = new Euler( 0, newRot, 0, 'YXZ' );
+                camera.quaternion.setFromEuler(neuler)
             }
             
             
@@ -862,22 +897,6 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
                 //console.log("adding the " + bakedMesh.position.x)
                 intobjs.push(bakedMesh);
             }
-
-            if(texturename.includes('ey_verse_screen')||texturename.includes("Map_screen")){
-                //https://discourse.threejs.org/t/how-to-fit-the-texture-to-the-plane/12017
-                var video = document.getElementById( 'video' );
-                video.play();
-                videotexture = new THREE.VideoTexture( video );
-                videotexture.flipY = true;
-                //videotexture.needsUpdate = true;
-                videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
-                videomaterial.flipY = true;
-                videomaterial.needsUpdate = true;
-                bakedMesh.material = videomaterial;
-                addSound(bakedMesh);
-                console.log("video")
-                
-            }
             
         }
         
@@ -1127,7 +1146,7 @@ function glow(){
         curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
         intObjects[i].material.emissive = curCol;
     }
-    if(intcolor>0.55){
+    if(intcolor>0.35){
         colorchanger = -0.0025
     }
     else if(intcolor<0.1){
