@@ -1,7 +1,7 @@
 //Hi
 //import '/style.css'
 import * as THREE from 'three';
-import { Euler, Vector2, Vector3 } from 'three';
+import { Color, Euler, Vector2, Vector3 } from 'three';
 import { GLTFLoader } from './GLTFLoader.js';
 import { DRACOLoader } from './DRACOLoader.js';
 import { PointerLockControls } from './PointerLockControls.js';
@@ -56,8 +56,15 @@ var click = false;
 var dblclick = false;
 
 var collision;
+var intObjects = [];
 var mapButtons = [];
 var TZmaps = [];
+
+var intcolor=0;
+var colorchanger = 0.05;
+let whiteColor = new THREE.Color( 0xffffff );
+let yellowColor = new THREE.Color( 0xffe600 );
+
 
 var monitorsangles = {'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_wall_monitors_01': -Math.PI/2};
 var monitorangles = [-Math.PI, 0, -Math.PI/2]
@@ -321,6 +328,8 @@ function animate() {
     if(loaded){
         //videotexture.needsUpdate = true;
     //videomaterial.needsUpdate = true;
+        intObjects = mapButtons;
+        glow();
     }
     
 
@@ -857,10 +866,12 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
             if(texturename.includes('ey_verse_screen')||texturename.includes("Map_screen")){
                 //https://discourse.threejs.org/t/how-to-fit-the-texture-to-the-plane/12017
                 var video = document.getElementById( 'video' );
+                video.play();
                 videotexture = new THREE.VideoTexture( video );
+                videotexture.flipY = true;
                 //videotexture.needsUpdate = true;
                 videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
-                //videomaterial.flipY = true;
+                videomaterial.flipY = true;
                 videomaterial.needsUpdate = true;
                 bakedMesh.material = videomaterial;
                 addSound(bakedMesh);
@@ -1106,4 +1117,22 @@ function addSound(mesh){
 });
 
 mesh.add(sound)
+}
+
+function glow(){
+    //intcolor = 1;
+    for(var i = 0; i < intObjects.length; i++){
+        let curCol = new THREE.Color();
+        curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
+        intObjects[i].material.emissive = curCol;
+    }
+    if(intcolor>0.55){
+        colorchanger = -0.0025
+    }
+    else if(intcolor<0.1){
+        colorchanger = 0.0025
+    }
+    intcolor = intcolor + colorchanger;
+    //console.log(intcolor);
+    
 }
