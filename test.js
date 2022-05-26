@@ -1,7 +1,7 @@
 //Hi
 //import '/style.css'
 import * as THREE from 'three';
-import { Euler, Vector2, Vector3 } from 'three';
+import { Color, Euler, Vector2, Vector3 } from 'three';
 import { GLTFLoader } from './GLTFLoader.js';
 import { DRACOLoader } from './DRACOLoader.js';
 import { PointerLockControls } from './PointerLockControls.js';
@@ -16,11 +16,14 @@ var slideMode = false;
 
 var back_mesh;
 var next_mesh;
+var x_mesh;
 
 let camMoveX = 0;
 let camMoveY = 0;
 var clickmovepoint;
 var clickmoving = false;
+
+var slideMesh;
 
 let raycaster;
 let loaded = false;
@@ -45,14 +48,26 @@ const clickraycaster = new THREE.Raycaster();
 let fraycaster = new THREE.Raycaster();
 let braycaster = new THREE.Raycaster();;
 
+//Sound
+const listener = new THREE.AudioListener();
+
+var videotexture;
+var videomaterial;
 
 const pointer = new THREE.Vector2();
 var click = false;
 var dblclick = false;
 
 var collision;
+var intObjects = [];
 var mapButtons = [];
 var TZmaps = [];
+
+var intcolor=0;
+var colorchanger = 0.05;
+let whiteColor = new THREE.Color( 0xffffff );
+let yellowColor = new THREE.Color( 0xffe600 );
+
 
 var monitorsangles = {'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_wall_monitors_01': -Math.PI/2};
 var monitorangles = [-Math.PI, 0, -Math.PI/2]
@@ -141,6 +156,7 @@ function init() {
  */
 loadFullModels();
 addLights();
+loadBSlides();
 //loadSlides();
 ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
     ocamera.position.z = 1;
@@ -177,6 +193,9 @@ gltfLoader.load(
 
 
     controls = new PointerLockControls( camera, document.body );
+
+    //Add sound
+    camera.add( listener );
 
     //const blocker = document.getElementById( 'blocker' );
     //const instructions = document.getElementById( 'instructions' );
@@ -287,7 +306,7 @@ gltfLoader.load(
 
     //
 
-    //window.addEventListener( 'resize', onWindowResize );
+    window.addEventListener( 'resize', onWindowResize );
 
 }
 
@@ -310,8 +329,12 @@ function animate() {
         camSpin();
     }
 
-
-
+    if(loaded){
+        //videotexture.needsUpdate = true;
+    //videomaterial.needsUpdate = true;
+        intObjects = mapButtons;
+        glow();
+    }
     
 
 
@@ -324,6 +347,29 @@ function animate() {
 
     renderer.render( scene, camera );
 
+}
+
+function onWindowResize(){
+    var three = document.getElementById( 'three' );
+    //three.canvas.innerWidth = window.innerWidth;
+    //three.canvas.innerHeight = window.innerHeight;
+    // Update camera
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    if(slideMode){
+        pcamera.aspect = width / height;
+        pcamera.updateProjectionMatrix();
+    }
+    else{
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    }
+
+    // Update renderer
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    console.log("resize!");
 }
 
 
@@ -365,34 +411,44 @@ function handleMove(time){
             console.log(intersects[i].object.name)
             if(intersects[i].object.name.includes('IZ_map_button')){
                 var newPos = new Vector3(0, 0, 0);
+                var newRot = 0;
 
                 if(intersects[i].object.name.includes('01')){
                     newPos = new Vector3(-4.913926124799983,1.5,3.1473119049575);
+                    newRot = -Math.PI;
                 }
                 else if(intersects[i].object.name.includes('02')){
                     newPos = new Vector3(-14.763254846552549,1.5,3.381983248102806);
+                    newRot = -Math.PI;
                 }
                 else if(intersects[i].object.name.includes('03')){
                     newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
+                    newRot = -Math.PI/2;
                 }
                 
                 else if(intersects[i].object.name.includes('04')){
                     newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
+                    newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('05')){
                     newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
+                    newRot = Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('06')){
                     newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+                    newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('07')){
                     newPos = new Vector3(44.73183653949032,1.5,4.082937851489276);
+                    newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('08')){
                     newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
+                    newRot = 0;
                 }
                 else if(intersects[i].object.name.includes('09')){
                     newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
+                    newRot = 0;
                 }
                 
 
@@ -400,6 +456,8 @@ function handleMove(time){
                 //No y because height shouldn't be changed
                 camera.position.x = newPos.x;
                 camera.position.z = newPos.z;
+                const neuler = new Euler( 0, newRot, 0, 'YXZ' );
+                camera.quaternion.setFromEuler(neuler)
             }
             
             
@@ -420,6 +478,9 @@ function handleMove(time){
             console.log(bintersects[i].object.rotation);
             console.log(bintersects[i].object.name);
             displaySlides(bintersects[i].object.position, monitorsangles[bintersects[i].object.name]);
+            slideMesh = bintersects[i].object;
+            console.log(slideMesh);
+            console.log(bintersects[i]);
             switchCamera(false);
             console.log("hi blockchain")
         }
@@ -583,7 +644,7 @@ function handleMove(time){
 function SlideInteract(){
     var currentIntersect;
     if(slideMode){
-    const objectsForRayCast = [back_mesh, next_mesh]
+    const objectsForRayCast = [back_mesh, next_mesh, x_mesh]
     clickraycaster.setFromCamera( pointer, camera );
     const intersecto = clickraycaster.intersectObjects(objectsForRayCast)
     
@@ -592,7 +653,7 @@ function SlideInteract(){
     }
 
     for(const intersect of intersecto){
-        console.log("setting color")
+        //console.log("setting color")
         intersect.object.material.color.set('#ffff00')
     }
     currentIntersect = intersecto[0];
@@ -604,7 +665,9 @@ function SlideInteract(){
 
 
         //Just for testing slides
-        if(slideMode){
+    if(slideMode){
+
+        
         if(currentIntersect){
             if (currentIntersect.object === back_mesh){
                 if(currentSlide > 0){
@@ -621,13 +684,23 @@ function SlideInteract(){
                 }
                 
             }
-            console.log(TZmaps[0]);
+            else if (currentIntersect.object === x_mesh){
+                exitSlideMode();
+                
+            }
+            console.log(currentSlide);
+            console.log("slide change")
+            console.log(slideMesh)
 
-            TZmaps[0].material = makeTexture(slides[currentSlide]);
+            slideMesh.material = slides[currentSlide];
+            //slideMesh.visible = false;
         }
+
+        
+        
         }
 
-
+        click = false;
 
         
 
@@ -783,22 +856,27 @@ function loadTextureModel(model, textureList, texturepath, transparent=false){
                 bakedMaterial.transparent = true;
             }
             try{
+                if(!texturename.includes('ey_verse_screen')){
             bakedMesh.material = bakedMaterial
+                }
             }
             catch(error){
                 console.log("error!" + basename)
             }
 
              //TO DO: make this less silly
-            if(texturename.includes('ey_verse_screen')){
-                /*
+            if(texturename.includes('ey_verse_screen')||texturename.includes("Map_screen")){
+                //https://discourse.threejs.org/t/how-to-fit-the-texture-to-the-plane/12017
                 var video = document.getElementById( 'video' );
-                var videotexture = new THREE.VideoTexture( video );
-                const videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
+                videotexture = new THREE.VideoTexture( video );
+                //videotexture.needsUpdate = true;
+                videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
                 videomaterial.flipY = true;
+                videomaterial.needsUpdate = true;
                 bakedMesh.material = videomaterial;
+                //addSound(bakedMesh);
                 console.log("video")
-                */
+                
             }
                 
             
@@ -885,6 +963,15 @@ function loadScreens(textureList, modelPath, texturepath){
 }
 }
 
+function loadBSlides(){
+    var bslides = ['/exports/slides/blockchain/blockchain_01.jpg', '/exports/slides/blockchain/blockchain_02.jpg', '/exports/slides/blockchain/blockchain_03.jpg', '/exports/slides/blockchain/blockchain_04.jpg', '/exports/slides/blockchain/blockchain_05.jpg', '/exports/slides/blockchain/blockchain_06.jpg', '/exports/slides/blockchain/blockchain_07.jpg', '/exports/slides/blockchain/blockchain_08.jpg', '/exports/slides/blockchain/blockchain_09.jpg', '/exports/slides/blockchain/blockchain_10.jpg', '/exports/slides/blockchain/blockchain_11.jpg', '/exports/slides/blockchain/blockchain_12.jpg', '/exports/slides/blockchain/blockchain_13.jpg', '/exports/slides/blockchain/blockchain_14.jpg', '/exports/slides/blockchain/blockchain_15.jpg', '/exports/slides/blockchain/blockchain_16.jpg', '/exports/slides/blockchain/blockchain_17.jpg', '/exports/slides/blockchain/blockchain_18.jpg', '/exports/slides/blockchain/blockchain_19.jpg', '/exports/slides/blockchain/blockchain_20.jpg']
+    for(var i = 0; i < bslides.length; i++){
+        slides[i] = makeTexture(bslides[i]);
+    }
+    //slides[0] = textureLoader.load('/exports/slides/slide1.png')
+    //slides[1] = textureLoader.load('/exports/slides/slide2.png')
+    //slides[2] = textureLoader.load('/exports/slides/slide3.png')
+}
 
 function loadSlides(){
 
@@ -950,12 +1037,16 @@ function displaySlides(p, a, dist){
     ocamera.position.z = p.z-Math.cos(a)*dist;
     ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
     //ocamera.quaternion
-    back_mesh.position.set(p.x+0.33*Math.cos(a), p.y, p.z-0.33*Math.sin(a));
+    back_mesh.position.set(p.x+0.5*Math.cos(a), p.y, p.z-0.5*Math.sin(a));
     back_mesh.rotation.set(0, a, 0);
-    next_mesh.position.set(p.x-0.33*Math.cos(a), p.y, p.z+0.33*Math.sin(a));
+    next_mesh.position.set(p.x-0.5*Math.cos(a), p.y, p.z+0.5*Math.sin(a));
     next_mesh.rotation.set(0, a, 0);
+
+    x_mesh.position.set(p.x+0.5*Math.cos(a), p.y+0.4, p.z-0.5*Math.sin(a));
+    x_mesh.rotation.set(0, a, 0);
     back_mesh.visible = true;
     next_mesh.visible = true;
+    x_mesh.visible = true;
     
     console.log("backmesh" + back_mesh.position.x+","+back_mesh.position.y+","+back_mesh.position.z);
 
@@ -995,6 +1086,7 @@ function loadSlideButtons(){
     //Add buttons
     const backTexture = textureLoader.load('./exports/buttons/backb.png')
     const nextTexture = textureLoader.load('./exports/buttons/nextb.png')
+    const xTexture = textureLoader.load('./exports/buttons/xbutton.png')
         //const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
         const back_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
         //back_plane.translate(-0.55, 0, 0)
@@ -1006,11 +1098,18 @@ function loadSlideButtons(){
         //next_plane.translate(0.55, 0, 0)
         const next_plane_material = new THREE.MeshBasicMaterial({ map: nextTexture })
         next_mesh = new THREE.Mesh(next_plane, next_plane_material)
+
+        const x_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
+        //next_plane.translate(0.55, 0, 0)
+        const x_plane_material = new THREE.MeshBasicMaterial({ map: xTexture })
+        x_mesh = new THREE.Mesh(x_plane, x_plane_material)
     
         scene.add(back_mesh)
         scene.add(next_mesh)
+        scene.add(x_mesh)
         back_mesh.visible = false;
         next_mesh.visible = false;
+        x_mesh.visible = false;
        
 
 }
@@ -1019,6 +1118,7 @@ function exitSlideMode(){
     switchCamera(true);
     next_mesh.visible = false;
     back_mesh.visible = false;
+    x_mesh.visible = false;
     slideMode = false;
 
 }
@@ -1041,8 +1141,9 @@ function camSpin(){
 function beginScene(){
     if(spun&&modelsloaded){
         loaded = true;
-        const _euler = new Euler( 0, 0, 0, 'YXZ' );
+        const _euler = new Euler( 0, -Math.PI/2, 0, 'YXZ' );
             camera.quaternion.setFromEuler( _euler );
+        camera.position.set(-26.5, 1.5, -1.35);
             var load = document.getElementById("loadingScreen");
             load.style.display = "none";
             var threecanvas = document.getElementById("three");
@@ -1058,4 +1159,41 @@ function addLights(){
     light.intensity = 6;
     scene.add( light );
     light.position.set(7, 2, -30);
+}
+
+function addSound(mesh){
+    const sound = new THREE.PositionalAudio( listener );
+
+    // load a sound and set it as the PositionalAudio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './exports/sounds/fullnarration.wav', function( buffer ) {
+	sound.setBuffer( buffer );
+	
+    sound.setDistanceModel("exponential");
+    sound.setRefDistance( 5 );
+    sound.setRolloffFactor( 4 );
+	sound.play();
+
+    
+});
+
+mesh.add(sound)
+}
+
+function glow(){
+    //intcolor = 1;
+    for(var i = 0; i < intObjects.length; i++){
+        let curCol = new THREE.Color();
+        curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
+        intObjects[i].material.emissive = curCol;
+    }
+    if(intcolor>0.35){
+        colorchanger = -0.0025
+    }
+    else if(intcolor<0.1){
+        colorchanger = 0.0025
+    }
+    intcolor = intcolor + colorchanger;
+    //console.log(intcolor);
+    
 }
