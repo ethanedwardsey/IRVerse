@@ -37,9 +37,6 @@ const camVelocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 const vertex = new THREE.Vector3();
 const color = new THREE.Color();
-//var fs = require('fs');
-
-
 
 //Raycasting
 const clickraycaster = new THREE.Raycaster();
@@ -55,20 +52,6 @@ var collision;
 var mapButtons = [];
 var TZmaps = [];
 
-
-
-
-
-
-/**
- * Base
- */
-// Debug
-/*
-const gui = new dat.GUI({
-    width: 400
-})
-*/
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -91,7 +74,7 @@ manager.onLoad = function ( ) {
     var threecanvas = document.getElementById("three");
     //threecanvas.style.display = "inline"
     var controller = document.getElementById("controller");
-    controller.style.display = "inline"
+    //controller.style.display = "inline"
 
 };
 
@@ -136,21 +119,6 @@ slides[2] = '/exports/slides/slide3.png'
 
 const backTexture = textureLoader.load('./exports/buttons/backb.png')
 const nextTexture = textureLoader.load('./exports/buttons/nextb.png')
-
-/**
- * Textures
- */
-
-
-/**
- * Sizes
- */
-
-
-/**
- * Camera
- */
-// Base camera
 
 function init() {
 
@@ -305,21 +273,8 @@ gltfLoader.load(
     document.addEventListener( 'keydown', onKeyDown );
     document.addEventListener( 'keyup', onKeyUp );
 
-    
-
-
-    //raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
     fraycaster.far = 2;
     braycaster.far = 2;
-    //fraycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
-    //braycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, 0, 0 ), 0, 10 );
-    // floor
-
-
-
- 
-
-    //
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -464,6 +419,7 @@ function animate() {
 
     }
 
+    
     if(dblclick){
         dblclick = false;
         clickraycaster.setFromCamera( pointer, camera );
@@ -472,9 +428,21 @@ function animate() {
         for ( let i = 0; i < intersects.length; i ++ ) {
             clickmoving = true;
             clickmovepoint = intersects[i].point;
+
+            /*
+            const pointmarker = new THREE.BoxGeometry(1, 1, 1);
+            var pcolor = new THREE.Color( 0xffffff );
+            const pointmaterial = new THREE.MeshBasicMaterial({ color:  0x00ff00 })
+            var pointmesh = new THREE.Mesh(pointmarker, pointmaterial)
+            scene.add(pointmesh);
+            pointmesh.position.x=clickmovepoint.x;
+            pointmesh.position.y = 0.75;
+            pointmesh.position.z=clickmovepoint.z;
+            */
             break;
         }
     }
+    
 
     //Collision
     fraycaster.setFromCamera(new Vector2(0, 0), camera);
@@ -544,18 +512,46 @@ function animate() {
             }
             
             else{
-                if(Math.abs(clickmovepoint.z - curPos.z)<1){
+                var zvec = clickmovepoint.z - curPos.z;
+                var xvec = clickmovepoint.x - curPos.x;
+                //console.log("zvec " + zvec + " xvec " + xvec);
+                var moveVec = new Vector2(xvec, zvec);
+                moveVec = moveVec.normalize();
+                xvec = moveVec.x;
+                zvec = moveVec.y;
+                var moveVecAngle = -Math.atan2(-zvec, -xvec)+Math.PI/2;
+                if (moveVecAngle>Math.PI){
+                    //moveVecAngle = -Math.PI + (moveVecAngle - Math.PI)
+                }
+                const eulerangle = new Euler( 0, 0, 0, 'YXZ' );
+                eulerangle.setFromQuaternion( camera.quaternion );
+                console.log("vector angle " + moveVecAngle + " and rotation " + eulerangle.y);
+                var angle = moveVecAngle-eulerangle.y;
+                console.log("combined angle " + angle + " sin " + Math.sin(angle))
+                var fmove = zvec*Math.cos(angle) + xvec*Math.sin(angle);
+                var rmove = xvec*Math.cos(angle) - zvec*Math.sin(angle);
+                var speed = 7;
+                velocity.z = -moveVec.length()*Math.cos(angle)*speed;
+                velocity.x = moveVec.length()*Math.sin(angle)*speed;
+
+                //console.log("playerpos is " + curPos.x + "," + curPos.y + "," +curPos.z + ", dest is "  + clickmovepoint.x + "," + clickmovepoint.y + "," + clickmovepoint.z + ", rotation is " + eulerangle.y)
+                //console.log("zvec is " + zvec + ", xvec is " + xvec)
+                //console.log("fmove is " + fmove + "from " + zvec*Math.cos(angle) + " and " + xvec*Math.sin(angle))
+                //console.log("rmove is " + rmove + "from " + zvec*Math.sin(angle) + " and " + xvec*Math.cos(angle))
+                /*
+                if(Math.abs(fmove)<1){
                     velocity.z = 0;
                 }
                 else{
-                    velocity.z = clickmovepoint.z - curPos.z;
+                    velocity.z = fmove;
                 }
-                if(Math.abs(clickmovepoint.x - curPos.x)<1){
+                if(Math.abs(rmove)<1){
                     velocity.x = 0;
                 }
                 else{
-                    velocity.x = clickmovepoint.x - curPos.x;
+                    velocity.x = -rmove;
                 }
+                */
             }
             console.log(clickmovepoint.z - curPos.z);
         }
@@ -648,11 +644,13 @@ function mouseUp()
         console.log(window.innerWidth-ypos)
         xpos = 100-(window.innerWidth-xpos);
         ypos = 100-(window.innerHeight-ypos);
+        /*
         if(xpos>-200 && ypos>-200){
             camMoveX = -xpos;
             camMoveY = -ypos;
             console.log(xpos + " " + ypos);
         }
+        */
         //click = true;
     }
 
