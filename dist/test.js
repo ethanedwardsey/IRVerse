@@ -83,7 +83,7 @@ manager.onLoad = function ( ) {
 manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
 
     //TO DO: update hardcoding
-	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+	//console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
     var progressBar = document.getElementById("loadingBar")
     progressBar.style.width = (itemsLoaded / 365 * 100) + '%';
 
@@ -130,8 +130,8 @@ function init() {
     //#000000
     //scene.background = new THREE.Color( 0xffffff );
     //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
-    scene.background = new THREE.Color( 0x5c5c5c );
-    scene.fog = new THREE.Fog( 0x5c5c5c, 0, 750 );
+    scene.background = new THREE.Color( 0x00000 );
+    scene.fog = new THREE.Fog( 0x00000, 0, 750 );
 
 
     loadSlideButtons();
@@ -140,6 +140,7 @@ function init() {
  * Materials
  */
 loadFullModels();
+addLights();
 //loadSlides();
 ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
     ocamera.position.z = 1;
@@ -699,9 +700,9 @@ function loadFullModels(){
     
     //CR
     var crList = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg']
-    loadTextureModel('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_BAKED_opaque.glb', crList, 'exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_opaque/')
+    loadTextureModel('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_BAKED_opaque.glb', crList, 'exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_opaque/', false)
     var crListT = ['CR_2035_truss.png']
-    loadTextureModel('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_BAKED_transparent.glb', crListT, 'exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_transparent/')
+    loadTextureModel('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_BAKED_transparent.glb', crListT, 'exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_transparent/', true)
     
     //EYVerse
     var EYVerseList = ['ey_verse_curtains.jpg', 'ey_verse_floor.jpg', 'ey_verse_inner_walls.jpg', 'ey_verse_outer_walls.jpg', 'ey_verse_rafters.jpg', 'ey_verse_rug.jpg', 'ey_verse_screen.jpg', 'ey_verse_side_rails.jpg', 'ey_verse_speakers_1.jpg', 'ey_verse_speakers_2.jpg', 'ey_verse_stools.jpg', 'ey_verse_tables_and_chairs.jpg']
@@ -711,7 +712,7 @@ function loadFullModels(){
     var forumListO = ['Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens_1.jpg', 'Forum_Screens_2.jpg', 'Forum_Screens_3.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg']
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_opaque.glb', forumListO, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_opaque/')
     var forumListT = ['Forum_light_truss.png']
-    loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_transparent.glb', forumListT, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_transparent/')
+    loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_transparent.glb', forumListT, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_transparent/', true)
 
     //IZ
     var IZListO = ['IR_Map_screen.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg']
@@ -723,7 +724,7 @@ function loadFullModels(){
     var mtextureListO = ['Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'Market_mound.jpg', 'Market_overhead_screen_5.jpg', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_walls.jpg', 'Market_waterfall_screen.jpg']
     loadTextureModel('exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_Opaque2.glb', mtextureListO, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_opaque/')
     var mtextureListT = ['Market_baklava_1.png', 'Market_baklava_2.png', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_pink_treats.png', 'Market_trellis.png']
-    loadTextureModel('exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_Transparent2.glb', mtextureListT, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_transparent/')
+    loadTextureModel('exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_Transparent2.glb', mtextureListT, 'exports/Market_BAKED_FINAL/Market_BAKED_FINAL/Market_BAKED_FINAL_textures_transparent/', true)
 
     //PurplePod
     var PurpList = ['Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg']
@@ -733,13 +734,13 @@ function loadFullModels(){
     var SpaceListO = ['Space_Pod_chairs.jpg', 'Space_Pod_floor_ceiling.jpg', 'Space_Pod_Inner_wall.jpg', 'Space_Pod_screen.jpg', 'Space_Pod_wood_pillars.jpg']
     loadTextureModel('exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_opaque.glb', SpaceListO, 'exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_textures/Space_Pod_textures_opaque/')
     var SpaceListT = ['Space_Pod_truss.png']
-    loadTextureModel('exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_transparent.glb', SpaceListT, 'exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_textures/Space_Pod_textures_transparent/')
+    loadTextureModel('exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_transparent.glb', SpaceListT, 'exports/Space_Pod_BAKED_FINAL/Space_Pod_BAKED_FINAL/Space_Pod_textures/Space_Pod_textures_transparent/', true)
 
     //Speakeasy
     var SpeakEasyListO = ['SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_floor.jpg', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg']
     loadTextureModel('exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_opaque.glb', SpeakEasyListO, 'exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_textures/SpeakEasy_BAKED_textures_opaque/')
     var SpeakEasyListT = ['SpeakEasy_edison_lamps.png', 'SpeakEasy_liquor_bottles.png']
-    loadTextureModel('exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_transparent.glb', SpeakEasyListT, 'exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_textures/SpeakEasy_BAKED_textures_transparent/')
+    loadTextureModel('exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_transparent.glb', SpeakEasyListT, 'exports/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_FINAL/SpeakEasy_BAKED_textures/SpeakEasy_BAKED_textures_transparent/', true)
  
     //TZ
     //
@@ -753,12 +754,12 @@ function loadFullModels(){
     var VRBarListO = ['VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_opaque.glb', VRBarListO, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_opaque/')
     var VRBarListT = ['VR_Bar_shooters.png']
-    loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_transparent.glb', VRBarListT, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_transparent/')
+    loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_transparent.glb', VRBarListT, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_transparent/', true)
     
     
 }
 
-function loadTextureModel(model, textureList, texturepath){
+function loadTextureModel(model, textureList, texturepath, transparent=false){
     gltfLoader.load(
         model,
         (gltf) =>
@@ -768,17 +769,19 @@ function loadTextureModel(model, textureList, texturepath){
         for (var i = 0; i < textureList.length; i++){
             var texturename = textureList[i];
             var basename = texturename.slice(0, -4);
-            console.log(basename)
+            //console.log(basename)
             texturename = texturepath + texturename;
             const bakedMesh = gltf.scene.children.find(child => child.name === basename)
             const bakedTexture = textureLoader.load(texturename)
             bakedTexture.flipY = false
             bakedTexture.encoding = THREE.sRGBEncoding
-            const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
-            console.log(basename)
+            //const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
+            const bakedMaterial = new THREE.MeshLambertMaterial({ map: bakedTexture })
+            //console.log(basename)
            
-            
-
+            if(transparent){
+                bakedMaterial.transparent = true;
+            }
             try{
             bakedMesh.material = bakedMaterial
             }
@@ -816,14 +819,15 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
         for (var i = 0; i < textureList.length; i++){
             var texturename = textureList[i];
             var basename = texturename.slice(0, -4);
-            console.log(basename)
+            //console.log(basename)
             texturename = texturepath + texturename;
             const bakedMesh = gltf.scene.children.find(child => child.name === basename)
             const bakedTexture = textureLoader.load(texturename)
             bakedTexture.flipY = false
             bakedTexture.encoding = THREE.sRGBEncoding
-            const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
-            console.log(basename)
+            //const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
+            const bakedMaterial = new THREE.MeshLambertMaterial({ map: bakedTexture })
+            //console.log(basename)
             try{
             bakedMesh.material = bakedMaterial
             }
@@ -831,7 +835,7 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
                 console.log("error!" + basename)
             }
             if(texturename.includes(intstr)){
-                console.log("adding the " + bakedMesh.position.x)
+                //console.log("adding the " + bakedMesh.position.x)
                 intobjs.push(bakedMesh);
             }
             
@@ -846,7 +850,7 @@ function loadScreens(textureList, modelPath, texturepath){
     for (var i = 0; i < textureList.length; i++){
         var texturename = textureList[i];
         var basename = texturename.slice(0, -4);
-        console.log(basename)
+        //console.log(basename)
         texturename = texturepath + texturename;
         var modelname = modelPath + basename + '.glb'
     gltfLoader.load(
@@ -860,7 +864,7 @@ function loadScreens(textureList, modelPath, texturepath){
             bakedTexture.flipY = false
             bakedTexture.encoding = THREE.sRGBEncoding
             const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
-            console.log(basename)
+            //console.log(basename)
             try{
             bakedMesh.material = bakedMaterial
             }
@@ -1047,4 +1051,11 @@ function beginScene(){
             //controller.style.display = "inline"
             //console.log(_euler);
     }
+}
+
+function addLights(){
+    const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    light.intensity = 6;
+    scene.add( light );
+    light.position.set(7, 2, -30);
 }
