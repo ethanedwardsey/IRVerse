@@ -45,6 +45,11 @@ const clickraycaster = new THREE.Raycaster();
 let fraycaster = new THREE.Raycaster();
 let braycaster = new THREE.Raycaster();;
 
+//Sound
+const listener = new THREE.AudioListener();
+
+var videotexture;
+var videomaterial;
 
 const pointer = new THREE.Vector2();
 var click = false;
@@ -178,6 +183,9 @@ gltfLoader.load(
 
     controls = new PointerLockControls( camera, document.body );
 
+    //Add sound
+    camera.add( listener );
+
     //const blocker = document.getElementById( 'blocker' );
     //const instructions = document.getElementById( 'instructions' );
 
@@ -310,8 +318,10 @@ function animate() {
         camSpin();
     }
 
-
-
+    if(loaded){
+        //videotexture.needsUpdate = true;
+    //videomaterial.needsUpdate = true;
+    }
     
 
 
@@ -783,22 +793,27 @@ function loadTextureModel(model, textureList, texturepath, transparent=false){
                 bakedMaterial.transparent = true;
             }
             try{
+                if(!texturename.includes('ey_verse_screen')){
             bakedMesh.material = bakedMaterial
+                }
             }
             catch(error){
                 console.log("error!" + basename)
             }
 
              //TO DO: make this less silly
-            if(texturename.includes('ey_verse_screen')){
-                /*
+            if(texturename.includes('ey_verse_screen')||texturename.includes("Map_screen")){
+                //https://discourse.threejs.org/t/how-to-fit-the-texture-to-the-plane/12017
                 var video = document.getElementById( 'video' );
-                var videotexture = new THREE.VideoTexture( video );
-                const videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
+                videotexture = new THREE.VideoTexture( video );
+                //videotexture.needsUpdate = true;
+                videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
                 videomaterial.flipY = true;
+                videomaterial.needsUpdate = true;
                 bakedMesh.material = videomaterial;
+                //addSound(bakedMesh);
                 console.log("video")
-                */
+                
             }
                 
             
@@ -837,6 +852,20 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
             if(texturename.includes(intstr)){
                 //console.log("adding the " + bakedMesh.position.x)
                 intobjs.push(bakedMesh);
+            }
+
+            if(texturename.includes('ey_verse_screen')||texturename.includes("Map_screen")){
+                //https://discourse.threejs.org/t/how-to-fit-the-texture-to-the-plane/12017
+                var video = document.getElementById( 'video' );
+                videotexture = new THREE.VideoTexture( video );
+                //videotexture.needsUpdate = true;
+                videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
+                //videomaterial.flipY = true;
+                videomaterial.needsUpdate = true;
+                bakedMesh.material = videomaterial;
+                addSound(bakedMesh);
+                console.log("video")
+                
             }
             
         }
@@ -1058,4 +1087,23 @@ function addLights(){
     light.intensity = 6;
     scene.add( light );
     light.position.set(7, 2, -30);
+}
+
+function addSound(mesh){
+    const sound = new THREE.PositionalAudio( listener );
+
+    // load a sound and set it as the PositionalAudio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './exports/sounds/fullnarration.wav', function( buffer ) {
+	sound.setBuffer( buffer );
+	
+    sound.setDistanceModel("exponential");
+    sound.setRefDistance( 5 );
+    sound.setRolloffFactor( 4 );
+	sound.play();
+
+    
+});
+
+mesh.add(sound)
 }
