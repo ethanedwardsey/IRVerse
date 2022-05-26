@@ -52,6 +52,9 @@ var collision;
 var mapButtons = [];
 var TZmaps = [];
 
+var monitorsangles = {'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_wall_monitors_01': -Math.PI/2};
+var monitorangles = [-Math.PI, 0, -Math.PI/2]
+
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -346,6 +349,9 @@ function animate() {
         //switchCamera(false);
             //Set to false so that held down click doesn't cast multiple rays
             console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
+            const beuler = new Euler( 0, 0, 0, 'YXZ' );
+            beuler.setFromQuaternion( camera.quaternion );
+            console.log("current rot: " + beuler.y);
             click = false;
             //console.log("pointer: " + pointer.x + " " + pointer.y)
         clickraycaster.setFromCamera( pointer, camera );
@@ -404,15 +410,19 @@ function animate() {
             //intersects[ i ].object.material.color.set( 0xff0000 );
 
         }
-
+        console.log(TZmaps);
         const bintersects = clickraycaster.intersectObjects( TZmaps );
         //console.log([collision])
         //console.log(scene.children)
         //console.log(mapButtons);
 
         for ( let i = 0; i < bintersects.length; i ++ ) {
-            console.log(bintersects[i].object.position)
-            displaySlides(bintersects[i].object.position);
+            console.log("logging object")
+            console.log(bintersects[i]);
+            console.log(bintersects[i].object.position);
+            console.log(bintersects[i].object.rotation);
+            console.log(bintersects[i].object.name);
+            displaySlides(bintersects[i].object.position, monitorsangles[bintersects[i].object.name]);
             switchCamera(false);
             console.log("hi blockchain")
         }
@@ -716,6 +726,9 @@ function loadFullModels(){
     //
     var TZListO = ['TZ_blockchain.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Curved_screens_06.png', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_wall_monitors.jpg']
     loadTextureModelInteractive('exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Experiment2.glb', TZListO, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_BAKED_Textures/TZ_BAKED_opaque/', 'blockchain', TZmaps)
+    var TZListScreens = ['TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg']
+    loadScreens(TZListScreens, 'exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Screens_Geometry/TZ_Screens_Geometry/', 'dist/exports/TZ_BAKED_FINAL/TZ_BAKED_FINAL/TZ_Screens_Textures/TZ_Screens_Textures/')
+
 
     //VRBar
     var VRBarListO = ['VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
@@ -810,6 +823,44 @@ function loadTextureModelInteractive(model, textureList, texturepath, intstr, in
     )
 }
 
+function loadScreens(textureList, modelPath, texturepath){
+    for (var i = 0; i < textureList.length; i++){
+        var texturename = textureList[i];
+        var basename = texturename.slice(0, -4);
+        console.log(basename)
+        texturename = texturepath + texturename;
+        var modelname = modelPath + basename + '.glb'
+    gltfLoader.load(
+        modelname,
+        (gltf) =>
+        {
+        
+                   //var textureList = ['Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_Floor.jpg', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text 1.jpg', 'market_innovation_text 2.jpg', 'Market_overhead_screen_1.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_walls.jpg', 'Market_waterfall_screen.jpg']       
+            const bakedMesh = gltf.scene;
+            const bakedTexture = textureLoader.load(texturename)
+            bakedTexture.flipY = false
+            bakedTexture.encoding = THREE.sRGBEncoding
+            const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
+            console.log(basename)
+            try{
+            bakedMesh.material = bakedMaterial
+            }
+            catch(error){
+                console.log("error!" + basename)
+            }
+            TZmaps.push(gltf.scene.children[0]);
+            
+        
+        
+        scene.add(gltf.scene);
+
+
+        }
+        
+        
+    )
+}
+}
 
 
 function loadSlides(){
@@ -862,19 +913,19 @@ function switchCamera(p){
     }
 }
 
-function displaySlides(p){
+function displaySlides(p, a, dist){
 
-    
+    dist = 3;
     
     //Set pcamera, should probably change
     pcamera = camera;
     console.log(p)
     console.log(p.x)
     console.log(ocamera)
-    ocamera.position.x = p.x;
+    ocamera.position.x = p.x-Math.sin(a)*dist;
     ocamera.position.y = p.y;
-    ocamera.position.z = p.z-3;
-    ocamera.quaternion.setFromEuler( new Euler( 0, -Math.PI/4, 0, 'YXZ' ));
+    ocamera.position.z = p.z-Math.cos(a)*dist;
+    ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
     //ocamera.quaternion
 
 
@@ -892,9 +943,12 @@ function displaySlides(p){
 
     scene.add(back_mesh)
     scene.add(next_mesh)
-    back_mesh.position.set(37-1.2, p.y, -9.4)
-    next_mesh.position.set(37, p.y, -9.4)
-    console.log("back mesh " + back_mesh);
+    back_mesh.position.set(p.x+0.25*Math.cos(a), p.y, p.z+0.5*Math.sin(a));
+    back_mesh.rotation.set(0, a, 0);
+    next_mesh.position.set(p.x-0.25*Math.cos(a), p.y, p.z-0.5*Math.sin(a));
+    next_mesh.rotation.set(0, a, 0);
+    
+    console.log("backmesh" + back_mesh.position.x+","+back_mesh.position.y+","+back_mesh.position.z);
 
     displaying = true;
 
