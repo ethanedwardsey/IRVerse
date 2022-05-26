@@ -1081,8 +1081,9 @@ function camSpin(){
 function beginScene(){
     if(spun&&modelsloaded){
         loaded = true;
-        const _euler = new Euler( 0, 0, 0, 'YXZ' );
+        const _euler = new Euler( 0, -Math.PI/2, 0, 'YXZ' );
             camera.quaternion.setFromEuler( _euler );
+        camera.position.set(-26.5, 1.5, -1.35);
             var load = document.getElementById("loadingScreen");
             load.style.display = "none";
             var threecanvas = document.getElementById("three");
