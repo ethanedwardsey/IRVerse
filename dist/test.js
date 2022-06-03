@@ -872,6 +872,8 @@ function loadTextureModel(model, textureList, texturepath, transparent=false){
              //TO DO: make this less silly
             if(texturename.includes('ey_verse_screen')||texturename.includes("Map_screen")){
                 //https://discourse.threejs.org/t/how-to-fit-the-texture-to-the-plane/12017
+
+                /*
                 var video = document.getElementById( 'video' );
                 videotexture = new THREE.VideoTexture( video );
                 //videotexture.needsUpdate = true;
@@ -881,7 +883,7 @@ function loadTextureModel(model, textureList, texturepath, transparent=false){
                 bakedMesh.material = videomaterial;
                 //addSound(bakedMesh);
                 console.log("video")
-                
+                */
             }
                 
             
