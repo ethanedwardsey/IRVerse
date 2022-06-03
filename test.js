@@ -831,9 +831,11 @@ function loadFullModels(){
     var VRBarListT = ['VR_Bar_shooters.png']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_transparent.glb', VRBarListT, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_transparent/', true)
     
-    //Walls
-    loadTextureModel('exports/IR_Outer_Walls_and_Ceiling/IR_Outer_Walls_and_Ceiling/outer_walls.glb', [], '')
-    loadTextureModel('exports/IR_Outer_Walls_and_Ceiling/IR_Outer_Walls_and_Ceiling/ceiling.glb', [], '')
+    //Misc
+    loadTextureModel('exports/Miscmodels/Miscmodels/outer_walls.glb', [], '')
+    loadTextureModel('exports/Miscmodels/Miscmodels/ceiling.glb', [], '')
+    loadTextureModel('exports/Miscmodels/Miscmodels/VR_BAR_carpet_dots.glb', [], '')
+    loadTextureModel('exports/Miscmodels/Miscmodels/Innovation_cafe_carpet_dots.glb', [], '')
     
 }
 
