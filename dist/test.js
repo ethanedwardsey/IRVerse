@@ -333,7 +333,7 @@ function animate() {
         //videotexture.needsUpdate = true;
     //videomaterial.needsUpdate = true;
         intObjects = mapButtons;
-        glow();
+        //glow();
     }
     
 
@@ -788,10 +788,12 @@ function loadFullModels(){
     loadTextureModel('exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_transparent.glb', forumListT, 'exports/Forum_BAKED_FINAL/Forum_BAKED_FINAL/Forum_BAKED_textures/Forum_BAKED_textures_transparent/', true)
 
     //IZ
-    var IZListO = ['IR_Map_screen.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg']
+    var IZListO = ['IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg']
     loadTextureModelInteractive('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_opaque.glb', IZListO, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_textures/IZ_BAKED_textures_opaque/', 'IZ_map_button', mapButtons)
     //var IZListT = ['IZ_directions.png']
     //loadTextureModel('exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_transparent.glb', IZListT, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_Textures/IZ_Transparent/')
+    var IZListScreens = ['IR_Map_screen.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_010.jpg', 'IZ_map_button_011.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg']
+    loadScreens(IZListScreens, 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_NAV_MAP/', 'exports/IZ_BAKED_FINAL/IZ_BAKED_FINAL/IZ_BAKED_textures/IZ_BAKED_textures_opaque/')
 
     //Market
     var mtextureListO = ['Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'Market_mound.jpg', 'Market_overhead_screen_5.jpg', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_walls.jpg', 'Market_waterfall_screen.jpg']
@@ -829,6 +831,9 @@ function loadFullModels(){
     var VRBarListT = ['VR_Bar_shooters.png']
     loadTextureModel('exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_transparent.glb', VRBarListT, 'exports/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_FINAL/VR_Bar_BAKED_textures/VR_Bar_BAKED_transparent/', true)
     
+    //Walls
+    loadTextureModel('exports/IR_Outer_Walls_and_Ceiling/IR_Outer_Walls_and_Ceiling/outer_walls.glb', [], '')
+    loadTextureModel('exports/IR_Outer_Walls_and_Ceiling/IR_Outer_Walls_and_Ceiling/ceiling.glb', [], '')
     
 }
 
@@ -948,6 +953,7 @@ function loadScreens(textureList, modelPath, texturepath){
             }
             catch(error){
                 console.log("error!" + basename)
+                console.log(texturename);
             }
             TZmaps.push(gltf.scene.children[0]);
             
