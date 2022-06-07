@@ -716,18 +716,21 @@ function SlideInteract(){
 
 function interact(e){
     //TO DO: If it's on the div, it should do nothing
-
-    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-    click = true;
-    console.log("interacting");
+    if(!controllerclickcheck(window.innerWidth-e.pageX, window.innerHeight-e.pageY)){
+        pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+        pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+        click = true;
+        console.log("interacting");
+    }
 }
 
 function clickmove(e){
-    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-    dblclick = true;
-    click = false;
+    if(!controllerclickcheck(window.innerWidth-e.pageX, window.innerHeight-e.pageY)){
+        pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+        pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+        dblclick = true;
+        click = false;
+    }
 }
 
 function mouseUp()
@@ -744,15 +747,17 @@ function mouseUp()
         var xpos = e.pageX;
         var ypos = e.pageY;
         console.log(window.innerWidth-ypos)
-        xpos = 100-(window.innerWidth-xpos);
-        ypos = 100-(window.innerHeight-ypos);
-        /*
-        if(xpos>-200 && ypos>-200){
+        xpos = (window.innerWidth-xpos);
+        ypos = (window.innerHeight-ypos);
+        
+        if(controllerclickcheck(xpos, ypos)){
+            xpos = (50+175/2)-xpos;
+            ypos = (50+175/2)-ypos;
             camMoveX = -xpos;
             camMoveY = -ypos;
             console.log(xpos + " " + ypos);
         }
-        */
+        
         //click = true;
     }
 
@@ -1159,7 +1164,7 @@ function beginScene(){
             var threecanvas = document.getElementById("three");
             //threecanvas.style.display = "inline"
             var controller = document.getElementById("controller");
-            //controller.style.display = "inline"
+            controller.style.display = "inline"
             //console.log(_euler);
     }
 }
@@ -1206,4 +1211,13 @@ function glow(){
     intcolor = intcolor + colorchanger;
     //console.log(intcolor);
     
+}
+
+function controllerclickcheck(xpos, ypos){
+    if(xpos>50 && ypos>50 && xpos<225 && ypos<225){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
