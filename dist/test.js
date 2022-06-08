@@ -34,6 +34,8 @@ let moveLeft = false;
 let moveRight = false;
 let canJump = false;
 
+var tooltipshowing = false;
+
 let prevTime = performance.now();
 const velocity = new THREE.Vector3();
 const camVelocity = new THREE.Vector3();
@@ -326,6 +328,9 @@ function animate() {
             SlideInteract();
         } else{
             handleMove(time);
+            toolTipper();
+            intObjects = mapButtons;
+            glow();
         }
     } else{
         camSpin();
@@ -334,8 +339,7 @@ function animate() {
     if(loaded){
         //videotexture.needsUpdate = true;
     //videomaterial.needsUpdate = true;
-        intObjects = mapButtons;
-        glow();
+        
     }
     
     prevTime = time;
@@ -666,11 +670,24 @@ function SlideInteract(){
     }
 }
 
+function toolTipper(){
 
-
-
-
-
+    clickraycaster.setFromCamera( pointer, camera );
+    const intersecto = clickraycaster.intersectObjects(mapButtons)
+    if(intersecto.length>0){
+        var tooltip = document.getElementById( 'tooltip' );
+        tooltip.innerText = "This is a tooltip describing the scene."
+        tooltip.style.visibility = true;
+        tooltip.style.left = pointer.x;
+        tooltip.style.top = pointer.y;
+        tooltipshowing = true
+    }
+    else if(tooltipshowing){
+        var tooltip = document.getElementById( 'tooltip' );
+        tooltip.style.visibility = false; 
+        tooltipshowing = false
+    }   
+}
 
 
 function interact(e){
