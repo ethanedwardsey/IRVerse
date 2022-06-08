@@ -70,7 +70,7 @@ let yellowColor = new THREE.Color( 0xffe600 );
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': -Math.PI*1/4, 'TZ_pillar_monitors_02': Math.PI*1/4, 'TZ_pillar_monitors_03': Math.PI*4/4, 'TZ_pillar_monitors_04': -Math.PI*3/4};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
-var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4};
+var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4};
 
 
 // Canvas
@@ -151,9 +151,10 @@ function init() {
  * Materials
  */
 //loadFullModels();
+loadBSlides();
 loadAllModels();
 addLights();
-loadBSlides();
+
 //loadSlides();
 //ocamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100 )
 ocamera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 1000 );
@@ -728,7 +729,7 @@ function makeTexture(filename){
     forumTexture.flipY = false
     forumTexture.encoding = THREE.sRGBEncoding
 
-    const forumMaterial = new THREE.MeshBasicMaterial({ map: forumTexture});
+    const forumMaterial = new THREE.MeshLambertMaterial({ map: forumTexture});
     return forumMaterial;
 }
 
@@ -1008,6 +1009,11 @@ function glow(){
         curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
         intObjects[i].material.emissive = curCol;
     }
+    for(var i = 0; i < TZmaps.length; i++){
+        let curCol = new THREE.Color();
+        curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
+        TZmaps[i].material.emissive = curCol;
+    }
     if(intcolor>0.65){
         colorchanger = -0.0025
     }
@@ -1146,6 +1152,22 @@ function makeSpecialMaterial(name){
             //console.log("found texturename" + texturename);
             return bakedMaterial;
 
+    }
+    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")){
+        /*
+        const bakedTexture = slideDecks[slideIndices[name]]
+        bakedTexture.flipY = false;
+        bakedTexture.encoding = THREE.sRGBEncoding
+        const bakedMaterial = new THREE.MeshLambertMaterial({ map: bakedTexture })
+        bakedMaterial.side = THREE.DoubleSide;
+        */
+        //console.log("found texturename" + texturename);
+        //return bakedMaterial;
+        var deck = slideDecks[slideIndices[name]];
+        //console.log(name)
+        //console.log(deck)
+        //console.log(deck[0])
+        return (deck[0]);
     }
     else if(name.includes('Forum_Screens_1')){
         /*
