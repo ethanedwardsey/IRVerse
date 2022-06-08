@@ -1148,19 +1148,23 @@ function makeSpecialMaterial(name){
 
     }
     else if(name.includes('Forum_Screens_1')){
+        /*
         var forumvideo = document.getElementById( 'forumvideo' );
             forumvideo.play();
             var svideotexture = new THREE.VideoTexture( forumvideo );
             var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
             
             return svideomaterial;
+            */
     }
     else if(name.includes('ey_verse_screen')){
+        /*
         var video = document.getElementById( 'video' );
             video.play();
             videotexture = new THREE.VideoTexture( video );
             videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
             return videomaterial;
+            */
     }
 
     return null;
