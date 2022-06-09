@@ -69,10 +69,10 @@ let whiteColor = new THREE.Color( 0xffffff );
 let yellowColor = new THREE.Color( 0xffe600 );
 
 
-var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': -Math.PI*1/4, 'TZ_pillar_monitors_02': Math.PI*1/4, 'TZ_pillar_monitors_03': Math.PI*4/4, 'TZ_pillar_monitors_04': -Math.PI*3/4};
+var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI*3/4, 'TZ_pillar_monitors_02': Math.PI*1/4, 'TZ_pillar_monitors_03': -Math.PI*1/4, 'TZ_pillar_monitors_04': -Math.PI*3/4};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
-var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4};
+var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4};
 var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
 'IZ_map_button_02': 'Summary of the Chicago regneration event',
 'IZ_map_button_03': 'Back to the entrance',
@@ -180,30 +180,6 @@ ocamera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeigh
 
 
 collision = new THREE.Object3D();
-/*
-gltfLoader.load(
-    'exports/Collision_Boundary_wall.glb',
-    (gltf) =>
-    {
-        collision = gltf.scene;
-        const bakedTexture = textureLoader.load('exports/CR_2035_BAKED_FINAL/CR_2035_BAKED_FINAL/CR_2035_textures/CR_2035_textures_opaque/CR_2035_blanket.jpg')
-            bakedTexture.flipY = false
-            bakedTexture.encoding = THREE.sRGBEncoding
-            const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture })
-        var tempMaterial = new THREE.MeshStandardMaterial({color: 0xffffff});
-        collision.traverse((o) => {
-            if(o.isMesh){
-            console.log("traversing")
-            console.log(o)
-            o.material = bakedMaterial;
-            }
-          });
-        collision.name = 'collision'
-        scene.add(collision)
-    }
-)
-*/
-
 
     controls = new PointerLockControls( camera, document.body );
 
@@ -486,7 +462,11 @@ function handleMove(time){
             console.log("object name " + bintersects[0].object.name);
             currentSlide = 0;
             slides = slideDecks[slideIndices[bintersects[0].object.name]];
-            displaySlides(bintersects[0].object.position, monitorsangles[bintersects[0].object.name]);
+            var dist = 3;
+            if(bintersects[0].object.name=='TZ_wall_monitors_04'){
+                dist = 3.75;
+            }
+            displaySlides(bintersects[0].object.position, monitorsangles[bintersects[0].object.name], dist);
             slideMesh = bintersects[0].object;
             //console.log(slideMesh);
             //console.log(bintersects[i]);
@@ -772,7 +752,9 @@ function makeTexture(filename){
 }
 
 function loadAllModels(){
-    var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_MAP_screens.glb', 'IZ_BAKED_MAP_screen_frame.glb', 'IZ_BAKED_opaque.glb', 'IZ_map_button_01.glb', 'IZ_map_button_010.glb', 'IZ_map_button_011.glb', 'IZ_map_button_02.glb', 'IZ_map_button_03.glb', 'IZ_map_button_04.glb', 'IZ_map_button_05.glb', 'IZ_map_button_06.glb', 'IZ_map_button_07.glb', 'IZ_map_button_08.glb', 'IZ_map_button_09.glb', 'IZ_nav_cube_1.glb', 'IZ_nav_cube_10.glb', 'IZ_nav_cube_11.glb', 'IZ_nav_cube_2.glb', 'IZ_nav_cube_3.glb', 'IZ_nav_cube_4.glb', 'IZ_nav_cube_5.glb', 'IZ_nav_cube_6.glb', 'IZ_nav_cube_7.glb', 'IZ_nav_cube_8.glb', 'IZ_nav_cube_9.glb', 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
+    //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_MAP_screens.glb', 'IZ_BAKED_MAP_screen_frame.glb', 'IZ_BAKED_opaque.glb', 'IZ_map_button_01.glb', 'IZ_map_button_010.glb', 'IZ_map_button_011.glb', 'IZ_map_button_02.glb', 'IZ_map_button_03.glb', 'IZ_map_button_04.glb', 'IZ_map_button_05.glb', 'IZ_map_button_06.glb', 'IZ_map_button_07.glb', 'IZ_map_button_08.glb', 'IZ_map_button_09.glb', 'IZ_nav_cube_1.glb', 'IZ_nav_cube_10.glb', 'IZ_nav_cube_11.glb', 'IZ_nav_cube_2.glb', 'IZ_nav_cube_3.glb', 'IZ_nav_cube_4.glb', 'IZ_nav_cube_5.glb', 'IZ_nav_cube_6.glb', 'IZ_nav_cube_7.glb', 'IZ_nav_cube_8.glb', 'IZ_nav_cube_9.glb', 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
+    //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
+    var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAked_opaque2.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     var fulltext = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_signage.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg', 'ey_verse_curtains.jpg', 'ey_verse_floor.jpg', 'ey_verse_inner_walls.jpg', 'ey_verse_outer_walls.jpg', 'ey_verse_rafters.jpg', 'ey_verse_rug.jpg', 'ey_verse_screen.jpg', 'ey_verse_side_rails.jpg', 'ey_verse_speakers_1.jpg', 'ey_verse_speakers_2.jpg', 'ey_verse_stools.jpg', 'ey_verse_tables_and_chairs.jpg', 'Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_light_truss.png', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg', 'IR_Welcome_Map_2.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_map_button_010.jpg', 'IZ_map_button_011.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg', 'Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'market_mound.jpg', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_overhead_screen_5.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_trellis.png', 'Market_walls.jpg', 'Market_waterfall_screen.jpg', 'Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg', 'Space_Pod_chairs.jpg', 'Space_Pod_floor_ceiling.jpg', 'Space_Pod_Inner_wall.jpg', 'Space_Pod_screen.jpg', 'Space_Pod_truss.png', 'Space_Pod_wood_pillars.jpg', 'SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_edison_lamps.png', 'SpeakEasy_floor.jpg', 'SpeakEasy_liquor_bottles.png', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg', 'TZ_blockchain_01.jpg', 'TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_signage.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg', 'VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_shooters.png', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     for(var i = 0; i < models.length; i++){
         var modelname = 'exports/models/' + models[i];
@@ -907,26 +889,29 @@ function switchCamera(p){
     }
 }
 
-function displaySlides(p, a, dist){
-
-    dist = 3;
+function displaySlides(p, a, dist=3){
     
     //Set pcamera, should probably change
     pcamera = camera;
     //console.log(p)
     //console.log(p.x)
     //console.log(ocamera)
+    var mul = 1;
+    if(dist==3.75){
+        mul = 1.5
+    }
+
     ocamera.position.x = p.x-Math.sin(a)*dist;
     ocamera.position.y = p.y;
     ocamera.position.z = p.z-Math.cos(a)*dist;
     ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
     //ocamera.quaternion
-    back_mesh.position.set(p.x+0.65*Math.cos(a)-0.1*Math.sin(a), p.y, p.z-0.65*Math.sin(a)-0.1*Math.cos(a));
+    back_mesh.position.set(p.x+mul*0.65*Math.cos(a)-0.1*Math.sin(a), p.y, p.z-mul*0.65*Math.sin(a)-0.1*Math.cos(a));
     back_mesh.rotation.set(0, a, 0);
-    next_mesh.position.set(p.x-0.65*Math.cos(a)-0.1*Math.sin(a), p.y, p.z+0.65*Math.sin(a)-0.1*Math.cos(a));
+    next_mesh.position.set(p.x-mul*0.65*Math.cos(a)-0.1*Math.sin(a), p.y, p.z+mul*0.65*Math.sin(a)-0.1*Math.cos(a));
     next_mesh.rotation.set(0, a, 0);
 
-    x_mesh.position.set(p.x+0.5*Math.cos(a)-0.1*Math.sin(a), p.y+0.4, p.z-0.5*Math.sin(a)-0.1*Math.cos(a));
+    x_mesh.position.set(p.x+mul*0.65*Math.cos(a)-0.1*Math.sin(a), p.y+mul*0.4, p.z-mul*0.65*Math.sin(a)-0.1*Math.cos(a));
     x_mesh.rotation.set(0, a, 0);
     back_mesh.visible = true;
     next_mesh.visible = true;
@@ -1211,26 +1196,27 @@ function makeSpecialMaterial(name){
         //console.log(name)
         //console.log(deck)
         //console.log(deck[0])
+        console.log("loading slide for " + name);
         return (deck[0]);
     }
     else if(name.includes('Forum_Screens_1')){
-        /*
+        
         var forumvideo = document.getElementById( 'forumvideo' );
             forumvideo.play();
             var svideotexture = new THREE.VideoTexture( forumvideo );
             var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
             
             return svideomaterial;
-          */  
+            
     }
     else if(name.includes('ey_verse_screen')){
-        /*
+        
         var video = document.getElementById( 'video' );
             video.play();
             videotexture = new THREE.VideoTexture( video );
             videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
             return videomaterial;
-          */  
+            
     }
 
     return null;
