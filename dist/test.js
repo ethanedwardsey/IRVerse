@@ -114,7 +114,7 @@ manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
     //TO DO: update hardcoding
 	//console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
     var progressBar = document.getElementById("loadingBar")
-    progressBar.style.width = Math.min((itemsLoaded / 365 * 100), 90) + '%';
+    progressBar.style.width = Math.min((itemsLoaded / 365 * 100), 95) + '%';
 
 };
 
@@ -299,9 +299,6 @@ collision = new THREE.Object3D();
     window.addEventListener( 'resize', onWindowResize );
     document.getElementById("EnterButton").addEventListener('click', enterClick)
 
-    //var verse = Object3D.getObjectByName('ey_verse_screen');
-    //verse.scale = new Vector3(-1,1,1);
-
 }
 
 function animate() {
@@ -339,7 +336,7 @@ function animate() {
 }
 
 function onWindowResize(){
-    var three = document.getElementById( 'three' );
+    //var three = document.getElementById( 'three' );
     //three.canvas.innerWidth = window.innerWidth;
     //three.canvas.innerHeight = window.innerHeight;
     // Update camera
@@ -390,9 +387,6 @@ function handleMove(time){
 
         // calculate objects intersecting the picking ray
         const intersects = clickraycaster.intersectObjects( mapButtons );
-        //console.log([collision])
-        //console.log(scene.children)
-        //console.log(mapButtons);
 
         for ( let i = 0; i < intersects.length; i ++ ) {
             console.log("yaaaay");
@@ -401,8 +395,15 @@ function handleMove(time){
             if(intersects[i].object.name.includes('IZ_map_button')){
                 var newPos = new Vector3(0, 0, 0);
                 var newRot = 0;
-
-                if(intersects[i].object.name.includes('01')){
+                if(intersects[i].object.name.includes('010')){
+                    newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
+                    newRot = 0;
+                }
+                else if(intersects[i].object.name.includes('011')){
+                    newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
+                    newRot = 0;
+                }
+                else if(intersects[i].object.name.includes('01')){
                     newPos = new Vector3(-4.913926124799983,1.5,3.1473119049575);
                     newRot = -Math.PI;
                 }
@@ -411,33 +412,38 @@ function handleMove(time){
                     newRot = -Math.PI;
                 }
                 else if(intersects[i].object.name.includes('03')){
-                    newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
+                    newPos = new Vector3(-24.250405077612033,1.5,-0.13968857421984837);
                     newRot = -Math.PI/2;
                 }
                 
                 else if(intersects[i].object.name.includes('04')){
-                    newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
+                    newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
+                    //newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
                     newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('05')){
-                    newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
-                    newRot = Math.PI/2;
-                }
-                else if(intersects[i].object.name.includes('06')){
-                    newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+                    newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
+                    //newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
                     newRot = -Math.PI/2;
                 }
+                else if(intersects[i].object.name.includes('06')){
+                    newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
+                    //newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+                    newRot = Math.PI/2;
+                }
+                
                 else if(intersects[i].object.name.includes('07')){
-                    newPos = new Vector3(44.73183653949032,1.5,4.082937851489276);
+                    newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+                    //newPos = new Vector3(44.73183653949032,1.5,4.082937851489276);
                     newRot = -Math.PI/2;
                 }
                 else if(intersects[i].object.name.includes('08')){
-                    newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
-                    newRot = 0;
+                    newPos = new Vector3(44.202573509065516,1.5,3.965227914830795);
+                    newRot = -Math.PI;
                 }
                 else if(intersects[i].object.name.includes('09')){
-                    newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
-                    newRot = 0;
+                    newPos = new Vector3(56.46974644873789,1.5,3.280566032867076);
+                    newRot = Math.PI;
                 }
                 
 
@@ -1000,6 +1006,9 @@ function beginScene(){
             //threecanvas.style.display = "inline"
             var controller = document.getElementById("controller");
             controller.style.display = "inline"
+            var mapButton = document.getElementById("return");
+            mapButton.style.visibility = "visible"
+            mapButton.addEventListener('click', warpToMap);
             //console.log(_euler);
     }
 }
@@ -1440,4 +1449,11 @@ function loadSlides(){
 function enterClick(){
     console.log("click!")
     beginScene();
+}
+
+function warpToMap(){
+    camera.position.x = -16.82363656182083;
+    camera.position.z = -0.7227533044218651;
+    const neuler = new Euler( 0, -Math.PI, 0, 'YXZ' );
+    camera.quaternion.setFromEuler(neuler)
 }
