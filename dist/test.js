@@ -104,7 +104,7 @@ manager.onLoad = function ( ) {
 
 	console.log( 'Loading complete!');
     modelsloaded = true;
-    beginScene();
+    showButton();
 
 };
 
@@ -114,7 +114,7 @@ manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
     //TO DO: update hardcoding
 	//console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
     var progressBar = document.getElementById("loadingBar")
-    progressBar.style.width = (itemsLoaded / 365 * 100) + '%';
+    progressBar.style.width = Math.min((itemsLoaded / 365 * 100), 90) + '%';
 
 };
 
@@ -321,6 +321,7 @@ gltfLoader.load(
     //
 
     window.addEventListener( 'resize', onWindowResize );
+    document.getElementById("EnterButton").addEventListener('click', enterClick)
 
     //var verse = Object3D.getObjectByName('ey_verse_screen');
     //verse.scale = new Vector3(-1,1,1);
@@ -861,12 +862,12 @@ function loadFullModels(){
 
 function loadBSlides(){
     var slidesslides = []
-    slidesslides.push(['/exports/slides/blockchain/blockchain_01.jpg', '/exports/slides/blockchain/blockchain_02.jpg', '/exports/slides/blockchain/blockchain_03.jpg', '/exports/slides/blockchain/blockchain_04.jpg', '/exports/slides/blockchain/blockchain_05.jpg', '/exports/slides/blockchain/blockchain_06.jpg', '/exports/slides/blockchain/blockchain_07.jpg', '/exports/slides/blockchain/blockchain_08.jpg', '/exports/slides/blockchain/blockchain_09.jpg', '/exports/slides/blockchain/blockchain_10.jpg', '/exports/slides/blockchain/blockchain_11.jpg', '/exports/slides/blockchain/blockchain_12.jpg', '/exports/slides/blockchain/blockchain_13.jpg', '/exports/slides/blockchain/blockchain_14.jpg', '/exports/slides/blockchain/blockchain_15.jpg', '/exports/slides/blockchain/blockchain_16.jpg', '/exports/slides/blockchain/blockchain_17.jpg', '/exports/slides/blockchain/blockchain_18.jpg', '/exports/slides/blockchain/blockchain_19.jpg', '/exports/slides/blockchain/blockchain_20.jpg'])
-    slidesslides.push(['/exports/slides/ai/ai_01.jpg', '/exports/slides/ai/ai_02.jpg', '/exports/slides/ai/ai_03.jpg', '/exports/slides/ai/ai_04.jpg', '/exports/slides/ai/ai_05.jpg', '/exports/slides/ai/ai_06.jpg', '/exports/slides/ai/ai_07.jpg', '/exports/slides/ai/ai_08.jpg', '/exports/slides/ai/ai_09.jpg', '/exports/slides/ai/ai_10.jpg', '/exports/slides/ai/ai_11.jpg', '/exports/slides/ai/ai_12.jpg', '/exports/slides/ai/ai_13.jpg'])
-    slidesslides.push(['/exports/slides/cyber/cyber_1.jpg', '/exports/slides/cyber/cyber_2.jpg', '/exports/slides/cyber/cyber_3.jpg', '/exports/slides/cyber/cyber_4.jpg', '/exports/slides/cyber/cyber_5.jpg', '/exports/slides/cyber/cyber_6.jpg'])
-    slidesslides.push(['/exports/slides/innovation/innovation_01.jpg', '/exports/slides/innovation/innovation_02.jpg', '/exports/slides/innovation/innovation_03.jpg', '/exports/slides/innovation/innovation_04.jpg', '/exports/slides/innovation/innovation_05.jpg', '/exports/slides/innovation/innovation_06.jpg', '/exports/slides/innovation/innovation_07.jpg', '/exports/slides/innovation/innovation_08.jpg', '/exports/slides/innovation/innovation_09.jpg', '/exports/slides/innovation/innovation_10.jpg', '/exports/slides/innovation/innovation_11.jpg', '/exports/slides/innovation/innovation_12.jpg', '/exports/slides/innovation/innovation_13.jpg'])
-    slidesslides.push(['/exports/slides/iot/iot_01.jpg', '/exports/slides/iot/iot_02.jpg', '/exports/slides/iot/iot_03.jpg', '/exports/slides/iot/iot_04.jpg', '/exports/slides/iot/iot_05.jpg', '/exports/slides/iot/iot_06.jpg', '/exports/slides/iot/iot_07.jpg', '/exports/slides/iot/iot_08.jpg', '/exports/slides/iot/iot_09.jpg', '/exports/slides/iot/iot_10.jpg', '/exports/slides/iot/iot_11.jpg', '/exports/slides/iot/iot_12.jpg'])
-    slidesslides.push(['/exports/slides/transform/transform_01.jpg', '/exports/slides/transform/transform_02.jpg', '/exports/slides/transform/transform_03.jpg', '/exports/slides/transform/transform_04.jpg', '/exports/slides/transform/transform_05.jpg', '/exports/slides/transform/transform_06.jpg', '/exports/slides/transform/transform_07.jpg', '/exports/slides/transform/transform_08.jpg', '/exports/slides/transform/transform_09.jpg', '/exports/slides/transform/transform_10.jpg', '/exports/slides/transform/transform_11.jpg'])
+    slidesslides.push(['./exports/slides/blockchain/blockchain_01.jpg', './exports/slides/blockchain/blockchain_02.jpg', './exports/slides/blockchain/blockchain_03.jpg', './exports/slides/blockchain/blockchain_04.jpg', './exports/slides/blockchain/blockchain_05.jpg', './exports/slides/blockchain/blockchain_06.jpg', './exports/slides/blockchain/blockchain_07.jpg', './exports/slides/blockchain/blockchain_08.jpg', './exports/slides/blockchain/blockchain_09.jpg', './exports/slides/blockchain/blockchain_10.jpg', './exports/slides/blockchain/blockchain_11.jpg', './exports/slides/blockchain/blockchain_12.jpg', './exports/slides/blockchain/blockchain_13.jpg', './exports/slides/blockchain/blockchain_14.jpg', './exports/slides/blockchain/blockchain_15.jpg', './exports/slides/blockchain/blockchain_16.jpg', './exports/slides/blockchain/blockchain_17.jpg', './exports/slides/blockchain/blockchain_18.jpg', './exports/slides/blockchain/blockchain_19.jpg', './exports/slides/blockchain/blockchain_20.jpg'])
+    slidesslides.push(['./exports/slides/ai/ai_01.jpg', './exports/slides/ai/ai_02.jpg', './exports/slides/ai/ai_03.jpg', './exports/slides/ai/ai_04.jpg', './exports/slides/ai/ai_05.jpg', './exports/slides/ai/ai_06.jpg', './exports/slides/ai/ai_07.jpg', './exports/slides/ai/ai_08.jpg', './exports/slides/ai/ai_09.jpg', './exports/slides/ai/ai_10.jpg', './exports/slides/ai/ai_11.jpg', './exports/slides/ai/ai_12.jpg', './exports/slides/ai/ai_13.jpg'])
+    slidesslides.push(['./exports/slides/cyber/cyber_1.jpg', './exports/slides/cyber/cyber_2.jpg', './exports/slides/cyber/cyber_3.jpg', './exports/slides/cyber/cyber_4.jpg', './exports/slides/cyber/cyber_5.jpg', './exports/slides/cyber/cyber_6.jpg'])
+    slidesslides.push(['./exports/slides/innovation/innovation_01.jpg', './exports/slides/innovation/innovation_02.jpg', './exports/slides/innovation/innovation_03.jpg', './exports/slides/innovation/innovation_04.jpg', './exports/slides/innovation/innovation_05.jpg', './exports/slides/innovation/innovation_06.jpg', './exports/slides/innovation/innovation_07.jpg', './exports/slides/innovation/innovation_08.jpg', './exports/slides/innovation/innovation_09.jpg', './exports/slides/innovation/innovation_10.jpg', './exports/slides/innovation/innovation_11.jpg', './exports/slides/innovation/innovation_12.jpg', './exports/slides/innovation/innovation_13.jpg'])
+    slidesslides.push(['./exports/slides/iot/iot_01.jpg', './exports/slides/iot/iot_02.jpg', './exports/slides/iot/iot_03.jpg', './exports/slides/iot/iot_04.jpg', './exports/slides/iot/iot_05.jpg', './exports/slides/iot/iot_06.jpg', './exports/slides/iot/iot_07.jpg', './exports/slides/iot/iot_08.jpg', './exports/slides/iot/iot_09.jpg', './exports/slides/iot/iot_10.jpg', './exports/slides/iot/iot_11.jpg', './exports/slides/iot/iot_12.jpg'])
+    slidesslides.push(['./exports/slides/transform/transform_01.jpg', './exports/slides/transform/transform_02.jpg', './exports/slides/transform/transform_03.jpg', './exports/slides/transform/transform_04.jpg', './exports/slides/transform/transform_05.jpg', './exports/slides/transform/transform_06.jpg', './exports/slides/transform/transform_07.jpg', './exports/slides/transform/transform_08.jpg', './exports/slides/transform/transform_09.jpg', './exports/slides/transform/transform_10.jpg', './exports/slides/transform/transform_11.jpg'])
     //slidesslides.push()
     //slidesslides.push()
     //slidesslides.push()
@@ -992,8 +993,14 @@ function camSpin(){
         //console.log(_euler);
         if(_euler.y>-0.2&&_euler.y<0){
             spun = true;
-            beginScene();
+            showButton();
         }
+}
+
+function showButton(){
+    if(spun&&modelsloaded){
+        document.getElementById("EnterButton").style.visibility = "visible";
+    }
 }
 
 function beginScene(){
@@ -1207,23 +1214,23 @@ function makeSpecialMaterial(name){
         return (deck[0]);
     }
     else if(name.includes('Forum_Screens_1')){
-        
+        /*
         var forumvideo = document.getElementById( 'forumvideo' );
             forumvideo.play();
             var svideotexture = new THREE.VideoTexture( forumvideo );
             var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
             
             return svideomaterial;
-            
+          */  
     }
     else if(name.includes('ey_verse_screen')){
-        
+        /*
         var video = document.getElementById( 'video' );
             video.play();
             videotexture = new THREE.VideoTexture( video );
             videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
             return videomaterial;
-            
+          */  
     }
 
     return null;
@@ -1441,4 +1448,10 @@ function loadSlides(){
 
 
 
+}
+
+
+function enterClick(){
+    console.log("click!")
+    beginScene();
 }
