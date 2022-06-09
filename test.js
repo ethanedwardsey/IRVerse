@@ -34,6 +34,8 @@ let moveLeft = false;
 let moveRight = false;
 let canJump = false;
 
+var tooltipshowing = false;
+
 let prevTime = performance.now();
 const velocity = new THREE.Vector3();
 const camVelocity = new THREE.Vector3();
@@ -71,7 +73,19 @@ var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02'
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
 var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4};
+var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
+'IZ_map_button_02': 'Summary of the Chicago regneration event',
+'IZ_map_button_03': 'Back to the entrance',
+'IZ_map_button_04': 'See the intersection of art, technology, and business',
+'IZ_map_button_05': 'Highlights from the market space',
+'IZ_map_button_06': 'See the main stage events',
+'IZ_map_button_07': 'Music made by an AI',
+'IZ_map_button_08': 'Check out Web 3.0 and the Metaverse',
+'IZ_map_button_09': 'EY\'s activity in future industries',
+'IZ_map_button_010': 'Explore our thinking on emerging tech',
+'IZ_map_button_011': 'Virtual reality area',
 
+}
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -205,6 +219,7 @@ gltfLoader.load(
 {
     pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+    //console.log(pointer.x)
 })
 
     document.addEventListener( 'click', interact );
@@ -326,6 +341,9 @@ function animate() {
             SlideInteract();
         } else{
             handleMove(time);
+            toolTipper();
+            intObjects = mapButtons;
+            glow();
         }
     } else{
         camSpin();
@@ -334,8 +352,7 @@ function animate() {
     if(loaded){
         //videotexture.needsUpdate = true;
     //videomaterial.needsUpdate = true;
-        intObjects = mapButtons;
-        glow();
+        
     }
     
     prevTime = time;
@@ -531,7 +548,7 @@ function handleMove(time){
         direction.x = Number( moveRight ) - Number( moveLeft );
         direction.normalize(); // this ensures consistent movements in all directions
 
-        if ( moveForward || moveBackward ) velocity.z -= direction.z * 100.0 * delta;
+        if ( moveForward || moveBackward ) velocity.z -= direction.z * 70.0 * delta;
         
         
         //disable strafing, just cameramovement
@@ -666,11 +683,31 @@ function SlideInteract(){
     }
 }
 
+function toolTipper(){
+    
+    clickraycaster.setFromCamera( pointer, camera );
+    const intersecto = clickraycaster.intersectObjects(mapButtons)
+    if(intersecto.length>0){
+        var tooltip = document.getElementById( 'tooltip' );
+        tooltip.innerText = mouseoverText[intersecto[0].object.name];
+        //pointer reverse map
+        var mouseX = ((pointer.x+1)/2)*window.innerWidth;
+        var mouseY = ((pointer.y-1)/-2)*window.innerHeight;
 
-
-
-
-
+        tooltip.style.visibility = "visible";
+        tooltip.style.left = mouseX + "px";
+        tooltip.style.top = mouseY + "px";
+        //tooltip.style.display = "none"
+        //console.log("Hi!")
+        tooltipshowing = true
+    }
+    else if(tooltipshowing){
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.visibility = "hidden";
+        //console.log("turn off!")
+        tooltipshowing = false
+    }   
+}
 
 
 function interact(e){
@@ -1014,10 +1051,10 @@ function glow(){
         curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
         TZmaps[i].material.emissive = curCol;
     }
-    if(intcolor>0.65){
+    if(intcolor>0.95){
         colorchanger = -0.0025
     }
-    else if(intcolor<0.3){
+    else if(intcolor<0.55){
         colorchanger = 0.0025
     }
     intcolor = intcolor + colorchanger;
@@ -1177,7 +1214,7 @@ function makeSpecialMaterial(name){
             var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
             
             return svideomaterial;
-            */
+          */  
     }
     else if(name.includes('ey_verse_screen')){
         /*
@@ -1186,7 +1223,7 @@ function makeSpecialMaterial(name){
             videotexture = new THREE.VideoTexture( video );
             videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
             return videomaterial;
-            */
+          */  
     }
 
     return null;
