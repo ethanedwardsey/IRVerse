@@ -42,6 +42,7 @@ const camVelocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 const vertex = new THREE.Vector3();
 const color = new THREE.Color();
+var controlShowMode;
 
 //Raycasting
 const clickraycaster = new THREE.Raycaster();
@@ -66,6 +67,13 @@ var SplitScreens = [];
 var IZMainScreen;
 var PurpleMainScreen;
 var SpaceMainScreen;
+var MainScreens = [];
+
+var videos = [];
+var sounds = [];
+
+var soundsadded = 0;
+var soundsToAdd = 1;
 
 var actualSlideMode = false;
 
@@ -78,7 +86,7 @@ let yellowColor = new THREE.Color( 0xffe600 );
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
-var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 0, 'Purple_pod_screen':0, 'Purple_pod_screen001':1, 'Purple_pod_screen002':2,'Purple_pod_screen003':3, 'Purple_pod_mainScreen':0};
+var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 2, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':1, 'Purple_pod_screen_3':2,'Purple_pod_screen_4':3, 'Purple_pod_screen_main':0, "IZ_screen_1":0, 'IZ_screen_2':1, 'IZ_screen_3':2,'IZ_screen_4':3,'IZ_screen_main':4, 'infinite_possibilities_screen_1':0, 'infinite_possibilities_screen_2':1, 'infinite_possibilities_screen_3':2, 'infinite_possibilities_screen_4':3, 'infinite_possibilities_screen_main':0};
 var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
 'IZ_map_button_02': 'Summary of the Chicago regneration event',
 'IZ_map_button_03': 'Back to the entrance',
@@ -182,7 +190,7 @@ addLights();
     ocamera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 1000 );
     ocamera.position.z = 1;
     scene.add(ocamera);
-    collision = new THREE.Object3D();
+    //collision = new THREE.Object3D();
 
     controls = new PointerLockControls( camera, document.body );
 
@@ -291,6 +299,7 @@ addLights();
     fraycaster.far = 2;
     braycaster.far = 2;
 
+
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -315,7 +324,11 @@ function animate() {
     if(loaded){
         if(slideMode){
             SlideInteract();
-        } else{
+        } 
+        else if(controlShowMode){
+
+        }
+        else{
             handleMove(time);
             toolTipper();
             intObjects = mapButtons;
@@ -471,11 +484,11 @@ function handleMove(time){
             if(SplitScreens.includes(bintersects[0].object)){
                 console.log("It's a 4 boy")
                 console.log(bintersects[0].object.name)
-                if(bintersects[0].object.name.includes('IZ_Startup_zone_screen')){
+                if(bintersects[0].object.name.includes('IZ_screen')){
                     console.log(IZMainScreen);
                     var a = 3*Math.PI/4;
                     console.log("a is " + a)
-                    displaySlides(IZMainScreen.position, a, 5);
+                    displaySlides(IZMainScreen.position, a, 4.5);
                     slideMesh = IZMainScreen;
                 }
                 if(bintersects[0].object.name.includes('Purple_pod_')){
@@ -483,6 +496,13 @@ function handleMove(time){
                     console.log("Purple boy")
                     displaySlides(PurpleMainScreen.position, a, 4.5);
                     slideMesh = PurpleMainScreen;
+
+                }
+                if(bintersects[0].object.name.includes('infinite_possibilities_screen')){
+                    var a = 0;
+                    console.log("Purple boy")
+                    displaySlides(SpaceMainScreen.position, a, 4.5);
+                    slideMesh = SpaceMainScreen;
 
                 }
 
@@ -539,13 +559,19 @@ function handleMove(time){
         moveForward = false;
     }
 
-    braycaster.setFromCamera(new Vector2(0, 0), camera);
-    braycaster.direction = -braycaster.direction;
+    //braycaster.direction = -fraycaster.direction;
+    //braycaster.setFromCamera(new Vector2(0, 0), camera);
+
+    /*
+    backwards raycasting
+    braycaster.set(camera.position, -fraycaster.direction)
+    
     const bcoll = braycaster.intersectObjects( [collision] );
     if(bcoll.length>0){
+        console.log(bcoll)
         moveBackward = false;
     }
-
+*/
 
         //Controls stuff
 
@@ -652,7 +678,7 @@ function SlideInteract(){
     for(const intersect of intersecto){
         //console.log("setting color")
         //console.log(intersect.object.name)
-        if(intersect.object.name!='Purple_pod_mainScreen'&&(!(SplitScreens.includes(intersect.object)&&actualSlideMode))){
+        if(!MainScreens.includes(intersect.object)&&(!(SplitScreens.includes(intersect.object)&&actualSlideMode))){
             console.log(intersect.object.name)
             intersect.object.material.color.set('#ffff00')
         }
@@ -689,34 +715,38 @@ function SlideInteract(){
                 exitSlideMode();
                 
             }
-            else if (currentIntersect.object.name.includes("IZ_Startup_Zone_screen")){
-                for(var i = 0; i < SplitScreens.length; i++){
-                    if(SplitScreens[i]==IZMainScreen){
-                        console.log("main screen")
-                    }
-                    else{
-                        SplitScreens[i].visible = false;
-                    }
-                }
-            }
-            else if(currentIntersect.object.name.includes("Purple_pod_")){
+            else if (SplitScreens.includes(currentIntersect.object)){
                 slides=slideDecks[slideIndices[currentIntersect.object.name]]
                 actualSlideMode = true;
                 for(var i = 0; i < SplitScreens.length; i++){
-                    if(SplitScreens[i]==PurpleMainScreen){
-                        console.log("main screen")
+                    if(MainScreens.includes(SplitScreens[i])){
+                        console.log("main screen");
                     }
                     else{
-                        //console.log(SplitScreens[i]);
                         SplitScreens[i].visible = false;
                     }
                 }
             }
+            
 
             
             console.log(currentSlide);
             console.log("slide change")
             console.log(slideMesh)
+
+            if(currentSlide==0){
+                next_mesh.visible = true;
+                back_mesh.visible = false;
+                
+            }
+            else if (currentSlide==slides.length-1){
+                next_mesh.visible = false;
+                back_mesh.visible = true;
+            }
+            else{
+                next_mesh.visible = true;
+                back_mesh.visible = true;
+            }
 
             slideMesh.material = slides[currentSlide];
             //slideMesh.visible = false;
@@ -826,7 +856,7 @@ function loadAllModels(){
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque2.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
-    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'PurplePodEthan.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
+    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
 
     var fulltext = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_signage.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg', 'ey_verse_curtains.jpg', 'ey_verse_floor.jpg', 'ey_verse_inner_walls.jpg', 'ey_verse_outer_walls.jpg', 'ey_verse_rafters.jpg', 'ey_verse_rug.jpg', 'ey_verse_screen.jpg', 'ey_verse_side_rails.jpg', 'ey_verse_speakers_1.jpg', 'ey_verse_speakers_2.jpg', 'ey_verse_stools.jpg', 'ey_verse_tables_and_chairs.jpg', 'Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_light_truss.png', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg', 'IR_Welcome_Map_2.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_map_button_010.jpg', 'IZ_map_button_011.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg', 'Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'market_mound.jpg', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_overhead_screen_5.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_trellis.png', 'Market_walls.jpg', 'Market_waterfall_screen.jpg', 'Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg', 'Space_Pod_chairs.jpg', 'Space_Pod_floor_ceiling.jpg', 'Space_Pod_Inner_wall.jpg', 'Space_Pod_screen.jpg', 'Space_Pod_truss.png', 'Space_Pod_wood_pillars.jpg', 'SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_edison_lamps.png', 'SpeakEasy_floor.jpg', 'SpeakEasy_liquor_bottles.png', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg', 'TZ_blockchain_01.jpg', 'TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_signage.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg', 'VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_shooters.png', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     for(var i = 0; i < models.length; i++){
@@ -920,7 +950,7 @@ function displaySlides(p, a, dist=25){
 
     x_mesh.position.set(p.x+mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y+mul*0.27, p.z-mul*bmul*Math.sin(a)-0.1*Math.cos(a));
     x_mesh.rotation.set(0, a, 0);
-    back_mesh.visible = true;
+    back_mesh.visible = false;
     next_mesh.visible = true;
     x_mesh.visible = true;
     
@@ -1001,7 +1031,7 @@ function camSpin(){
 }
 
 function showButton(){
-    if(spun&&modelsloaded){
+    if(spun&&modelsloaded&&soundsadded>=soundsToAdd){
         document.getElementById("EnterButton").style.visibility = "visible";
         document.getElementById("loadingBar").style.visibility = "hidden";
         document.getElementById("loadingbackground").style.visibility = "hidden";
@@ -1028,6 +1058,16 @@ function beginScene(){
             controlbutton.addEventListener('click', showControls)
             var xbutton = document.getElementById("xbutton");
             xbutton.addEventListener('click', closeControls);
+
+            for(var i = 0; i < videos.length; i++){
+                videos[i].play();
+            }
+            console.log(sounds)
+            console.log("length " + sounds.length)
+            for(var i = 0; i < sounds.length; i++){
+                console.log(sounds[i])
+                sounds[i].play();
+            }
             
             //console.log(_euler);
     }
@@ -1042,7 +1082,7 @@ function addLights(){
 }
 
 function addSound(mesh){
-    const sound = new THREE.PositionalAudio( listener );
+    var sound = new THREE.PositionalAudio( listener );
 
     // load a sound and set it as the PositionalAudio object's buffer
     const audioLoader = new THREE.AudioLoader();
@@ -1052,7 +1092,10 @@ function addSound(mesh){
     sound.setDistanceModel("exponential");
     sound.setRefDistance( 5 );
     sound.setRolloffFactor( 4 );
-	sound.play();
+    sounds.push(sound);
+    soundsadded++;
+    showButton();
+    
 
     
 });
@@ -1146,7 +1189,7 @@ function makeSpecialMaterial(name){
             return bakedMaterial;
 
     }
-    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen")||name.includes("Purple_pod_mainScreen")||name.includes("CR_2035_screen")){
+    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen")||name.includes("IZ_screen")||name.includes("infinite_possibilities_screen")||name.includes("CR_2035_screen")){
         if(name.includes('CR_2035_screen_frame')){
             return null;
         }
@@ -1171,9 +1214,10 @@ function makeSpecialMaterial(name){
     else if(name.includes('Forum_Screens_1')){
         //if(browser!='Microsoft Edge'){
             var forumvideo = document.getElementById( 'forumvideo' );
-            forumvideo.play();
+            //forumvideo.play();
             var svideotexture = new THREE.VideoTexture( forumvideo );
             var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
+            videos.push(forumvideo);
             
             return svideomaterial;
         //}
@@ -1181,9 +1225,10 @@ function makeSpecialMaterial(name){
     else if(name.includes('ey_verse_screen')){
         //if(browser!='Microsoft Edge'){
         var video = document.getElementById( 'video' );
-            video.play();
+            //video.play();
             videotexture = new THREE.VideoTexture( video );
             videomaterial = new THREE.MeshBasicMaterial( { map: videotexture } );
+            videos.push(video);
             return videomaterial;
         //}
           
@@ -1201,13 +1246,19 @@ function addInteract(bakedMesh){
         
     }
     //Split monitors
-    else if(name.includes('IZ_Startup_zone_screen')||name.includes("Purple_pod_screen")||name.includes("Space_Pod_screen")||name.includes("Purple_pod_mainScreen")){
+    else if(name.includes('IZ_screen')||name.includes("Purple_pod_screen")||name.includes("infinite_possibilities_screen")){
         SplitScreens.push(bakedMesh);
-        if(name.includes("IZ_Startup_zone_screen_frame")){
+        if(name.includes("IZ_screen_main")){
             IZMainScreen = bakedMesh;
+            MainScreens.push(IZMainScreen);
         }
-        if(name.includes("Purple_pod_mainScreen")){
+        if(name.includes("Purple_pod_screen_main")){
             PurpleMainScreen = bakedMesh;
+            MainScreens.push(PurpleMainScreen);
+        }
+        if(name.includes("infinite_possibilities_screen_main")){
+            SpaceMainScreen = bakedMesh;
+            MainScreens.push(SpaceMainScreen);
         }
     }
     else if(name.includes('IZ_map_button_')){
@@ -1217,6 +1268,7 @@ function addInteract(bakedMesh){
     }
     else if(name.includes('Line001')){
         bakedMesh.visible = false;
+        collision = bakedMesh;
         
     }
     else if(name.includes('ey_verse_screen')){
@@ -1365,7 +1417,7 @@ function enterClick(){
 
 function warpToMap(){
     camera.position.x = -16.82363656182083;
-    camera.position.z = -0.7227533044218651;
+    camera.position.z = -0.37317274066446193;
     const neuler = new Euler( 0, -Math.PI, 0, 'YXZ' );
     camera.quaternion.setFromEuler(neuler)
 }
@@ -1373,11 +1425,19 @@ function warpToMap(){
 function showControls(){
     document.getElementById("controldisplay").style.visibility = "visible";
     document.getElementById("xbutton").style.visibility = "visible";
+    document.getElementById("return").style.visibility = "hidden";
+    document.getElementById("controlbutton").style.visibility = "hidden";
+    document.getElementById("controller").style.visibility = "hidden";
+    controlShowMode = true;
 }
 
 function closeControls(){
     document.getElementById("controldisplay").style.visibility = "hidden";
     document.getElementById("xbutton").style.visibility = "hidden";
+    document.getElementById("return").style.visibility = "visible";
+    document.getElementById("controlbutton").style.visibility = "visible";
+    document.getElementById("controller").style.visibility = "visible";
+    controlShowMode = false;
 }
 
 function loadFullModels(){
