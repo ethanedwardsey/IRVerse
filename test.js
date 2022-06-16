@@ -343,6 +343,7 @@ function animate() {
     // Cast a ray
 
     if(loaded){
+        
         if(slideMode){
             SlideInteract();
         } 
@@ -355,14 +356,8 @@ function animate() {
             intObjects = mapButtons;
             glow();
 
-            if(animatecount%200==0){
-                pause();
-            }
-            if(animatecount%201==0){
-                play();
-            }
-
         }
+        
     } else{
         camSpin();
     }
@@ -1246,9 +1241,11 @@ function glow(){
         //console.log("glowing " + TZmaps[i].name);
     }
     for(var i = 0; i < VideoScreens.length; i++){
+        if(browser=="Edge"){
         let curCol = new THREE.Color();
         curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
         VideoScreens[i].material.emissive = curCol;
+        }
         //console.log("glowing " + TZmaps[i].name);
     }
     if(intcolor>0.95){
@@ -1333,13 +1330,7 @@ function makeSpecialMaterial(name){
         if(name.includes('CR_2035_screen_frame')){
             return null;
         }
-        /*
-        const bakedTexture = slideDecks[slideIndices[name]]
-        bakedTexture.flipY = false;
-        bakedTexture.encoding = THREE.sRGBEncoding
-        const bakedMaterial = new THREE.MeshLambertMaterial({ map: bakedTexture })
-        bakedMaterial.side = THREE.DoubleSide;
-        */
+
         //console.log("found texturename" + texturename);
         //return bakedMaterial;
         console.log(name)
