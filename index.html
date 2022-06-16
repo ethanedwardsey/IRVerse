@@ -8,17 +8,19 @@
 </head>
 
 <body>
+  
+
   <!--
   <video id="video" muted crossorigin="anonymous" style="display:none; position: absolute; left: 15px; top: 75px;"
         type="video/mp4"
-        src="./exports/videos/EYVerseFlip.mp4" controls="false" autoplay="true" loop="true">
-</video>
-
-<video id="forumvideo" muted crossorigin="anonymous" style="display:none;"
-        type="video/mp4"
-        src="./exports/videos/IRFlip2.mp4" controls="false" autoplay="true" loop="true">
+        src="./exports/videos/EYVerseFlip.mp4" controls="false" autoplay="true" loop="true" codecs="avc1.42E01E, mp4a.40.2">
 </video>
 -->
+<video id="forumvideo" muted crossorigin="anonymous" style="display:none;"
+        type="video/mp4"
+        src="./exports/videos/IRFlip2.mp4" controls="false" autoplay="true" loop="true" codecs="avc1.42E01E, mp4a.40.2">
+</video>
+
 
     <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
@@ -31,17 +33,24 @@
 </script>
 <script type="module" src="test.js"> </script>
     <div id="loadingScreen" style="position:absolute;top:0px;right:0px;bottom:0px;left:0px;border: 2px solid #000;">
-      <img id="EnterButton" src="EnterButton.jpg" style="visibility:hidden;position: absolute; top:47.264%;left:45%;width:10%;">
-      <img src="LoadingScreen.jpg" style="height:100%;width:100%">
-        <div id = "loadingBackground" style="position:absolute;top: 50%; bottom: 50%; width: 100%;background-color: grey;"></div>
-        <div id = "loadingBar"  style="position:absolute; bottom: 0px; left: 5%; width: 1%;height: 30px;background-color: green;"></div> 
+      <img id="EnterButton" src="EnterButton.png" style="visibility:hidden;position:absolute;height:100%;width:100%;z-index: 25;">
+      <img id="loadingbackground" src="LoadingBar.png" style="position:absolute;z-index:9;height:100%;width:100%">
+      <img src="LoadingScreenFinal.jpg" style="position:absolute;z-index:3;height:100%;width:100%">
+        
+        <div id = "loadingBar"  style="position:absolute; z-index:12;bottom: 12%; left: 28%; width: 1%;height: 2%;background-color: rgb(254, 230, 0);"></div> 
         
     </div>
    
 
-<div id="controller" class="controller" style="display: none; position:fixed;bottom:50px;right:50px;z-index: 9999;background-color: transparent;opacity:0.8"> <img src="IRController.png" width="175" height="175" style=""></div>
-<div id="tooltip" class="tooltip" style="visibility: false; position: absolute; z-index: 9999; width: 100px; background: #0f0f0f; color: white; opacity: 0.75"></div>
-<canvas id="three" class="webgl" style="position: fixed;top: 0;left: 0;outline: none;"></canvas>
+<img id ="controller" src="IRController.png" style="visibility:hidden; position:absolute;bottom:5%;right:5%;width:15%;z-index: 9999;background-color: transparent;opacity:0.8;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+<img id="return" src="MapButton.jpg" style="visibility:hidden;position: absolute; bottom:2%;left:2%;width:8%;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+<img id="controlbutton" src="CheckControls.jpg" style="visibility:hidden;position: absolute; bottom:2%;left:12%;width:8%;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+
+<img id="controldisplay" src="LoadingScreenFinal.jpg" style="visibility:hidden;position: absolute; height:80%;width:80%;left:10%;top:10%;z-index:99;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+<img id="xbutton" src="./exports/buttons/xbutton.png" style="visibility:hidden;position: absolute; width:5%;left:3%;top:3%;z-index:999;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+
+<div id="tooltip" class="tooltip" style="visibility: false; position: absolute; z-index: 9999; width: 100px; background: #0f0f0f; color: white; opacity: 0.75;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;"></div>
+<canvas id="three" class="webgl" style="visibility: false; position: fixed;top: 0;left: 0;outline: none;"></canvas>
 
 
 <!--position: absolute;width: 200px;height: 200px;bottom: 100;right: 100;background-color: transparent;opacity: 0.5;-->
