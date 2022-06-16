@@ -91,7 +91,7 @@ let yellowColor = new THREE.Color( 0xffe600 );
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0, 'Forum_Screens_2': -Math.PI/2, 'Forum_Screens_3':-Math.PI/2};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
-var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 3, 'TZ_wall_monitors_08': 4, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 11, 'TZ_blockchain_19': 12, 'TZ_blockchain_20': 18, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 2, 'TZ_pillar_monitors_02': 3, 'TZ_pillar_monitors_03': 5, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':19, 'Purple_pod_screen_3':20,'Purple_pod_screen_4':21, 'Purple_pod_screen_main':0, "IZ_screen_1":0, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':10, 'infinite_possibilities_screen_2':17, 'infinite_possibilities_screen_3':15, 'infinite_possibilities_screen_4':13, 'infinite_possibilities_screen_main':0};
+var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 3, 'TZ_wall_monitors_08': 4, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 11, 'TZ_blockchain_19': 12, 'TZ_blockchain_20': 18, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 22, 'TZ_pillar_monitors_02': 23, 'TZ_pillar_monitors_03': 24, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':19, 'Purple_pod_screen_3':20,'Purple_pod_screen_4':21, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':10, 'infinite_possibilities_screen_2':17, 'infinite_possibilities_screen_3':15, 'infinite_possibilities_screen_4':13, 'infinite_possibilities_screen_005': 14, 'infinite_possibilities_screen_006': 15, 'infinite_possibilities_screen_main':0};
 var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
 'IZ_map_button_02': 'Summary of the Chicago regneration event',
 'IZ_map_button_03': 'Back to the entrance',
@@ -555,6 +555,10 @@ function handleMove(time){
                     dist = 2.75;
                     mul = 2;
                 }
+                else if (bintersects[0].object.name.includes('Forum_Screens_')){
+                    dist = 4.5;
+                    mul = 3.35;
+                }
                 else if (bintersects[0].object.name=='CR_2035_screen'){
                     dist = 3.35;
                     mul = 2.45;
@@ -910,7 +914,7 @@ function loadAllModels(){
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque2.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
-    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb',  'IZEthan.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
+    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'ForumEthan.glb', 'Forum_BAKED_transparent.glb',  'IZEthan.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
 
     var fulltext = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_signage.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg', 'ey_verse_curtains.jpg', 'ey_verse_floor.jpg', 'ey_verse_inner_walls.jpg', 'ey_verse_outer_walls.jpg', 'ey_verse_rafters.jpg', 'ey_verse_rug.jpg', 'ey_verse_screen.jpg', 'ey_verse_side_rails.jpg', 'ey_verse_speakers_1.jpg', 'ey_verse_speakers_2.jpg', 'ey_verse_stools.jpg', 'ey_verse_tables_and_chairs.jpg', 'Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_light_truss.png', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg', 'IR_Welcome_Map_2.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_map_button_010.jpg', 'IZ_map_button_011.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg', 'Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'market_mound.jpg', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_overhead_screen_5.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_trellis.png', 'Market_walls.jpg', 'Market_waterfall_screen.jpg', 'Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg', 'Space_Pod_chairs.jpg', 'Space_Pod_floor_ceiling.jpg', 'Space_Pod_Inner_wall.jpg', 'Space_Pod_screen.jpg', 'Space_Pod_truss.png', 'Space_Pod_wood_pillars.jpg', 'SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_edison_lamps.png', 'SpeakEasy_floor.jpg', 'SpeakEasy_liquor_bottles.png', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg', 'TZ_blockchain_01.jpg', 'TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_signage.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg', 'VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_shooters.png', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     for(var i = 0; i < models.length; i++){
@@ -970,12 +974,20 @@ function loadBSlides(){
     slidesslides.push(['./exports/slides/techatspeed/Slide1.JPG', './exports/slides/techatspeed/Slide2.JPG', './exports/slides/techatspeed/Slide3.JPG', './exports/slides/techatspeed/Slide4.JPG']);
     //21
     slidesslides.push(['./exports/slides/transformationtransition/Slide1.JPG', './exports/slides/transformationtransition/Slide2.JPG', './exports/slides/transformationtransition/Slide3.JPG', './exports/slides/transformationtransition/Slide4.JPG', './exports/slides/transformationtransition/Slide5.JPG']);
-    //19
-    //slidesslides.push();
-    
-    //slidesslides.push()
-    //slidesslides.push()
-    //slidesslides.push()
+    //22
+    slidesslides.push(['./exports/slides/innovationsg/Slide1.JPG', './exports/slides/innovationsg/Slide2.JPG', './exports/slides/innovationsg/Slide3.JPG', './exports/slides/innovationsg/Slide4.JPG', './exports/slides/innovationsg/Slide5.JPG', './exports/slides/innovationsg/Slide6.JPG', './exports/slides/innovationsg/Slide7.JPG', './exports/slides/innovationsg/Slide8.JPG', './exports/slides/innovationsg/Slide9.JPG']);
+    //23
+    slidesslides.push(['./exports/slides/technologysg/Slide1.JPG', './exports/slides/technologysg/Slide2.JPG', './exports/slides/technologysg/Slide3.JPG', './exports/slides/technologysg/Slide4.JPG', './exports/slides/technologysg/Slide5.JPG', './exports/slides/technologysg/Slide6.JPG', './exports/slides/technologysg/Slide7.JPG', './exports/slides/technologysg/Slide8.JPG', './exports/slides/technologysg/Slide9.JPG', './exports/slides/technologysg/Slide910.JPG', './exports/slides/technologysg/Slide911.JPG', './exports/slides/technologysg/Slide912.JPG', './exports/slides/technologysg/Slide913.JPG', './exports/slides/technologysg/Slide914.JPG', './exports/slides/technologysg/Slide915.JPG'])
+    //24
+    slidesslides.push(['./exports/slides/transformationsg/Slide1.JPG', './exports/slides/transformationsg/Slide2.JPG', './exports/slides/transformationsg/Slide3.JPG', './exports/slides/transformationsg/Slide4.JPG', './exports/slides/transformationsg/Slide5.JPG', './exports/slides/transformationsg/Slide6.JPG', './exports/slides/transformationsg/Slide7.JPG', './exports/slides/transformationsg/Slide8.JPG', './exports/slides/transformationsg/Slide9.JPG', './exports/slides/transformationsg/Slide910.JPG', './exports/slides/transformationsg/Slide911.JPG']);
+    //25
+    slidesslides.push(['./exports/slides/transformbusiness/Slide1.JPG', './exports/slides/transformbusiness/Slide2.JPG', './exports/slides/transformbusiness/Slide3.JPG', './exports/slides/transformbusiness/Slide4.JPG']);
+    //26
+    slidesslides.push(['./exports/slides/metaversecloud/Slide1.JPG', './exports/slides/metaversecloud/Slide2.JPG', './exports/slides/metaversecloud/Slide3.JPG', './exports/slides/metaversecloud/Slide4.JPG']);
+    //27
+    slidesslides.push(['./exports/slides/arttechinnovation/Slide1.JPG', './exports/slides/arttechinnovation/Slide2.JPG', './exports/slides/arttechinnovation/Slide3.JPG', './exports/slides/arttechinnovation/Slide4.JPG']);
+    //28
+    slidesslides.push(['./exports/slides/ecosystems/Slide1.JPG', './exports/slides/ecosystems/Slide2.JPG', './exports/slides/ecosystems/Slide3.JPG', './exports/slides/ecosystems/Slide4.JPG', './exports/slides/ecosystems/Slide5.JPG', './exports/slides/ecosystems/Slide6.JPG', './exports/slides/ecosystems/Slide7.JPG', './exports/slides/ecosystems/Slide8.JPG']);
     for(var i = 0; i < slidesslides.length; i++){
         var newDeck = []
 
@@ -1008,28 +1020,6 @@ function displaySlides(p, a, dist=1.5, mul=1, split=false){
     
     //Set pcamera, should probably change
     pcamera = camera;
-    //var mul = 1;
-    /*
-    if(dist==3.75){
-        mul = 2
-        dist = 2.75
-    }
-    if(dist==4){
-        dist = 3;
-    }
-    if(dist==4.5){
-        dist = 2.75;
-        mul = 2;
-    }
-    if(dist==8){
-        dist = 3.35;
-        mul = 2.45;
-    }
-    if(dist==9){
-        dist = 1.9;
-        mul = 1.35;
-    }
-    */
     console.log("mul " + mul)
     console.log("dist " + dist)
     var bmul = 0.54;
@@ -1324,7 +1314,7 @@ function makeSpecialMaterial(name){
     }
     else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen_")||name.includes("IZ_screen")||name.includes("infinite_possibilities_screen")||name.includes("CR_2035_screen")||name=="Forum_Screens_2"||name=="Forum_Screens_3"){
         if(name.includes('Forum')){
-            return null;
+            //return null;
         }
         
         if(name.includes('CR_2035_screen_frame')){
@@ -1389,9 +1379,6 @@ function addInteract(bakedMesh){
     //Standard monitors
     if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes('CR_2035_screen')||name=='Forum_Screens_2'||name=='Forum_Screens_3'){
         if(!name.includes('CR_2035_screen_frame')){
-            if(name.includes('Forum')){
-                return null;
-            }
             TZmaps.push(bakedMesh);
         }
         
