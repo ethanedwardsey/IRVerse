@@ -16,6 +16,7 @@ var slideMode = false;
 var back_mesh;
 var next_mesh;
 var x_mesh;
+var contact_mesh;
 
 let camMoveX = 0;
 let camMoveY = 0;
@@ -87,6 +88,7 @@ var colorchanger = 0.05;
 let whiteColor = new THREE.Color( 0xffffff );
 let yellowColor = new THREE.Color( 0xffe600 );
 
+var contactSlides = [];
 
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0, 'Forum_Screens_2': -Math.PI/2, 'Forum_Screens_3':-Math.PI/2};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
@@ -723,7 +725,7 @@ function handleMove(time){
 function SlideInteract(){
     var currentIntersect;
     if(slideMode){
-    const objectsForRayCast = [back_mesh, next_mesh, x_mesh]
+    const objectsForRayCast = [back_mesh, next_mesh, x_mesh, contact_mesh]
     clickraycaster.setFromCamera( pointer, camera );
     const intersecto = clickraycaster.intersectObjects(objectsForRayCast.concat(SplitScreens))
     
@@ -773,8 +775,12 @@ function SlideInteract(){
                 return;
                 
             }
+            else if (currentIntersect.object == contact_mesh){
+                window.open('mailto:ethan.edwards@ey.com', '_blank');
+            }
             else if (SplitScreens.includes(currentIntersect.object)){
-                slides=slideDecks[slideIndices[currentIntersect.object.name]]
+                slides=slideDecks[slideIndices[currentIntersect.object.name]];
+                currentSlide = 0;
                 actualSlideMode = true;
                 for(var i = 0; i < SplitScreens.length; i++){
                     if(MainScreens.includes(SplitScreens[i])){
@@ -795,15 +801,20 @@ function SlideInteract(){
             if(currentSlide==0){
                 next_mesh.visible = true;
                 back_mesh.visible = false;
+                contact_mesh.visible = false;
                 
             }
             else if (currentSlide==slides.length-1){
                 next_mesh.visible = false;
                 back_mesh.visible = true;
+                if(contactSlides.includes(slideMesh.name)){
+                    contact_mesh.visible = true;
+                }
             }
             else{
                 next_mesh.visible = true;
                 back_mesh.visible = true;
+                contact_mesh.visible = false;
             }
 
             slideMesh.material = slides[currentSlide];
@@ -1039,6 +1050,10 @@ function displaySlides(p, a, dist=1.5, mul=1, split=false){
 
     x_mesh.position.set(p.x+mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y+mul*0.27, p.z-mul*bmul*Math.sin(a)-0.1*Math.cos(a));
     x_mesh.rotation.set(0, a, 0);
+
+    contact_mesh.position.set(p.x-0.5*mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y-mul*0.14, p.z+0.5*mul*bmul*Math.sin(a)-0.1*Math.cos(a));
+    contact_mesh.rotation.set(0, a, 0);
+
     back_mesh.visible = false;
     next_mesh.visible = !split;
     console.log("Visible? " + !split)
@@ -1061,6 +1076,7 @@ function loadSlideButtons(){
     const backTexture = textureLoader.load('./exports/buttons/backb.png')
     const nextTexture = textureLoader.load('./exports/buttons/nextb.png')
     const xTexture = textureLoader.load('./exports/buttons/xbutton.png')
+    const contactTexture = textureLoader.load('./exports/buttons/contactbutton.jpg')
         //const back_plane = new THREE.PlaneGeometry( 0.1, 0.1)
         const back_plane = new THREE.BoxGeometry(0.1, 0.1, 0.01);
         //back_plane.translate(-0.55, 0, 0)
@@ -1077,13 +1093,20 @@ function loadSlideButtons(){
         //next_plane.translate(0.55, 0, 0)
         const x_plane_material = new THREE.MeshBasicMaterial({ map: xTexture })
         x_mesh = new THREE.Mesh(x_plane, x_plane_material)
+
+        const contact_plane = new THREE.BoxGeometry(0.2, 0.1, 0.01);
+        //next_plane.translate(0.55, 0, 0)
+        const contact_plane_material = new THREE.MeshBasicMaterial({ map: contactTexture })
+        contact_mesh = new THREE.Mesh(contact_plane, contact_plane_material)
     
         scene.add(back_mesh)
         scene.add(next_mesh)
         scene.add(x_mesh)
+        scene.add(contact_mesh)
         back_mesh.visible = false;
         next_mesh.visible = false;
         x_mesh.visible = false;
+        contact_mesh.visible = false;
        
 
 }
@@ -1097,14 +1120,19 @@ function exitSlideMode(){
     next_mesh.visible = false;
     back_mesh.visible = false;
     x_mesh.visible = false;
+    contact_mesh.visible = false;
     slideMode = false;
     actualSlideMode = false;
     document.getElementById("return").style.visibility = "visible";
     document.getElementById("controlbutton").style.visibility = "visible";
     document.getElementById("controller").style.visibility = "visible";
-    
+    ResetSlide();
     
 
+}
+
+function ResetSlide(){
+    slideMesh.material = slides[0];
 }
 
 function camSpin(){
@@ -1201,14 +1229,23 @@ mesh.add(sound)
 function addGlobalSounds(){
     const sound = new THREE.Audio( listener );
 
+
 // load a sound and set it as the Audio object's buffer
     const audioLoader = new THREE.AudioLoader();
     audioLoader.load( './exports/sounds/crowd-2.mp3', function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setLoop( true );
-	sound.setVolume( 0.01 );
+	sound.setVolume( 0.005 );
 	sound.play();
 });
+    const sound2 = new THREE.Audio( listener );
+    audioLoader.load( './exports/sounds/IRVerse2.mp3', function( buffer ) {
+	sound2.setBuffer( buffer );
+	sound2.setLoop( true );
+	sound2.setVolume( 0.01 );
+	sound2.play();
+});
+
 }
 
 function glow(){
@@ -1347,9 +1384,9 @@ function makeSpecialMaterial(name){
         }
     }
     else if(name.includes('ey_verse_screen')){
-        if(browser!='Edge'&&false){
+        if(browser!='Edge'){
 
-        
+        console.log("EY VIDEO")
         var video = document.getElementById( 'video' );
             //video.play();
             videotexture = new THREE.VideoTexture( video );
