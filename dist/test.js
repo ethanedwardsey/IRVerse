@@ -442,76 +442,8 @@ function handleMove(time){
 
         // calculate objects intersecting the picking ray
         const intersects = clickraycaster.intersectObjects( mapButtons );
-
-        for ( let i = 0; i < intersects.length; i ++ ) {
-            console.log("yaaaay");
-            console.log(intersects[i])
-            console.log(intersects[i].object.name)
-            if(intersects[i].object.name.includes('IZ_map_button')){
-                var newPos = new Vector3(0, 0, 0);
-                var newRot = 0;
-                if(intersects[i].object.name.includes('010')){
-                    newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
-                    newRot = 0;
-                }
-                else if(intersects[i].object.name.includes('011')){
-                    newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
-                    newRot = 0;
-                }
-                else if(intersects[i].object.name.includes('01')){
-                    newPos = new Vector3(-4.913926124799983,1.5,3.1473119049575);
-                    newRot = -Math.PI;
-                }
-                else if(intersects[i].object.name.includes('02')){
-                    newPos = new Vector3(-14.763254846552549,1.5,3.381983248102806);
-                    newRot = -Math.PI;
-                }
-                else if(intersects[i].object.name.includes('03')){
-                    newPos = new Vector3(-24.250405077612033,1.5,-0.13968857421984837);
-                    newRot = -Math.PI/2;
-                }
-                
-                else if(intersects[i].object.name.includes('04')){
-                    newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
-                    //newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
-                    newRot = -Math.PI/2;
-                }
-                else if(intersects[i].object.name.includes('05')){
-                    newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
-                    //newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
-                    newRot = -Math.PI/2;
-                }
-                else if(intersects[i].object.name.includes('06')){
-                    newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
-                    //newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
-                    newRot = Math.PI/2;
-                }
-                
-                else if(intersects[i].object.name.includes('07')){
-                    newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
-                    //newPos = new Vector3(44.73183653949032,1.5,4.082937851489276);
-                    newRot = -Math.PI/2;
-                }
-                else if(intersects[i].object.name.includes('08')){
-                    
-                    newPos = new Vector3(56.46974644873789,1.5,3.280566032867076);
-                    newRot = Math.PI;
-                }
-                else if(intersects[i].object.name.includes('09')){
-                    newPos = new Vector3(44.202573509065516,1.5,3.965227914830795);
-                    newRot = -Math.PI;
-                }
-                
-
-
-                //No y because height shouldn't be changed
-                camera.position.x = newPos.x;
-                camera.position.z = newPos.z;
-                const neuler = new Euler( 0, newRot, 0, 'YXZ' );
-                camera.quaternion.setFromEuler(neuler)
-            }
-            
-
+        if(intersects.length>0){
+            teleport(intersects[0].object.name);
         }
         console.log(TZmaps);
         const bintersects = clickraycaster.intersectObjects( TZmaps.concat(SplitScreens) );
@@ -722,9 +654,91 @@ function handleMove(time){
         }
 }
 
+
+function teleport(name){
+    if(name.includes('IZ_map_button')){
+        var newPos = new Vector3(0, 0, 0);
+        var newRot = 0;
+        if(name.includes('010')){
+            newPos = new Vector3(36.357200959384286,1.5,-27.780869919116576);
+            newRot = Math.PI/2;
+        }
+        else if(name.includes('011')){
+            newPos = new Vector3(2.0107367878510556,1.5,-27.518229810088066);
+            newRot = -Math.PI/2;
+        }
+        else if(name.includes('01')){
+            newPos = new Vector3(-24.250405077612033,1.5,-0.13968857421984837);
+            newRot = -Math.PI/2;
+        }
+        else if(name.includes('02')){
+            newPos = new Vector3(-14.763254846552549,1.5,3.381983248102806);
+            newRot = -Math.PI;
+        }
+        else if(name.includes('03')){
+            
+            newPos = new Vector3(-4.913926124799983,1.5,3.1473119049575);
+            newRot = -Math.PI;
+        }
+        
+        else if(name.includes('04')){
+            newPos = new Vector3(-6.131198084298851,1.5,-4.94005691805949);
+            newRot = -Math.PI/2;
+        }
+        else if(name.includes('05')){
+            newPos = new Vector3(14.228396830902655,1.5,-5.924025345405676);
+            newRot = 0;
+        }
+        else if(name.includes('06')){
+            newPos = new Vector3(27.86055241837079,1.5,-5.924285762145197);
+            newRot = 0;
+        }
+        
+        else if(name.includes('07')){
+            newPos = new Vector3(44.202573509065516,1.5,3.965227914830795);
+            newRot = -Math.PI; 
+        }
+        else if(name.includes('08')){
+            
+            newPos = new Vector3(56.46974644873789,1.5,3.280566032867076);
+            newRot = Math.PI;
+        }
+        else if(name.includes('09')){
+            newPos = new Vector3(45.32320284406064,1.5,-4.000316721102775);
+            newRot = -Math.PI/2;
+        }
+        
+
+
+        //No y because height shouldn't be changed
+        camera.position.x = newPos.x;
+        camera.position.z = newPos.z;
+        const neuler = new Euler( 0, newRot, 0, 'YXZ' );
+        camera.quaternion.setFromEuler(neuler)
+    }
+}
+
 function SlideInteract(){
-    var currentIntersect;
-    if(slideMode){
+    var currentIntersect = highlightButtons();
+    if(click){
+        slideClick(currentIntersect);
+        click = false;     
+    }
+    slidesKeyboard();
+}
+
+function slidesKeyboard(){
+    if(moveLeft){
+        changeSlide(false);
+        moveLeft = false;
+    }
+    if(moveRight){
+        changeSlide(true);
+        moveRight = false;
+    }
+}
+
+function highlightButtons(){
     const objectsForRayCast = [back_mesh, next_mesh, x_mesh, contact_mesh]
     clickraycaster.setFromCamera( pointer, camera );
     const intersecto = clickraycaster.intersectObjects(objectsForRayCast.concat(SplitScreens))
@@ -738,97 +752,85 @@ function SlideInteract(){
         //console.log("setting color")
         //console.log(intersect.object.name)
         if(!MainScreens.includes(intersect.object)&&(!(SplitScreens.includes(intersect.object)&&actualSlideMode))){
-            console.log(intersect.object.name)
+            //console.log(intersect.object.name)
             intersect.object.material.color.set('#ffff00')
         }
     }
-    currentIntersect = intersecto[0];
+    //Return current intersection
+    return intersecto[0];
+}
+
+function changeSlide(plus){
+    var nm = true;
+    var bm = true;
+    var cm = false;
+    if(plus){
+        if(currentSlide<(slides.length-1)){
+            currentSlide++;
+        }
+        if(currentSlide==slides.length-1){
+            nm = false;
+            bm = true;
+            if(contactSlides.includes(slideMesh.name)){
+                cm = true;
+            }
+        }
+    }
+    else{
+        if(currentSlide>0){
+            currentSlide--;
+        }
+        if(currentSlide==0){
+            nm = true;
+            bm = false;
+            cm = false;
+        }
+
     }
 
+    next_mesh.visible = nm;
+    back_mesh.visible = bm;
+    contact_mesh.visible = cm;
 
-        //Handle raycasting
-    if(click){
+    slideMesh.material = slides[currentSlide];
+}
 
-
-        //Just for testing slides
-    if(slideMode){
-
-        
-        if(currentIntersect){
-            if (currentIntersect.object === back_mesh){
-                if(currentSlide > 0){
-                    currentSlide--;
-                } else {
-                    console.log('at the beginning of the deck, no more slides for back')                
-                }
-            } 
-            else if (currentIntersect.object === next_mesh){
-                if(currentSlide < slides.length-1){
-                    currentSlide++;
-                } else {
-                    console.log('at the end of the deck, no more slides next')  
-                }
-                
-            }
-            else if (currentIntersect.object === x_mesh){
-                exitSlideMode();
-                return;
-                
-            }
-            else if (currentIntersect.object == contact_mesh){
-                window.open('mailto:ethan.edwards@ey.com', '_blank');
-            }
-            else if (SplitScreens.includes(currentIntersect.object)){
-                slides=slideDecks[slideIndices[currentIntersect.object.name]];
-                currentSlide = 0;
-                actualSlideMode = true;
-                for(var i = 0; i < SplitScreens.length; i++){
-                    if(MainScreens.includes(SplitScreens[i])){
-                        console.log("main screen");
-                    }
-                    else{
-                        SplitScreens[i].visible = false;
-                    }
-                }
-            }
+function slideClick(currentIntersect){
+    if(currentIntersect){
+        if (currentIntersect.object === back_mesh){
+            changeSlide(false);
+        } 
+        else if (currentIntersect.object === next_mesh){
+            changeSlide(true);
             
-
+        }
+        else if (currentIntersect.object === x_mesh){
+            exitSlideMode();
+            return;
             
-            console.log(currentSlide);
-            console.log("slide change")
-            console.log(slideMesh)
-
-            if(currentSlide==0){
-                next_mesh.visible = true;
-                back_mesh.visible = false;
-                contact_mesh.visible = false;
-                
-            }
-            else if (currentSlide==slides.length-1){
-                next_mesh.visible = false;
-                back_mesh.visible = true;
-                if(contactSlides.includes(slideMesh.name)){
-                    contact_mesh.visible = true;
+        }
+        else if (currentIntersect.object == contact_mesh){
+            window.open('mailto:ethan.edwards@ey.com', '_blank');
+        }
+        else if (SplitScreens.includes(currentIntersect.object)){
+            slides=slideDecks[slideIndices[currentIntersect.object.name]];
+            currentSlide = 0;
+            actualSlideMode = true;
+            for(var i = 0; i < SplitScreens.length; i++){
+                if(MainScreens.includes(SplitScreens[i])){
+                    console.log("main screen");
+                }
+                else{
+                    SplitScreens[i].visible = false;
                 }
             }
-            else{
-                next_mesh.visible = true;
-                back_mesh.visible = true;
-                contact_mesh.visible = false;
-            }
-
-            slideMesh.material = slides[currentSlide];
-            //slideMesh.visible = false;
+            next_mesh.visible = true;
+            back_mesh.visible = false;
+            contact_mesh.visible = false;
         }
-
-        
-        
-        }
-
-        click = false;
-
         
 
+        
     }
 }
 
@@ -891,7 +893,7 @@ function mouseDown(e){
     window.addEventListener('mousemove', divMove, true);
     var xpos = e.pageX;
     var ypos = e.pageY;
-    console.log(window.innerWidth-ypos)
+    //console.log(window.innerWidth-ypos)
     xpos = (window.innerWidth-xpos);
     ypos = (window.innerHeight-ypos);
     
