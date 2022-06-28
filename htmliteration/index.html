@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovation Realized 2022 Metaverse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  
+
+
+    <div id="loadingScreen" style="position:absolute;top:0px;right:0px;bottom:0px;left:0px;">
+      <img src="./exports/ui/white.jpeg" style="position:absolute;z-index:0;height:100%;width:100%">
+      <img src="./exports/ui/eylogo.png" alt="EY Logo" style="position: relative; width:128px;height:80px">
+      <h1 style="position: relative; text-align:center; font-family:EY-Font; background-color:white;">Welcome To Innovation Realized 2022<br><br><br></h1>
+
+      <h3 style="position: relative;"> 
+        <div style="float:left; font-family:EY-Font; margin-left: 10%; font-size: 1.4vw;background-color:white;">Ways to walk around</div>
+        <div style="float:right; font-family:EY-Font; margin-right: 6%; font-size: 1.4vw;background-color:white;">Click the controller arrows to look around</div>
+        <div style="text-align:center; font-family:EY-Font; font-size: 1.4vw; background-color:white;">Click on glowing objects to interact</div>
+        <div style="clear: left;">
+      </h3>
+      <p style="text-align:center;"><img src="./exports/ui/controls.png" alt="Controls" style="width:100%; position: relative; background-color:white;"><br></p>
+      <div class="container">
+        <img src="./exports/ui/bottom.png" alt="Bottom Image" style="position: absolute; bottom: 0px; width: 100% ;height: 20%">
+        <button id="EnterButton" class="btn"  style="position: absolute; visibility:hidden; bottom: 7%; left:  45%;width: 15% ;height: 5%; background-color: yellow; font-size: 1vw;; font-family:EY-Font;">Enter Innovation Realized</button>
+      </div>
+      <!-- <img id="EnterButton" src="EnterButton.png" style="visibility:hidden;position:absolute;height:100%;width:100%;z-index: 25;"> -->
+      <img id="loadingbackground" src="./exports/ui/LoadingBar.png" style="position:absolute;z-index:9;height:100%;width:100%">
+      <!-- <img src="LoadingScreenFinal.jpg" style="position:absolute;z-index:3;height:100%;width:100%"> -->
+        
+        <div id = "loadingBar"  style="position:absolute; z-index:12;bottom: 12%; left: 28%; width: 1%;height: 2%;background-color: rgb(254, 230, 0);"></div> 
+    </div>
+   
+<script>
+  var itemsLoaded = 0;
+  var timing = 100;
+  function load(){
+    var progressBar = document.getElementById("loadingBar")
+    progressBar.style.width = Math.min((itemsLoaded), 42) + '%'
+    
+    if(itemsLoaded>42){
+      document.getElementById("EnterButton").style.visibility = "visible";
+      document.getElementById("loadingBar").style.visibility = "hidden";
+      document.getElementById("loadingbackground").style.visibility = "hidden";
+    }
+    else{
+      setTimeout(load, timing)
+    }
+
+    itemsLoaded++;
+  }
+
+  setTimeout(load, timing)
+
+
+</script>
+<!--position: absolute;width: 200px;height: 200px;bottom: 100;right: 100;background-color: transparent;opacity: 0.5;-->
+</body>
+</html>

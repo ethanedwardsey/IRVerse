@@ -93,7 +93,7 @@ var contactSlides = [];
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0, 'Forum_Screens_2': -Math.PI/2, 'Forum_Screens_3':-Math.PI/2};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
-var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 3, 'TZ_wall_monitors_08': 4, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 11, 'TZ_blockchain_19': 12, 'TZ_blockchain_20': 18, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 22, 'TZ_pillar_monitors_02': 23, 'TZ_pillar_monitors_03': 24, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':19, 'Purple_pod_screen_3':20,'Purple_pod_screen_4':21, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':10, 'infinite_possibilities_screen_2':17, 'infinite_possibilities_screen_3':15, 'infinite_possibilities_screen_4':13, 'infinite_possibilities_screen_005': 14, 'infinite_possibilities_screen_006': 15, 'infinite_possibilities_screen_main':0};
+var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 3, 'TZ_wall_monitors_08': 4, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 11, 'TZ_blockchain_19': 12, 'TZ_blockchain_20': 18, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 22, 'TZ_pillar_monitors_02': 23, 'TZ_pillar_monitors_03': 24, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':10, 'Purple_pod_screen_2':17, 'Purple_pod_screen_3':15,'Purple_pod_screen_4':13, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':18, 'infinite_possibilities_screen_2':17, 'infinite_possibilities_screen_3':28, 'infinite_possibilities_screen_4':20, 'infinite_possibilities_screen_005': 19, 'infinite_possibilities_screen_006': 15, 'infinite_possibilities_screen_main':0};
 var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
 'IZ_map_button_02': 'Summary of the Chicago regneration event',
 'IZ_map_button_03': 'Back to the entrance',
@@ -432,10 +432,10 @@ function handleMove(time){
     if(click&&!buttonClicked){
         //switchCamera(false);
             //Set to false so that held down click doesn't cast multiple rays
-            console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
+            //console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
             const beuler = new Euler( 0, 0, 0, 'YXZ' );
             beuler.setFromQuaternion( camera.quaternion );
-            console.log("current rot: " + beuler.y);
+            //console.log("current rot: " + beuler.y);
             click = false;
             //console.log("pointer: " + pointer.x + " " + pointer.y)
         clickraycaster.setFromCamera( pointer, camera );
@@ -445,7 +445,7 @@ function handleMove(time){
         if(intersects.length>0){
             teleport(intersects[0].object.name);
         }
-        console.log(TZmaps);
+        //console.log(TZmaps);
         const bintersects = clickraycaster.intersectObjects( TZmaps.concat(SplitScreens) );
         if(bintersects.length>0){
         //for ( let i = 0; i < bintersects.length; i ++ ) {
@@ -454,25 +454,25 @@ function handleMove(time){
             //console.log(bintersects[i].object.position);
             //console.log(bintersects[i].object.rotation);
             if(SplitScreens.includes(bintersects[0].object)){
-                console.log("It's a 4 boy")
+                //console.log("It's a 4 boy")
                 console.log(bintersects[0].object.name)
                 if(bintersects[0].object.name.includes('IZ_screen')){
                     console.log(IZMainScreen);
                     var a = 3*Math.PI/4;
-                    console.log("a is " + a)
+                    //console.log("a is " + a)
                     displaySlides(IZMainScreen.position, a, 2.75, 2, true);
                     slideMesh = IZMainScreen;
                 }
                 if(bintersects[0].object.name.includes('Purple_pod_')){
                     var a = 0;
-                    console.log("Purple boy")
+                    //console.log("Purple boy")
                     displaySlides(PurpleMainScreen.position, a, 2.75, 2, true);
                     slideMesh = PurpleMainScreen;
 
                 }
                 if(bintersects[0].object.name.includes('infinite_possibilities_screen')){
                     var a = 0;
-                    console.log("Purple boy")
+                    //console.log("Purple boy")
                     displaySlides(SpaceMainScreen.position, a, 3.75, 2.85, true);
                     slideMesh = SpaceMainScreen;
 
@@ -720,7 +720,9 @@ function teleport(name){
 
 function SlideInteract(){
     var currentIntersect = highlightButtons();
+    
     if(click){
+        console.log("current intersect is " + currentIntersect.object.name)
         slideClick(currentIntersect);
         click = false;     
     }
@@ -763,7 +765,7 @@ function highlightButtons(){
 function changeSlide(plus){
     var nm = true;
     var bm = true;
-    var cm = false;
+    var cm = true;
     if(plus){
         if(currentSlide<(slides.length-1)){
             currentSlide++;
@@ -818,12 +820,13 @@ function slideClick(currentIntersect){
             actualSlideMode = true;
             for(var i = 0; i < SplitScreens.length; i++){
                 if(MainScreens.includes(SplitScreens[i])){
-                    console.log("main screen");
+                    //console.log("main screen");
                 }
                 else{
                     SplitScreens[i].visible = false;
                 }
             }
+            slideMesh.material = slides[currentSlide];
             next_mesh.visible = true;
             back_mesh.visible = false;
             contact_mesh.visible = false;
@@ -867,7 +870,6 @@ function interact(e){
         pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
         pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
         click = true;
-        console.log("interacting");
     }
 }
 
@@ -956,7 +958,7 @@ function loadBSlides(){
     //5
     slidesslides.push(['./exports/slides/transform/transform_01.jpg', './exports/slides/transform/transform_02.jpg', './exports/slides/transform/transform_03.jpg', './exports/slides/transform/transform_04.jpg', './exports/slides/transform/transform_05.jpg', './exports/slides/transform/transform_06.jpg', './exports/slides/transform/transform_07.jpg', './exports/slides/transform/transform_08.jpg', './exports/slides/transform/transform_09.jpg', './exports/slides/transform/transform_10.jpg', './exports/slides/transform/transform_11.jpg'])
     //6
-    slidesslides.push(['./exports/slides/arttech/Slide2.JPG', './exports/slides/arttech/Slide3.JPG', './exports/slides/arttech/Slide4.JPG'])
+    slidesslides.push(['./exports/slides/arttech/Slide1.JPG', './exports/slides/arttech/Slide2.JPG', './exports/slides/arttech/Slide3.JPG', './exports/slides/arttech/Slide4.JPG'])
     //7
     slidesslides.push(['./exports/slides/future/future_01.jpg', './exports/slides/future/future_02.jpg', './exports/slides/future/future_03.jpg', './exports/slides/future/future_04.jpg', './exports/slides/future/future_05.jpg', './exports/slides/future/future_06.jpg', './exports/slides/future/future_07.jpg', './exports/slides/future/future_08.jpg', './exports/slides/future/future_09.jpg', './exports/slides/future/future_10.jpg', './exports/slides/future/future_11.jpg', './exports/slides/future/future_12.jpg', './exports/slides/future/future_13.jpg', './exports/slides/future/future_14.jpg', './exports/slides/future/future_15.jpg', './exports/slides/future/future_16.jpg']);
     //8
@@ -1033,16 +1035,16 @@ function displaySlides(p, a, dist=1.5, mul=1, split=false){
     
     //Set pcamera, should probably change
     pcamera = camera;
-    console.log("mul " + mul)
-    console.log("dist " + dist)
+    //console.log("mul " + mul)
+    //console.log("dist " + dist)
     var bmul = 0.54;
-    console.log("dist is " + dist);
-    console.log("position is " + p.x + " " + p.z);
-    console.log("angle is " + a)
+    //console.log("dist is " + dist);
+    //console.log("position is " + p.x + " " + p.z);
+    //console.log("angle is " + a)
     ocamera.position.x = p.x-Math.sin(a)*dist;
     ocamera.position.y = p.y;
     ocamera.position.z = p.z-Math.cos(a)*dist;
-    console.log("cam pos " + ocamera.position.x + " " + ocamera.position.z)
+    //console.log("cam pos " + ocamera.position.x + " " + ocamera.position.z)
     ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
     //ocamera.quaternion
     back_mesh.position.set(p.x+mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y, p.z-mul*bmul*Math.sin(a)-0.1*Math.cos(a));
@@ -1058,7 +1060,6 @@ function displaySlides(p, a, dist=1.5, mul=1, split=false){
 
     back_mesh.visible = false;
     next_mesh.visible = !split;
-    console.log("Visible? " + !split)
     x_mesh.visible = true;
     
     //console.log("backmesh" + back_mesh.position.x+","+back_mesh.position.y+","+back_mesh.position.z);
@@ -1351,24 +1352,11 @@ function makeSpecialMaterial(name){
             return bakedMaterial;
 
     }
-    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen_")||name.includes("IZ_screen")||name.includes("infinite_possibilities_screen")||name.includes("CR_2035_screen")||name=="Forum_Screens_2"||name=="Forum_Screens_3"){
-        if(name.includes('Forum')){
-            //return null;
-        }
-        
+    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen_")||name.includes("IZ_screen")||name.includes("infinite_possibilities_screen")||name.includes("CR_2035_screen")||name=="Forum_Screens_2"||name=="Forum_Screens_3"){        
         if(name.includes('CR_2035_screen_frame')){
             return null;
         }
-
-        //console.log("found texturename" + texturename);
-        //return bakedMaterial;
-        console.log(name)
         var deck = slideDecks[slideIndices[name]];
-        //console.log(name)
-        //console.log(deck)
-        //console.log(deck[0])
-        console.log(name + deck[0].name)
-        console.log("loading slide for " + name);
         return (deck[0]);
     }
     else if(name.includes('Forum_Screens_1')){

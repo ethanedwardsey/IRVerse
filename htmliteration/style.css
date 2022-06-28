@@ -1,0 +1,17 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    overflow: hidden;
+    background-image: url(./exports/ui/white.jpeg);
+}
+
+@font-face {
+    font-family: EY-Font;
+    src: url(./exports/ui/EYInterstate-Light.ttf);
+}
