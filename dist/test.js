@@ -5,12 +5,14 @@ import { Color, Euler, Object3D, Vector2, Vector3 } from 'three';
 import { GLTFLoader } from './GLTFLoader.js';
 import { DRACOLoader } from './DRACOLoader.js';
 import { PointerLockControls } from './PointerLockControls.js';
+//import { object } from 'webidl-conversions';
 
 
 console.log("here")
 
 let camera, scene, dummyscene, renderer, controls;
 let pcamera, ocamera;
+let slidecammode = false;
 var slideMode = false;
 
 var back_mesh;
@@ -24,6 +26,7 @@ var clickmovepoint;
 var clickmoving = false;
 
 var slideMesh;
+var Slide_screen;
 
 let loaded = false;
 let modelsloaded = false;
@@ -72,6 +75,8 @@ var SpaceMainScreen;
 var MainScreens = [];
 
 var VideoScreens = [];
+var VideoScreensGlow = [];
+
 
 var videos = [];
 var sounds = [];
@@ -88,12 +93,27 @@ var colorchanger = 0.05;
 let whiteColor = new THREE.Color( 0xffffff );
 let yellowColor = new THREE.Color( 0xffe600 );
 
-var contactSlides = [];
+//var contactSlides = {'TZ_wall_monitors_01': 3,  'TZ_wall_monitors_02': 11, 'TZ_wall_monitors_03': 5, 'TZ_wall_monitors_04': 12, 'TZ_wall_monitors_08': 32, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 4, 'TZ_wall_monitors_05': 2, 'TZ_wall_monitors_06': 21, 'TZ_wall_monitors_07': 31, 'TZ_pillar_monitors_02': 1, 'CR_2035_screen': 1, 'IZ_screen_1': 1, 'IZ_screen_2': 1, 'Purple_pod_screen_1': 1, 'Purple_pod_screen_2':2, 'Purple_pod_screen_3':2, 'Purple_pod_screen_4':1, 'infinite_possibilities_screen_1':2, 'infinite_possibilities_screen_2':2, 'infinite_possibilities_screen_3':2, 'infinite_possibilities_screen_4':1, 'infinite_possibilities_screen_005': 1, 'infinite_possibilities_screen_006': 1};
 
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0, 'Forum_Screens_2': -Math.PI/2, 'Forum_Screens_3':-Math.PI/2};
+
+var videosounds = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'HighlightsAudio.mp3', 'SpeakEasy_screen':'HighlightsAudio.mp3'};
+var playtextures = {'ey_verse_screen': 'EYVersePlayTexture.jpg', 'Forum_Screens_1': 'HighlightsPlay.jpg', 'Forum_Screens_3': 'CarminePlayButton.jpg', 'Market_waterfall_screen_AI': 'HighlightsPlay2.jpg', 'SpeakEasy_screen':'HighlightsPlay3.jpg'};
+var videoindexes = {'ey_verse_screen': 0, 'Forum_Screens_1': 1, 'Market_waterfall_screen_AI': 2, 'SpeakEasy_screen': 3, 'Market_screens_01':4, 'Market_screens_02':5};
+var videobegunstate = [false, true, false, false, false, false];
+var videolinks = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'HighlightsAudio.mp3', 'SpeakEasy_screen':'HighlightsAudio.mp3'};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
-var slideIndices = {'TZ_wall_monitors_01': 0,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 3, 'TZ_wall_monitors_08': 4, 'TZ_blockchain_01': 5, 'TZ_blockchain_02': 11, 'TZ_blockchain_19': 12, 'TZ_blockchain_20': 18, 'TZ_wall_monitors_05': 3, 'TZ_wall_monitors_06': 4, 'TZ_wall_monitors_07': 5, 'TZ_pillar_monitors_01': 22, 'TZ_pillar_monitors_02': 23, 'TZ_pillar_monitors_03': 24, 'TZ_pillar_monitors_04': 4, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':10, 'Purple_pod_screen_2':17, 'Purple_pod_screen_3':15,'Purple_pod_screen_4':13, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':18, 'infinite_possibilities_screen_2':17, 'infinite_possibilities_screen_3':28, 'infinite_possibilities_screen_4':20, 'infinite_possibilities_screen_005': 19, 'infinite_possibilities_screen_006': 15, 'infinite_possibilities_screen_main':0};
+var firstSlides = [];
+var slideIndices = {'TZ_wall_monitors_01': 3,  'TZ_wall_monitors_02': 11, 'TZ_wall_monitors_03': 5, 'TZ_wall_monitors_04': 12, 'TZ_wall_monitors_08': 32, 'TZ_blockchain_01': 33, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 4, 'TZ_wall_monitors_05': 2, 'TZ_wall_monitors_06': 21, 'TZ_wall_monitors_07': 31, 'TZ_pillar_monitors_01': 24, 'TZ_pillar_monitors_02': 14, 'TZ_pillar_monitors_03': 23, 'TZ_pillar_monitors_04': 22, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':10, 'Purple_pod_screen_2':17, 'Purple_pod_screen_3':15,'Purple_pod_screen_4':13, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':18, 'infinite_possibilities_screen_2':25, 'infinite_possibilities_screen_3':28, 'infinite_possibilities_screen_4':20, 'infinite_possibilities_screen_005': 19, 'infinite_possibilities_screen_006': 30, 'infinite_possibilities_screen_main':0, 'Market_waterfall_screen_Gil_1': 29, 'Market_waterfall_screen_Gil_2': 29};
+
+var contactSlides = {'TZ_wall_monitors_01': 1,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 1, 'TZ_wall_monitors_04': 1, 'TZ_wall_monitors_08': -1, 'TZ_blockchain_01': 0, 'TZ_blockchain_02': 2, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 0, 'TZ_wall_monitors_05': 0, 'TZ_wall_monitors_06': 1, 'TZ_wall_monitors_07': 1, 'TZ_pillar_monitors_01': -1, 'TZ_pillar_monitors_02': 1, 'TZ_pillar_monitors_03': -1, 'TZ_pillar_monitors_04': -1, 'CR_2035_screen': 1, 'Forum_Screens_2': -1, 'Purple_pod_screen_1':1, 'Purple_pod_screen_2':1, 'Purple_pod_screen_3':1,'Purple_pod_screen_4':1, 'Purple_pod_screen_main':0, "IZ_screen_1":1, 'IZ_screen_2':1, 'IZ_screen_3':1,'IZ_screen_4':1,'IZ_screen_main':-1, 'infinite_possibilities_screen_1':1, 'infinite_possibilities_screen_2':1, 'infinite_possibilities_screen_3':1, 'infinite_possibilities_screen_4':1, 'infinite_possibilities_screen_005': 1, 'infinite_possibilities_screen_006': 1, 'infinite_possibilities_screen_main':-1, 'Market_waterfall_screen_Gil_1': 1, 'Market_waterfall_screen_Gil_2': 1};
+var slidePos = {'TZ_wall_monitors_01': 1,  'TZ_wall_monitors_02': 0, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': 1, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 0, 'TZ_wall_monitors_05': 0, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': 0, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': 0, 'TZ_pillar_monitors_04': 0, 'CR_2035_screen': 0, 'Forum_Screens_2': 0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':0, 'Purple_pod_screen_3':0,'Purple_pod_screen_4':0, 'Purple_pod_screen_main':0, "IZ_screen_1":0, 'IZ_screen_2':0, 'IZ_screen_3':0,'IZ_screen_4':0,'IZ_screen_main':0, 'infinite_possibilities_screen_1':0, 'infinite_possibilities_screen_2':0, 'infinite_possibilities_screen_3':0, 'infinite_possibilities_screen_4':0, 'infinite_possibilities_screen_005': 0, 'infinite_possibilities_screen_006': 0, 'infinite_possibilities_screen_main':0, 'Market_waterfall_screen_Gil_1': 0, 'Market_waterfall_screen_Gil_2': 0};
+var contactEmails = {'TZ_wall_monitors_01': 'ethan.edwards@ey.com',  'TZ_wall_monitors_02': 'michael.kanazawa@ey.com', 'TZ_wall_monitors_03': 'ethan.edwards@ey.com', 'TZ_wall_monitors_04': 'tonny.dekker@nl.ey.com, brad.artigue@ey.com', 'TZ_wall_monitors_08': '', 'TZ_blockchain_01': 'edwina.fitzmaurice@ey.com', 'TZ_blockchain_02': 'brian.stern@ey.com', 'TZ_blockchain_19': 'dean.sauer@ey.com', 'TZ_blockchain_20': 'ethan.edwards@ey.com', 'TZ_wall_monitors_05': 'ethan.edwards@ey.com', 'TZ_wall_monitors_06': 'lbuchanan@uk.ey.com', 'TZ_wall_monitors_07': 'Oliver.Jones@uk.ey.com', 'TZ_pillar_monitors_01': '', 'TZ_pillar_monitors_02': 'michael.kanazawa@ey.com', 'TZ_pillar_monitors_03': '', 'TZ_pillar_monitors_04': '', 'CR_2035_screen': 'orlan.boston@ey.com, lisa.lindstrom@doberman.ey.com', 'Forum_Screens_2': '', 'Purple_pod_screen_1':'Adrian.Slobin@ey.com', 'Purple_pod_screen_2':'Kamran.Malik@au.ey.com', 'Purple_pod_screen_3':'Rachel.Hall@ey.com, aloha.mcbride@ey.com','Purple_pod_screen_4':'Roselyn.Feinsod@ey.com', 'Purple_pod_screen_main':'', "IZ_screen_1":'Nicola.Morini.Bianzino@eyg.ey.com', 'IZ_screen_2':'abaldwin@uk.ey.com', 'IZ_screen_3':'','IZ_screen_4':'','IZ_screen_main':'', 'infinite_possibilities_screen_1':'Kristina.Rogers1@ey.com, Rob.Dongoski@parthenon.ey.com', 'infinite_possibilities_screen_2':'edwina.fitzmaurice@ey.com', 'infinite_possibilities_screen_3':'Greg.Sarafin@ey.com, Jeff.Wray@parthenon.ey.com', 'infinite_possibilities_screen_4':'Adlai.Goldberg@ey.com', 'infinite_possibilities_screen_005': 'savarley@uk.ey.com', 'infinite_possibilities_screen_006': 'Janet.Balis@ey.com', 'infinite_possibilities_screen_main':'', 'Market_waterfall_screen_Gil_1': 'gil.forer@ey.com', 'Market_waterfall_screen_Gil_2': 'gil.forer@ey.com'};
+var cmpositions = [[23.516043701171875, 1.13, 19.438042068481444], [23.356043701171875, 1.13, 19.438042068481444], [23.636043701171875, 1.07, 19.438042068481444]];
+
+
+
 var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
 'IZ_map_button_02': 'Summary of the Chicago regneration event',
 'IZ_map_button_03': 'Back to the entrance',
@@ -202,6 +222,7 @@ function init() {
  * Materials
  */
 //loadFullModels();
+loadVideos();
 loadBSlides();
 loadAllModels();
 addLights();
@@ -280,9 +301,26 @@ addLights();
                 break;
 
             case 'Escape':
-                exitSlideMode();
+                if(slideMode){
+                    exitSlideMode();
+                }
+                else if(controlShowMode){
+                    closeControls();
+                }
                 
                 break;
+            case 'Enter':
+                click = true;
+                pointer.x = 0;
+                pointer.y = 0.25;
+                break;
+            case 'KeyM':
+                warpToMap();
+                break;
+            case 'KeyC':
+                showControls();
+                break;
+
 
         }
 
@@ -430,6 +468,7 @@ console.log("huh")
 
 function handleMove(time){
     if(click&&!buttonClicked){
+        console.log("casting!");
         //switchCamera(false);
             //Set to false so that held down click doesn't cast multiple rays
             //console.log("current position: " + controls.getObject().position.x + "," + controls.getObject().position.y + "," + controls.getObject().position.z );
@@ -501,8 +540,9 @@ function handleMove(time){
                     dist = 1.9;
                     mul = 1.35;
                 }
-                displaySlides(bintersects[0].object.position, monitorsangles[bintersects[0].object.name], dist, mul, false);
+                //displaySlides(bintersects[0].object.position, monitorsangles[bintersects[0].object.name], dist, mul, false);
                 slideMesh = bintersects[0].object;
+                displaySlideScreen();
             }
                 
                 
@@ -513,17 +553,54 @@ function handleMove(time){
             
         //}
     }
-        if(browser=='Edge'){
+
             const sintersects = clickraycaster.intersectObjects( VideoScreens );
             if(sintersects.length>0){
-                if(sintersects[0].object.name=='ey_verse_screen'){
-                    window.open('https://cdn.ey.com/mw-nonprod/exports/videos/EYVerseNoFlip.mp4', '_blank');
+                
+                var oname = sintersects[0].object.name;
+                //Check whether it's the carmine video
+                if(oname.includes('Forum_Screens_3')){
+                    window.open('./videos/carmine/index.html', '_blank');
                 }
-                else if(sintersects[0].object.name=='Forum_Screens_1'){
-                    window.open('https://cdn.ey.com/mw-nonprod/exports/videos/unflip.mp4', '_blank');
+                
+                //Check whether browser is Edge
+                else if(browser=='Edge'){
+
+                    if(oname=='ey_verse_screen'){
+                        window.open('./videos/eyverse/index.html', '_blank');
+                    }
+                    else if(oname=='Forum_Screens_1'){
+                        window.open('./videos/highlights/index.html', '_blank');
+                    }
+                    else if(oname=='Market_waterfall_screen_AI'){
+                        window.open('./videos/robot/index.html', '_blank');
+                    }
+                    else if(oname=='SpeakEasy_screen'){
+                        window.open('./videos/beatboxer/index.html', '_blank');
+                    }
+                }
+                //If it is not Edge, check whether a video is already playing
+                else{
+                    
+
+                    if(!videobegunstate[videoindexes[oname]]){
+                        beginVideo(sintersects[0].object);
+                        videobegunstate[videoindexes[oname]] = true;
+                    }
+                    else{
+                        if(videos[videoindexes[oname]].paused){
+                            videos[videoindexes[oname]].play();
+                            sounds[videoindexes[oname]].play();
+                        }
+                        else{
+                            videos[videoindexes[oname]].pause();
+                            sounds[videoindexes[oname]].pause();
+                        }
+                    }
+
                 }
             }
-        }
+        
     }
 
 
@@ -722,7 +799,7 @@ function SlideInteract(){
     var currentIntersect = highlightButtons();
     
     if(click){
-        console.log("current intersect is " + currentIntersect.object.name)
+        //console.log("current intersect is " + currentIntersect.object.name)
         slideClick(currentIntersect);
         click = false;     
     }
@@ -765,7 +842,7 @@ function highlightButtons(){
 function changeSlide(plus){
     var nm = true;
     var bm = true;
-    var cm = true;
+    var cm = false;
     if(plus){
         if(currentSlide<(slides.length-1)){
             currentSlide++;
@@ -773,9 +850,9 @@ function changeSlide(plus){
         if(currentSlide==slides.length-1){
             nm = false;
             bm = true;
-            if(contactSlides.includes(slideMesh.name)){
-                cm = true;
-            }
+            //if(contactSlides.includes(slideMesh.name)){
+            //    cm = true;
+            //}
         }
     }
     else{
@@ -790,10 +867,17 @@ function changeSlide(plus){
 
     }
 
+    if(currentSlide == slides.length - Math.min((1+contactSlides[slideMesh.name]), 3)||(currentSlide==2)&&slideMesh.name=='infinite_possibilities_screen_3'){
+        cm = true;
+        var cmpos = cmpositions[slidePos[slideMesh.name]];
+        contact_mesh.position.set(cmpos[0], cmpos[1], cmpos[2]);
+
+    }
+
     next_mesh.visible = nm;
     back_mesh.visible = bm;
     contact_mesh.visible = cm;
-
+    updateSlideScreen();
     slideMesh.material = slides[currentSlide];
 }
 
@@ -812,12 +896,21 @@ function slideClick(currentIntersect){
             
         }
         else if (currentIntersect.object == contact_mesh){
-            window.open('mailto:ethan.edwards@ey.com', '_blank');
+            var maillink = 'mailto:' + contactEmails[slideMesh.name];
+            if(slideMesh.name=='infinite_possibilities_screen_3'&&currentSlide==3){
+                maillink = 'mailto:Juan.Uro@parthenon.ey.com, edwina.fitzmaurice@ey.com';
+            }
+            window.open(maillink , '_blank');
         }
         else if (SplitScreens.includes(currentIntersect.object)){
+            slideMesh = currentIntersect.object;
             slides=slideDecks[slideIndices[currentIntersect.object.name]];
             currentSlide = 0;
             actualSlideMode = true;
+            displaySlideScreen();
+
+
+            /*
             for(var i = 0; i < SplitScreens.length; i++){
                 if(MainScreens.includes(SplitScreens[i])){
                     //console.log("main screen");
@@ -826,10 +919,12 @@ function slideClick(currentIntersect){
                     SplitScreens[i].visible = false;
                 }
             }
-            slideMesh.material = slides[currentSlide];
+            updateSlideScreen();
+            //slideMesh.material = slides[currentSlide];
             next_mesh.visible = true;
             back_mesh.visible = false;
             contact_mesh.visible = false;
+            */
         }
         
 
@@ -869,6 +964,7 @@ function interact(e){
     if(!controllerclickcheck(window.innerWidth-e.pageX, window.innerHeight-e.pageY)){
         pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
         pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+        //console.log(pointer.y)
         click = true;
     }
 }
@@ -920,6 +1016,15 @@ function makeTexture(filename){
     forumTexture.flipY = false
     forumTexture.encoding = THREE.sRGBEncoding
 
+    const forumMaterial = new THREE.MeshStandardMaterial({ map: forumTexture});
+    return forumMaterial;
+}
+
+function makeLambertTexture(filename){
+    const forumTexture = textureLoader.load(filename)
+    forumTexture.flipY = false
+    forumTexture.encoding = THREE.sRGBEncoding
+
     const forumMaterial = new THREE.MeshLambertMaterial({ map: forumTexture});
     return forumMaterial;
 }
@@ -929,7 +1034,7 @@ function loadAllModels(){
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque2.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
-    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'ForumEthan.glb', 'Forum_BAKED_transparent.glb',  'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
+    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'ForumEthan.glb', 'Forum_BAKED_transparent.glb',  'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Slide_screen.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEthan.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
 
     var fulltext = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_signage.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg', 'ey_verse_curtains.jpg', 'ey_verse_floor.jpg', 'ey_verse_inner_walls.jpg', 'ey_verse_outer_walls.jpg', 'ey_verse_rafters.jpg', 'ey_verse_rug.jpg', 'ey_verse_screen.jpg', 'ey_verse_side_rails.jpg', 'ey_verse_speakers_1.jpg', 'ey_verse_speakers_2.jpg', 'ey_verse_stools.jpg', 'ey_verse_tables_and_chairs.jpg', 'Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_light_truss.png', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg', 'IR_Welcome_Map_2.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_map_button_010.jpg', 'IZ_map_button_011.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg', 'Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'market_mound.jpg', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_overhead_screen_5.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_trellis.png', 'Market_walls.jpg', 'Market_waterfall_screen.jpg', 'Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg', 'Space_Pod_chairs.jpg', 'Space_Pod_floor_ceiling.jpg', 'Space_Pod_Inner_wall.jpg', 'Space_Pod_screen.jpg', 'Space_Pod_truss.png', 'Space_Pod_wood_pillars.jpg', 'SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_edison_lamps.png', 'SpeakEasy_floor.jpg', 'SpeakEasy_liquor_bottles.png', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg', 'TZ_blockchain_01.jpg', 'TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_signage.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg', 'VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_shooters.png', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     for(var i = 0; i < models.length; i++){
@@ -1003,6 +1108,17 @@ function loadBSlides(){
     slidesslides.push(['./exports/slides/arttechinnovation/Slide1.JPG', './exports/slides/arttechinnovation/Slide2.JPG', './exports/slides/arttechinnovation/Slide3.JPG', './exports/slides/arttechinnovation/Slide4.JPG']);
     //28
     slidesslides.push(['./exports/slides/ecosystems/Slide1.JPG', './exports/slides/ecosystems/Slide2.JPG', './exports/slides/ecosystems/Slide3.JPG', './exports/slides/ecosystems/Slide4.JPG', './exports/slides/ecosystems/Slide5.JPG', './exports/slides/ecosystems/Slide6.JPG', './exports/slides/ecosystems/Slide7.JPG', './exports/slides/ecosystems/Slide8.JPG']);
+    //29
+    slidesslides.push(['./exports/slides/IRHighlights/Slide1.JPG', './exports/slides/IRHighlights/Slide2.JPG', './exports/slides/IRHighlights/Slide3.JPG', './exports/slides/IRHighlights/Slide4.JPG', './exports/slides/IRHighlights/Slide5.JPG', './exports/slides/IRHighlights/Slide6.JPG']);
+    //30
+    slidesslides.push(['./exports/slides/DataTransformation/Slide1.JPG', './exports/slides/DataTransformation/Slide2.JPG', './exports/slides/DataTransformation/Slide3.JPG', './exports/slides/DataTransformation/Slide4.JPG']);
+    //31
+    slidesslides.push(['./exports/slides/pandemicendemic/Slide1.JPG', './exports/slides/pandemicendemic/Slide2.JPG', './exports/slides/pandemicendemic/Slide3.JPG', './exports/slides/pandemicendemic/Slide4.JPG']);
+    //32
+    slidesslides.push(['./exports/slides/McgrathCEO360/Slide1.JPG', './exports/slides/McgrathCEO360/Slide2.JPG', './exports/slides/McgrathCEO360/Slide3.JPG']);
+    //33
+    slidesslides.push(['./exports/slides/metaverse/Slide1.JPG', './exports/slides/metaverse/Slide10.JPG', './exports/slides/metaverse/Slide11.JPG', './exports/slides/metaverse/Slide12.JPG', './exports/slides/metaverse/Slide2.JPG', './exports/slides/metaverse/Slide3.JPG', './exports/slides/metaverse/Slide4.JPG', './exports/slides/metaverse/Slide5.JPG', './exports/slides/metaverse/Slide6.JPG', './exports/slides/metaverse/Slide7.JPG', './exports/slides/metaverse/Slide8.JPG', './exports/slides/metaverse/Slide9.JPG']);
+
     for(var i = 0; i < slidesslides.length; i++){
         var newDeck = []
 
@@ -1012,6 +1128,7 @@ function loadBSlides(){
             newDeck.push(makeTexture(slidesslides[i][j]));
         }
         slideDecks.push(newDeck);
+        firstSlides.push(makeLambertTexture(slidesslides[i][0]))
         //console.log("deck pushed" + newDeck.length)
     }
     //slides[0] = textureLoader.load('/exports/slides/slide1.png')
@@ -1023,18 +1140,23 @@ function loadBSlides(){
 function switchCamera(p){
     if(p){
         camera = pcamera;
+        slidecammode = false;
         
     }
     else{
-        pcamera = camera;
+        if(!slidecammode){
+            pcamera = camera;
+        }
         camera = ocamera;
+        slidecammode = true;
     }
 }
 
 function displaySlides(p, a, dist=1.5, mul=1, split=false){
     
     //Set pcamera, should probably change
-    pcamera = camera;
+    //pcamera = camera;
+    switchCamera(false);
     //console.log("mul " + mul)
     //console.log("dist " + dist)
     var bmul = 0.54;
@@ -1056,6 +1178,7 @@ function displaySlides(p, a, dist=1.5, mul=1, split=false){
     x_mesh.rotation.set(0, a, 0);
 
     contact_mesh.position.set(p.x-0.5*mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y-mul*0.14, p.z+0.5*mul*bmul*Math.sin(a)-0.1*Math.cos(a));
+    console.log("contact mesh pos: x = " + (p.x-0.5*mul*bmul*Math.cos(a)-0.1*Math.sin(a)) + ", y = " + (p.y-mul*0.14) + ", z = " + (p.z+0.5*mul*bmul*Math.sin(a)-0.1*Math.cos(a)))
     contact_mesh.rotation.set(0, a, 0);
 
     back_mesh.visible = false;
@@ -1070,6 +1193,63 @@ function displaySlides(p, a, dist=1.5, mul=1, split=false){
     document.getElementById("controlbutton").style.visibility = "hidden";
     document.getElementById("controller").style.visibility = "hidden";
 
+}
+
+function displaySlideScreen(){
+    var p = Slide_screen.position;
+    var a = 0;
+    var dist = 1.5;
+    var mul = 1;
+    var split = false;
+
+
+    //Set pcamera, should probably change
+    //pcamera = camera;
+    switchCamera(false);
+    //console.log("mul " + mul)
+    //console.log("dist " + dist)
+    var bmul = 0.54;
+    //console.log("dist is " + dist);
+    //console.log("position is " + p.x + " " + p.z);
+    //console.log("angle is " + a)
+    ocamera.position.x = p.x-Math.sin(a)*dist;
+    ocamera.position.y = p.y;
+    ocamera.position.z = p.z-Math.cos(a)*dist;
+    //console.log("cam pos " + ocamera.position.x + " " + ocamera.position.z)
+    ocamera.quaternion.setFromEuler( new Euler( 0, a+Math.PI, 0, 'YXZ' ));
+    //ocamera.quaternion
+    back_mesh.position.set(p.x+mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y, p.z-mul*bmul*Math.sin(a)-0.1*Math.cos(a));
+    back_mesh.rotation.set(0, a, 0);
+    next_mesh.position.set(p.x-mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y, p.z+mul*bmul*Math.sin(a)-0.1*Math.cos(a));
+    next_mesh.rotation.set(0, a, 0);
+
+    x_mesh.position.set(p.x+mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y+mul*0.27, p.z-mul*bmul*Math.sin(a)-0.1*Math.cos(a));
+    x_mesh.rotation.set(0, a, 0);
+
+    contact_mesh.position.set(p.x-0.5*mul*bmul*Math.cos(a)-0.1*Math.sin(a), p.y-mul*0.14, p.z+0.5*mul*bmul*Math.sin(a)-0.1*Math.cos(a));
+    console.log("contact mesh pos: x = " + (p.x-0.5*mul*bmul*Math.cos(a)-0.1*Math.sin(a)) + ", y = " + (p.y-mul*0.14) + ", z = " + (p.z+0.5*mul*bmul*Math.sin(a)-0.1*Math.cos(a)))
+
+    contact_mesh.rotation.set(0, a, 0);
+
+    back_mesh.visible = false;
+    next_mesh.visible = !split;
+    x_mesh.visible = true;
+    
+    //console.log("backmesh" + back_mesh.position.x+","+back_mesh.position.y+","+back_mesh.position.z);
+
+    slideMode = true;
+
+    document.getElementById("return").style.visibility = "hidden";
+    document.getElementById("controlbutton").style.visibility = "hidden";
+    document.getElementById("controller").style.visibility = "hidden";
+
+
+    updateSlideScreen();
+
+}
+
+function updateSlideScreen(){
+    Slide_screen.material = slides[currentSlide];
 }
 
 
@@ -1135,6 +1315,7 @@ function exitSlideMode(){
 }
 
 function ResetSlide(){
+    //updateSlideScreen();
     slideMesh.material = slides[0];
 }
 
@@ -1184,6 +1365,7 @@ function beginScene(){
             var xbutton = document.getElementById("xbutton");
             xbutton.addEventListener('click', closeControls);
 
+            /*
             for(var i = 0; i < videos.length; i++){
                 videos[i].play();
             }
@@ -1193,6 +1375,16 @@ function beginScene(){
                 console.log(sounds[i])
                 sounds[i].play();
             }
+            */
+           //Autoplaying videos
+           //Highlights
+           if(browser!='Edge'){
+           videos[1].play();
+           sounds[1].play();
+
+           videos[4].play();
+           videos[5].play();
+           }
             
             
             //console.log(_euler);
@@ -1207,18 +1399,20 @@ function addLights(){
     light.position.set(7, 2, -30);
 }
 
-function addSound(mesh){
+function addSound(mesh, name){
     var sound = new THREE.PositionalAudio( listener );
 
     // load a sound and set it as the PositionalAudio object's buffer
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './exports/sounds/EYVerse.mp3', function( buffer ) {
+    console.log("video sound " + videosounds[mesh.name]);
+    console.log(mesh.name)
+    audioLoader.load( './exports/sounds/' + videosounds[mesh.name], function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setVolume(0.4)
     sound.setDistanceModel("exponential");
     sound.setRefDistance( 5 );
     sound.setRolloffFactor( 4 );
-    sounds.push(sound);
+    sounds[videoindexes[mesh.name]] = sound;
     soundsadded++;
     showButton();
     
@@ -1270,12 +1464,12 @@ function glow(){
         SplitScreens[i].material.emissive = curCol;
         //console.log("glowing " + TZmaps[i].name);
     }
-    for(var i = 0; i < VideoScreens.length; i++){
-        if(browser=="Edge"){
+    for(var i = 0; i < VideoScreensGlow.length; i++){
+        //if(browser=="Edge"){
         let curCol = new THREE.Color();
         curCol.lerpColors(whiteColor, new THREE.Color(0x00000), intcolor)
-        VideoScreens[i].material.emissive = curCol;
-        }
+        VideoScreensGlow[i].material.emissive = curCol;
+        //}
         //console.log("glowing " + TZmaps[i].name);
     }
     if(intcolor>0.95){
@@ -1352,27 +1546,54 @@ function makeSpecialMaterial(name){
             return bakedMaterial;
 
     }
-    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen_")||name.includes("IZ_screen")||name.includes("infinite_possibilities_screen")||name.includes("CR_2035_screen")||name=="Forum_Screens_2"||name=="Forum_Screens_3"){        
+    else if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes("Purple_pod_screen_")||name.includes("IZ_screen")||name.includes("infinite_possibilities_screen")||name.includes("CR_2035_screen")||name=="Forum_Screens_2"||name.includes('Market_waterfall_screen_Gil')){        
         if(name.includes('CR_2035_screen_frame')){
             return null;
         }
-        var deck = slideDecks[slideIndices[name]];
-        return (deck[0]);
+        //var deck = slideDecks[slideIndices[name]];
+        var slide = firstSlides[slideIndices[name]];
+        //return (deck[0]);
+        return slide;
     }
-    else if(name.includes('Forum_Screens_1')){
+    else if(name.includes("Slide_screen")){
+        const bakedMaterial = new THREE.MeshStandardMaterial();
+        return bakedMaterial;
+    }
+    //Videos
+    else if(name.includes('Forum_Screens_1')||name.includes('Market_screens_01')||name.includes('Market_screens_02')){
         if(browser!='Edge'){
-            var forumvideo = document.getElementById( 'forumvideo' );
+            var forumvideo = videos[videoindexes[name]];
             //forumvideo.play();
             var svideotexture = new THREE.VideoTexture( forumvideo );
             var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
-            videos.push(forumvideo);
+            //videos.push(forumvideo);
             
             return svideomaterial;
         }
         else{
-
+            if(name=='Market_screens_01'){
+                return makeTexture('./exports/textures/Market1Still3.jpg');
+            }
+            else if(name=='Market_screens_02'){
+                return makeTexture('./exports/textures/Market2Still3.jpg');
+            }
+            else if(name=='Forum_Screens_1'){
+                return makeLambertTexture('./exports/textures/HighlightsPlay.jpg');
+            }
         }
     }
+    else if(name.includes('ey_verse_screen')||name.includes('Forum_Screens_3')||name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen')){
+        if(name.includes('SpeakEasy_screen_frame')){
+            return null;
+        }
+        texturename = 'exports/textures/' + playtextures[name];
+        console.log(name)
+        console.log(texturename)
+        const bakedMaterial = makeLambertTexture(texturename);
+        return bakedMaterial;
+
+    }
+
     else if(name.includes('ey_verse_screen')){
         if(browser!='Edge'){
 
@@ -1401,10 +1622,36 @@ function makeSpecialMaterial(name){
     console.log("didn't find" + name)
 }
 
+function beginVideo(mesh){
+    console.log("video mesh is " + mesh)
+    var video = videos[videoindexes[mesh.name]]
+    var svideotexture = new THREE.VideoTexture( video );
+    var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
+    mesh.material = svideomaterial;
+    video.play();
+    console.log("before " + VideoScreensGlow);
+    if(VideoScreensGlow.includes(mesh)){
+    VideoScreensGlow.splice(mesh, 1);
+    }
+    console.log("after " + VideoScreensGlow);
+    sounds[videoindexes[mesh.name]].play();
+}
+
+function loadVideos(){
+
+    videos.push(document.getElementById( 'eyverse' ));
+    videos.push(document.getElementById( 'irhighlights' ));
+    videos.push(document.getElementById( 'beatboxer' ));
+    videos.push(document.getElementById( 'robot' ));
+    videos.push(document.getElementById( 'market1' ));
+    videos.push(document.getElementById( 'market2' ));
+
+}
+
 function addInteract(bakedMesh){
     var name = bakedMesh.name;
     //Standard monitors
-    if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes('CR_2035_screen')||name=='Forum_Screens_2'||name=='Forum_Screens_3'){
+    if(name.includes("TZ_wall_monitors_")||name.includes("TZ_pillar_monitors_")||name.includes("TZ_blockchain_")||name.includes('CR_2035_screen')||name=='Forum_Screens_2'||name.includes('Market_waterfall_screen_Gil')){
         if(!name.includes('CR_2035_screen_frame')){
             TZmaps.push(bakedMesh);
         }
@@ -1427,6 +1674,9 @@ function addInteract(bakedMesh){
             MainScreens.push(SpaceMainScreen);
         }
     }
+    else if(name.includes("Slide_screen")){
+        Slide_screen = bakedMesh;
+    }
     else if(name.includes('IZ_map_button_')){
         //bakedMesh.material = makeSpecialMaterial(bakedMesh.name);
         mapButtons.push(bakedMesh)
@@ -1437,13 +1687,22 @@ function addInteract(bakedMesh){
         collision = bakedMesh;
         
     }
-    else if(name.includes('Forum_Screens_1')){
+    else if(name.includes('ey_verse_screen')||name.includes('Forum_Screens_1')||name.includes('Forum_Screens_3')||name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen')){
+        if(name.includes('SpeakEasy_screen_frame')){
+            return null;
+        }
+        
         VideoScreens.push(bakedMesh);
-    }
-    else if(name.includes('ey_verse_screen')){
-        VideoScreens.push(bakedMesh);
+        if(!(name.includes('Forum_Screens_1')&&browser!='Edge')){
+            if(!(name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen'))){
+                VideoScreensGlow.push(bakedMesh);
+            }
+            console.log("glow name " + name);
+        }
         if(browser!='Edge'){
-            addSound(bakedMesh);
+            if(!name.includes('Forum_Screens_3')){
+                addSound(bakedMesh);
+            }
         }
         else{
             soundsadded++;
