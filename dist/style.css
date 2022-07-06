@@ -36,7 +36,6 @@ body
   font-weight:700;
   text-align:center;
   font-family: EY-Font;
-  
 }
 .img-block img{
   padding:0;
@@ -49,4 +48,27 @@ body
   float:left;
   width:33%;
   /*margin:0 10px;*/
+}
+.btn {
+  display: inline-block;
+  padding: 15px 26px;
+  background-color: white;
+  color: #2e2e38;
+  border: 1px solid #2e2e38;
+  font-weight: 700;
+  line-height: 24px;
+  position: relative; 
+  visibility:hidden; 
+  bottom: 7%; 
+  width: 125px ;
+  height: 20px;
+  z-index:8789;
+  font-size: 10px; 
+  font-family:EY-Font-Bold;
+  text-decoration: none
+  
+}
+.btn:hover{
+  background-color: #2e2e38;
+  color: white;
 }

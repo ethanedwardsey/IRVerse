@@ -11,28 +11,44 @@
   
 
 
-    <div id="loadingScreen" style="position:absolute;top:0px;right:0px;bottom:0px;left:0px;">
-      <img src="./exports/ui/white.jpeg" style="position:absolute;z-index:0;height:100%;width:100%">
-      <img src="./exports/ui/eylogo.png" alt="EY Logo" style="position: relative; width:128px;height:80px">
-      <h1 style="position: relative; text-align:center; font-family:EY-Font; background-color:white;">Welcome To Innovation Realized 2022<br><br><br></h1>
-
-      <h3 style="position: relative;"> 
-        <div style="float:left; font-family:EY-Font; margin-left: 10%; font-size: 1.4vw;background-color:white;">Ways to walk around</div>
-        <div style="float:right; font-family:EY-Font; margin-right: 6%; font-size: 1.4vw;background-color:white;">Click the controller arrows to look around</div>
-        <div style="text-align:center; font-family:EY-Font; font-size: 1.4vw; background-color:white;">Click on glowing objects to interact</div>
-        <div style="clear: left;">
-      </h3>
-      <p style="text-align:center;"><img src="./exports/ui/controls.png" alt="Controls" style="width:100%; position: relative; background-color:white;"><br></p>
-      <div class="container">
-        <img src="./exports/ui/bottom.png" alt="Bottom Image" style="position: absolute; bottom: 0px; width: 100% ;height: 20%">
-        <button id="EnterButton" class="btn"  style="position: absolute; visibility:hidden; bottom: 7%; left:  45%;width: 15% ;height: 5%; background-color: yellow; font-size: 1vw;; font-family:EY-Font;">Enter Innovation Realized</button>
-      </div>
-      <!-- <img id="EnterButton" src="EnterButton.png" style="visibility:hidden;position:absolute;height:100%;width:100%;z-index: 25;"> -->
-      <img id="loadingbackground" src="./exports/ui/LoadingBar.png" style="position:absolute;z-index:9;height:100%;width:100%">
-      <!-- <img src="LoadingScreenFinal.jpg" style="position:absolute;z-index:3;height:100%;width:100%"> -->
-        
-        <div id = "loadingBar"  style="position:absolute; z-index:12;bottom: 12%; left: 28%; width: 1%;height: 2%;background-color: rgb(254, 230, 0);"></div> 
+  <div id="loadingScreen" style="position:absolute;top:0px;right:0px;bottom:0px;left:0px;">
+    <img src="./exports/ui/white.jpeg" style="position:absolute;z-index:0;height:100%;width:100%">
+    <img src="./exports/ui/eylogo2.jpg" alt="EY Logo" style="position: relative; width:160px;height:100px">
+    <h1 style="position: relative; text-align:center; font-family:EY-Font; background-color:white;">Welcome To Innovation Realized '22<br><br><br></h1>
+  
+    <div class="img-block" style="margin-left: 3%; margin-right: 3%;">
+      <a href=""> 
+          <span>Ways to walk around</span>
+          <img class="aboutimage" src="./exports/ui/controls1.png"> 
+        </a>
+      <a href=""> 
+          <span>Click on glowing objects to interact</span>
+          <img class="aboutimage" src="./exports/ui/controls2a.jpg"> 
+        </a>
+      <a href=""> 
+        <span>Click the controller arrows to look around</span>
+        <img class="aboutimage" src="./exports/ui/controls3.png"> <br><br>
+      </a>
     </div>
+  
+    <!-- <h3 style="position: relative;"> 
+      <br>
+      <div style="float:left; font-family:EY-Font; margin-left: 10%; font-size: 1.4vw;background-color:white;">Ways to walk around</div>
+      <div style="float:right; font-family:EY-Font; margin-right: 6%; font-size: 1.4vw;background-color:white;">Click the controller arrows to look around</div>
+      <div style="text-align:center; font-family:EY-Font; font-size: 1.4vw; background-color:white;">Click on glowing objects to interact</div>
+      <div style="clear: left;">
+    </h3>
+    <p style="text-align:center;"><img src="./exports/ui/controls.png" alt="Controls" style="width:100%; position: relative; background-color:white;"><br></p> -->
+    <div class="container" style = "text-align:center">
+      <!-- <img src="./exports/ui/bottom.png" alt="Bottom Image" style="position: absolute; bottom: 0px; width: 100% ;height: 9vw;"> -->
+      <button id="EnterButton" class="btn"  style="position: relative; border:none; visibility:hidden; bottom: 7%; width: 250px ;height: 60px; background-color: #ffe600; font-size: 15px; font-family:EY-Font-Bold;">Enter Innovation Realized</button>
+    </div>
+    <!-- <img id="EnterButton" src="EnterButton.png" style="visibility:hidden;position:absolute;height:100%;width:100%;z-index: 25;"> -->
+    <img id="loadingbackground" src="./exports/ui/LoadingBar.png" style="position:absolute;z-index:9;height:100%;width:100%">
+    <!-- <img src="LoadingScreenFinal.jpg" style="position:absolute;z-index:3;height:100%;width:100%"> -->
+      
+      <div id = "loadingBar"  style="position:absolute; z-index:12;bottom: 12%; left: 28%; width: 1%;height: 2%;background-color: rgb(254, 230, 0);"></div> 
+  </div>
    
 <script>
   var itemsLoaded = 0;

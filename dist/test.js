@@ -97,34 +97,34 @@ let yellowColor = new THREE.Color( 0xffe600 );
 
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0, 'Forum_Screens_2': -Math.PI/2, 'Forum_Screens_3':-Math.PI/2};
 
-var videosounds = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'HighlightsAudio.mp3', 'SpeakEasy_screen':'HighlightsAudio.mp3'};
-var playtextures = {'ey_verse_screen': 'EYVersePlayTexture.jpg', 'Forum_Screens_1': 'HighlightsPlay.jpg', 'Forum_Screens_3': 'CarminePlayButton.jpg', 'Market_waterfall_screen_AI': 'HighlightsPlay2.jpg', 'SpeakEasy_screen':'HighlightsPlay3.jpg'};
-var videoindexes = {'ey_verse_screen': 0, 'Forum_Screens_1': 1, 'Market_waterfall_screen_AI': 2, 'SpeakEasy_screen': 3, 'Market_screens_01':4, 'Market_screens_02':5};
+var videosounds = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'RobotAudio.mp3', 'SpeakEasy_screen':'BeatboxAudio.mp3'};
+var playtextures = {'ey_verse_screen': 'EYVersePlayTexture.jpg', 'Forum_Screens_1': 'HighlightsPlay.jpg', 'Forum_Screens_3': 'CarminePlayButton.jpg', 'Market_waterfall_screen_AI': 'RobotPlay.jpg', 'SpeakEasy_screen':'BeatboxPlay.jpg', 'VR_Bar_screens04': 'BeatboxPlay.jpg', 'VR_Bar_screens03': 'RobotPlay.jpg'};
+var videoindexes = {'ey_verse_screen': 0, 'Forum_Screens_1': 1, 'Market_waterfall_screen_AI': 3, 'SpeakEasy_screen': 2, 'Market_screens_01':4, 'Market_screens_02':5};
 var videobegunstate = [false, true, false, false, false, false];
 var videolinks = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'HighlightsAudio.mp3', 'SpeakEasy_screen':'HighlightsAudio.mp3'};
 //var monitorangles = [-Math.PI, 0, -Math.PI/2]
 var slideDecks = [];
 var firstSlides = [];
-var slideIndices = {'TZ_wall_monitors_01': 3,  'TZ_wall_monitors_02': 11, 'TZ_wall_monitors_03': 5, 'TZ_wall_monitors_04': 12, 'TZ_wall_monitors_08': 32, 'TZ_blockchain_01': 33, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 4, 'TZ_wall_monitors_05': 2, 'TZ_wall_monitors_06': 21, 'TZ_wall_monitors_07': 31, 'TZ_pillar_monitors_01': 24, 'TZ_pillar_monitors_02': 14, 'TZ_pillar_monitors_03': 23, 'TZ_pillar_monitors_04': 22, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'Purple_pod_screen_1':10, 'Purple_pod_screen_2':17, 'Purple_pod_screen_3':15,'Purple_pod_screen_4':13, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':18, 'infinite_possibilities_screen_2':25, 'infinite_possibilities_screen_3':28, 'infinite_possibilities_screen_4':20, 'infinite_possibilities_screen_005': 19, 'infinite_possibilities_screen_006': 30, 'infinite_possibilities_screen_main':0, 'Market_waterfall_screen_Gil_1': 29, 'Market_waterfall_screen_Gil_2': 29};
+var slideIndices = {'TZ_wall_monitors_01': 3,  'TZ_wall_monitors_02': 11, 'TZ_wall_monitors_03': 5, 'TZ_wall_monitors_04': 12, 'TZ_wall_monitors_08': 32, 'TZ_blockchain_01': 33, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 4, 'TZ_wall_monitors_05': 2, 'TZ_wall_monitors_06': 21, 'TZ_wall_monitors_07': 31, 'TZ_pillar_monitors_01': 24, 'TZ_pillar_monitors_02': 14, 'TZ_pillar_monitors_03': 23, 'TZ_pillar_monitors_04': 22, 'CR_2035_screen': 16, 'Forum_Screens_2': 7, 'Forum_Screens_3':0, 'VR_Bar_screens04':0, 'VR_Bar_screens03':0, 'Purple_pod_screen_1':10, 'Purple_pod_screen_2':17, 'Purple_pod_screen_3':15,'Purple_pod_screen_4':13, 'Purple_pod_screen_main':0, "IZ_screen_1":26, 'IZ_screen_2':6, 'IZ_screen_3':9,'IZ_screen_4':8,'IZ_screen_main':4, 'infinite_possibilities_screen_1':18, 'infinite_possibilities_screen_2':25, 'infinite_possibilities_screen_3':28, 'infinite_possibilities_screen_4':20, 'infinite_possibilities_screen_005': 19, 'infinite_possibilities_screen_006': 30, 'infinite_possibilities_screen_main':0, 'Market_waterfall_screen_Gil_1': 29, 'Market_waterfall_screen_Gil_2': 29};
 
 var contactSlides = {'TZ_wall_monitors_01': 1,  'TZ_wall_monitors_02': 1, 'TZ_wall_monitors_03': 1, 'TZ_wall_monitors_04': 1, 'TZ_wall_monitors_08': -1, 'TZ_blockchain_01': 0, 'TZ_blockchain_02': 2, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 0, 'TZ_wall_monitors_05': 0, 'TZ_wall_monitors_06': 1, 'TZ_wall_monitors_07': 1, 'TZ_pillar_monitors_01': -1, 'TZ_pillar_monitors_02': 1, 'TZ_pillar_monitors_03': -1, 'TZ_pillar_monitors_04': -1, 'CR_2035_screen': 1, 'Forum_Screens_2': -1, 'Purple_pod_screen_1':1, 'Purple_pod_screen_2':1, 'Purple_pod_screen_3':1,'Purple_pod_screen_4':1, 'Purple_pod_screen_main':0, "IZ_screen_1":1, 'IZ_screen_2':1, 'IZ_screen_3':1,'IZ_screen_4':1,'IZ_screen_main':-1, 'infinite_possibilities_screen_1':1, 'infinite_possibilities_screen_2':1, 'infinite_possibilities_screen_3':1, 'infinite_possibilities_screen_4':1, 'infinite_possibilities_screen_005': 1, 'infinite_possibilities_screen_006': 1, 'infinite_possibilities_screen_main':-1, 'Market_waterfall_screen_Gil_1': 1, 'Market_waterfall_screen_Gil_2': 1};
 var slidePos = {'TZ_wall_monitors_01': 1,  'TZ_wall_monitors_02': 0, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': 1, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 0, 'TZ_wall_monitors_05': 0, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': 0, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': 0, 'TZ_pillar_monitors_04': 0, 'CR_2035_screen': 0, 'Forum_Screens_2': 0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':0, 'Purple_pod_screen_3':0,'Purple_pod_screen_4':0, 'Purple_pod_screen_main':0, "IZ_screen_1":0, 'IZ_screen_2':0, 'IZ_screen_3':0,'IZ_screen_4':0,'IZ_screen_main':0, 'infinite_possibilities_screen_1':0, 'infinite_possibilities_screen_2':0, 'infinite_possibilities_screen_3':0, 'infinite_possibilities_screen_4':0, 'infinite_possibilities_screen_005': 0, 'infinite_possibilities_screen_006': 0, 'infinite_possibilities_screen_main':0, 'Market_waterfall_screen_Gil_1': 0, 'Market_waterfall_screen_Gil_2': 0};
-var contactEmails = {'TZ_wall_monitors_01': 'ethan.edwards@ey.com',  'TZ_wall_monitors_02': 'michael.kanazawa@ey.com', 'TZ_wall_monitors_03': 'ethan.edwards@ey.com', 'TZ_wall_monitors_04': 'tonny.dekker@nl.ey.com, brad.artigue@ey.com', 'TZ_wall_monitors_08': '', 'TZ_blockchain_01': 'edwina.fitzmaurice@ey.com', 'TZ_blockchain_02': 'brian.stern@ey.com', 'TZ_blockchain_19': 'dean.sauer@ey.com', 'TZ_blockchain_20': 'ethan.edwards@ey.com', 'TZ_wall_monitors_05': 'ethan.edwards@ey.com', 'TZ_wall_monitors_06': 'lbuchanan@uk.ey.com', 'TZ_wall_monitors_07': 'Oliver.Jones@uk.ey.com', 'TZ_pillar_monitors_01': '', 'TZ_pillar_monitors_02': 'michael.kanazawa@ey.com', 'TZ_pillar_monitors_03': '', 'TZ_pillar_monitors_04': '', 'CR_2035_screen': 'orlan.boston@ey.com, lisa.lindstrom@doberman.ey.com', 'Forum_Screens_2': '', 'Purple_pod_screen_1':'Adrian.Slobin@ey.com', 'Purple_pod_screen_2':'Kamran.Malik@au.ey.com', 'Purple_pod_screen_3':'Rachel.Hall@ey.com, aloha.mcbride@ey.com','Purple_pod_screen_4':'Roselyn.Feinsod@ey.com', 'Purple_pod_screen_main':'', "IZ_screen_1":'Nicola.Morini.Bianzino@eyg.ey.com', 'IZ_screen_2':'abaldwin@uk.ey.com', 'IZ_screen_3':'','IZ_screen_4':'','IZ_screen_main':'', 'infinite_possibilities_screen_1':'Kristina.Rogers1@ey.com, Rob.Dongoski@parthenon.ey.com', 'infinite_possibilities_screen_2':'edwina.fitzmaurice@ey.com', 'infinite_possibilities_screen_3':'Greg.Sarafin@ey.com, Jeff.Wray@parthenon.ey.com', 'infinite_possibilities_screen_4':'Adlai.Goldberg@ey.com', 'infinite_possibilities_screen_005': 'savarley@uk.ey.com', 'infinite_possibilities_screen_006': 'Janet.Balis@ey.com', 'infinite_possibilities_screen_main':'', 'Market_waterfall_screen_Gil_1': 'gil.forer@ey.com', 'Market_waterfall_screen_Gil_2': 'gil.forer@ey.com'};
+var contactEmails = {'TZ_wall_monitors_01': 'daniel.krauss@de.ey.com',  'TZ_wall_monitors_02': 'michael.kanazawa@ey.com', 'TZ_wall_monitors_03': 'steve.basili@ey.com', 'TZ_wall_monitors_04': 'tonny.dekker@nl.ey.com, brad.artigue@ey.com', 'TZ_wall_monitors_08': '', 'TZ_blockchain_01': 'edwina.fitzmaurice@ey.com', 'TZ_blockchain_02': 'paul.brody@ey.com', 'TZ_blockchain_19': 'beatriz.sanzsaiz@es.ey.com', 'TZ_blockchain_20': 'miroslaw.ryba@pl.ey.com', 'TZ_wall_monitors_05': 'richard.watson@au.ey.com', 'TZ_wall_monitors_06': 'lbuchanan@uk.ey.com', 'TZ_wall_monitors_07': 'Oliver.Jones@uk.ey.com', 'TZ_pillar_monitors_01': '', 'TZ_pillar_monitors_02': 'michael.kanazawa@ey.com', 'TZ_pillar_monitors_03': '', 'TZ_pillar_monitors_04': '', 'CR_2035_screen': 'orlan.boston@ey.com, lisa.lindstrom@doberman.ey.com', 'Forum_Screens_2': '', 'Purple_pod_screen_1':'Adrian.Slobin@ey.com', 'Purple_pod_screen_2':'Kamran.Malik@au.ey.com', 'Purple_pod_screen_3':'Rachel.Hall@ey.com, aloha.mcbride@ey.com','Purple_pod_screen_4':'Roselyn.Feinsod@ey.com', 'Purple_pod_screen_main':'', "IZ_screen_1":'Nicola.Morini.Bianzino@eyg.ey.com', 'IZ_screen_2':'abaldwin@uk.ey.com', 'IZ_screen_3':'','IZ_screen_4':'','IZ_screen_main':'', 'infinite_possibilities_screen_1':'Kristina.Rogers1@ey.com, Rob.Dongoski@parthenon.ey.com', 'infinite_possibilities_screen_2':'edwina.fitzmaurice@ey.com', 'infinite_possibilities_screen_3':'Greg.Sarafin@ey.com, Jeff.Wray@parthenon.ey.com', 'infinite_possibilities_screen_4':'Adlai.Goldberg@ey.com', 'infinite_possibilities_screen_005': 'savarley@uk.ey.com', 'infinite_possibilities_screen_006': 'Janet.Balis@ey.com', 'infinite_possibilities_screen_main':'', 'Market_waterfall_screen_Gil_1': 'gil.forer@ey.com', 'Market_waterfall_screen_Gil_2': 'gil.forer@ey.com'};
 var cmpositions = [[23.516043701171875, 1.13, 19.438042068481444], [23.356043701171875, 1.13, 19.438042068481444], [23.636043701171875, 1.07, 19.438042068481444]];
 
 
 
-var mouseoverText = {'IZ_map_button_01': 'See the new EY Metaverse',
-'IZ_map_button_02': 'Summary of the Chicago regneration event',
-'IZ_map_button_03': 'Back to the entrance',
-'IZ_map_button_04': 'See the intersection of art, technology, and business',
-'IZ_map_button_05': 'Highlights from the market space',
-'IZ_map_button_06': 'See the main stage events',
-'IZ_map_button_07': 'Music made by an AI',
-'IZ_map_button_08': 'Check out Web 3.0 and the Metaverse',
-'IZ_map_button_09': 'EY\'s activity in future industries',
-'IZ_map_button_010': 'Explore our thinking on emerging tech',
-'IZ_map_button_011': 'Virtual reality area',
+var mouseoverText = {'IZ_map_button_01': 'Enter the new EY Metaverse',
+'IZ_map_button_02': 'An immersive experience of regenerative future and business-as-usual future',
+'IZ_map_button_03': 'Find out more on our vision for how EY will do business, connect with clients and create value in the metaverse of the near future',
+'IZ_map_button_04': 'An open discussion of Metaverse is the new cloud and critical issues to consider. Know our partner sponsors of Innovation Realized 2022',
+'IZ_map_button_05': 'Did you want to listen to some music and reflect on Innovation realised 2022? You are on the right place! Watch the performances of: \no Harry Yeff (Reeps 100) who is a London born artist, founder and technologist, utilizing an almost inhuman vocal rang to drive his performative digital and physical artworks. \no And Shimon an improvising robotic marimba player that uses artificial intelligence to improvise with human musicians, leading to novel musical experiences and outcomes',
+'IZ_map_button_06': 'This section walks you through the workshop highlights of solving the dream to reality gap in innovation, how do you transform your operating model, so it delivers what you need?',
+'IZ_map_button_07': 'Workshop highlights the key takeaways of Customer centricity, Reimagine personalized care, Right skills to meet future business requirement in the next decade, Innovation@ scale and Reimagine hybrid work',
+'IZ_map_button_08': 'Workshop highlights on why settle for moon when there are new galaxies to explore?, what tech@speed means to you?, sustainability strategy and actions, and navigating your transformation in transitional times',
+'IZ_map_button_09': 'A video performances of beat boxer and robot playing music',
+'IZ_map_button_010': 'o	A conversation with Carmine Di Sibio, Global Chairman and CEO, EY on the CEO 360: from strategy to transformation and beyond.\no A video on Innovation Realized 2022 highlights.\no Dr. Parag Khanna, Managing Partner provides insights on the Geopolitical marketplace.',
+'IZ_map_button_011': 'o	A walkthrough on top ten key highlights of Innovation Realized 2022\no Watch the performances of:\n	   o Harry Yeff (Reeps 100) who is a London born artist, founder and technologist, utilizing an almost inhuman vocal rang to drive his performative digital and physical artworks.\n	o And Shimon an improvising robotic marimba player that uses artificial intelligence to improvise with human musicians, leading to novel musical experiences and outcomes.'
 
 }
 var browser = "";
@@ -310,9 +310,16 @@ addLights();
                 
                 break;
             case 'Enter':
-                click = true;
-                pointer.x = 0;
-                pointer.y = 0.25;
+                console.log("hit enter")
+                
+                if(!loaded){
+                    //enterClick();
+                }
+                else{
+                    click = true;
+                    pointer.x = 0;
+                    pointer.y = 0.25;
+                }
                 break;
             case 'KeyM':
                 warpToMap();
@@ -321,7 +328,40 @@ addLights();
                 showControls();
                 break;
 
-
+            //teleports
+            case 'Digit1':
+                teleport('IZ_map_button_01');
+                break;
+            case 'Digit2':
+                teleport('IZ_map_button_02');
+                break;
+            case 'Digit3':
+                teleport('IZ_map_button_03');
+                break;
+            case 'Digit4':
+                teleport('IZ_map_button_04');
+                break;
+            case 'Digit5':
+                teleport('IZ_map_button_05');
+                break;
+            case 'Digit6':
+                teleport('IZ_map_button_06');
+                break;                            
+            case 'Digit7':
+                teleport('IZ_map_button_07');
+                break;
+            case 'Digit8':
+                teleport('IZ_map_button_08');
+                break;
+            case 'Digit9':
+                teleport('IZ_map_button_09');
+                break;
+            case 'Digit0':
+                teleport('IZ_map_button_010');
+                break;
+            case 'Minus':
+                teleport('IZ_map_button_011');
+                break;
         }
 
     };
@@ -370,6 +410,7 @@ addLights();
 
     window.addEventListener( 'resize', onWindowResize );
     document.getElementById("EnterButton").addEventListener('click', enterClick)
+    //document.addEventListener('sumbit', enterClick)
 
 }
 
@@ -562,7 +603,12 @@ function handleMove(time){
                 if(oname.includes('Forum_Screens_3')){
                     window.open('./videos/carmine/index.html', '_blank');
                 }
-                
+                else if(oname.includes('VR_Bar_screens04')){
+                    window.open('./videos/beatboxer/index.html', '_blank');
+                }
+                else if(oname.includes('VR_Bar_screens03')){
+                    window.open('./videos/robot/index.html', '_blank');
+                }
                 //Check whether browser is Edge
                 else if(browser=='Edge'){
 
@@ -1034,7 +1080,7 @@ function loadAllModels(){
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'TZ_blockchain_02.glb', 'TZ_blockchain_19.glb', 'TZ_blockchain_20.glb', 'TZ_Curved_screens_01.glb', 'TZ_Curved_screens_02.glb', 'TZ_Curved_screens_03.glb', 'TZ_Curved_screens_04.glb', 'TZ_Curved_screens_05.glb', 'TZ_Curved_screens_06.glb', 'TZ_pillar_monitors_01.glb', 'TZ_pillar_monitors_02.glb', 'TZ_pillar_monitors_03.glb', 'TZ_pillar_monitors_04.glb', 'TZ_wall_monitors_01.glb', 'TZ_wall_monitors_02.glb', 'TZ_wall_monitors_03.glb', 'TZ_wall_monitors_04.glb', 'TZ_wall_monitors_05.glb', 'TZ_wall_monitors_06.glb', 'TZ_wall_monitors_07.glb', 'TZ_wall_monitors_08.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED_FINAL_opaque.glb', 'Market_BAKED_FINAL_transparent.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque2.glb', 'VR_Bar_BAKED_opaque.glb', 'VR_Bar_BAKED_transparent.glb']
     //var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CR_2035_BAKED_opaque.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'Forum_BAKED_opaque.glb', 'Forum_BAKED_transparent.glb', 'IR_Map_screen.glb', 'IR_Map_screen_frame.glb', 'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEasy_BAKED_opaque.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
-    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'ForumEthan.glb', 'Forum_BAKED_transparent.glb',  'IZ_BAKED_opaque_and_map.glb' , 'Market_BAKED.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Slide_screen.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEthan.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKED.glb']
+    var models = ['ceiling.glb', 'Collision_Boundary_wall_updated.glb', 'CREthan.glb', 'CR_2035_BAKED_transparent.glb', 'EY_VERSE_BAKED.glb', 'Floor_GOBO_spots.glb', 'ForumEthan.glb', 'Forum_BAKED_transparent.glb',  'IZEthan.glb' , 'Market_BAKEDEthan.glb', 'outer_walls.glb', 'Purple_Pod_BAKED_opaque.glb', 'Slide_screen.glb', 'Space_Pod_BAKED_opaque.glb', 'Space_Pod_BAKED_transparent.glb', 'SpeakEthan.glb', 'SpeakEasy_BAKED_transparent.glb', 'TZ_BAKED_opaque.glb', 'VR_Bar_BAKEDEthan.glb']
 
     var fulltext = ['CR_2035_blanket.jpg', 'CR_2035_ceiling.jpg', 'CR_2035_floor.jpg', 'CR_2035_furniture.jpg', 'CR_2035_screen.jpg', 'CR_2035_signage.jpg', 'CR_2035_video_wall.jpg', 'CR_2035_wall.jpg', 'ey_verse_curtains.jpg', 'ey_verse_floor.jpg', 'ey_verse_inner_walls.jpg', 'ey_verse_outer_walls.jpg', 'ey_verse_rafters.jpg', 'ey_verse_rug.jpg', 'ey_verse_screen.jpg', 'ey_verse_side_rails.jpg', 'ey_verse_speakers_1.jpg', 'ey_verse_speakers_2.jpg', 'ey_verse_stools.jpg', 'ey_verse_tables_and_chairs.jpg', 'Forum_Chairs.jpg', 'Forum_Floor.jpg', 'Forum_Light_gels.jpg', 'Forum_light_truss.png', 'Forum_Lower_Benches.jpg', 'Forum_Main_Stage.jpg', 'Forum_Rafters.jpg', 'Forum_Rear_wall.jpg', 'Forum_Screens.jpg', 'Forum_stage.jpg', 'Forum_Stage_and_Walls.jpg', 'Forum_Tables.jpg', 'Forum_Upper_Benches.jpg', 'Forum_wall_panels.jpg', 'IR_Welcome_Map_2.jpg', 'IZ_arches.jpg', 'IZ_cafe_counter.jpg', 'IZ_chairs.jpg', 'IZ_desk.jpg', 'IZ_directions_1.jpg', 'IZ_directions_2.jpg', 'IZ_floor.jpg', 'IZ_furniture.jpg', 'IZ_map_button_01.jpg', 'IZ_map_button_02.jpg', 'IZ_map_button_03.jpg', 'IZ_map_button_04.jpg', 'IZ_map_button_05.jpg', 'IZ_map_button_06.jpg', 'IZ_map_button_07.jpg', 'IZ_map_button_08.jpg', 'IZ_map_button_09.jpg', 'IZ_map_button_010.jpg', 'IZ_map_button_011.jpg', 'IZ_rafters.jpg', 'IZ_seat_boxes.jpg', 'IZ_signage_1.jpg', 'IZ_signage_2.jpg', 'IZ_signage_3.jpg', 'IZ_sofa.jpg', 'IZ_stage.jpg', 'IZ_Startup_zone_screen.jpg', 'IZ_tables.jpg', 'IZ_walls.jpg', 'IZ_Wall_fix.jpg', 'IZ_welcome_corridor_screen_02.jpg', 'IZ_welcome_corridor_screen_03.jpg', 'Market_baklava_1.png', 'Market_baklava_2.png', 'Market_buffet_1.jpg', 'Market_buffet_2.jpg', 'Market_buffet_3.jpg', 'Market_buffet_4.jpg', 'Market_counters.jpg', 'Market_desserts_1.png', 'Market_desserts_2.png', 'Market_desserts_3.png', 'Market_desserts_4.png', 'Market_directional_signage_1.jpg', 'Market_directional_signage_2.jpg', 'Market_Floor.jpg', 'Market_foliage_bakery_wall.png', 'Market_foliage_hanging.png', 'Market_foliage_video_wall_1.png', 'Market_foliage_video_wall_2.png', 'Market_foliage_video_wall_3.png', 'Market_foliage_video_wall_4.png', 'Market_Forum_signage.jpg', 'Market_furniture.jpg', 'Market_green_panels.jpg', 'Market_innovation_text_1.jpg', 'Market_Light_gels.jpg', 'market_mound.jpg', 'Market_overhead_screen_1.png', 'Market_overhead_screen_2.png', 'Market_overhead_screen_3.png', 'Market_overhead_screen_4.png', 'Market_overhead_screen_5.jpg', 'Market_pink_treats.png', 'Market_Rafters.jpg', 'Market_Scaffold.jpg', 'Market_screens_01.jpg', 'Market_screens_02.jpg', 'Market_Signage_1.jpg', 'Market_Signage_2.jpg', 'Market_signage_stands.jpg', 'Market_sign_islands.jpg', 'Market_trellis.png', 'Market_walls.jpg', 'Market_waterfall_screen.jpg', 'Purple_Pod_chairs.jpg', 'Purple_pod_floor_ceiling.jpg', 'Purple_pod_screen.jpg', 'Purple_Pod_walls.jpg', 'Space_Pod_chairs.jpg', 'Space_Pod_floor_ceiling.jpg', 'Space_Pod_Inner_wall.jpg', 'Space_Pod_screen.jpg', 'Space_Pod_truss.png', 'Space_Pod_wood_pillars.jpg', 'SpeakEasy_barstools.jpg', 'SpeakEasy_Bar_Back_Bottles.jpg', 'SpeakEasy_Bar_Back_Lighting.jpg', 'SpeakEasy_bar_shelves.jpg', 'SpeakEasy_Bar_top.jpg', 'SpeakEasy_brick_wall.jpg', 'SpeakEasy_edison_lamps.png', 'SpeakEasy_floor.jpg', 'SpeakEasy_liquor_bottles.png', 'SpeakEasy_paneled_wall.jpg', 'SpeakEasy_rafters.jpg', 'SpeakEasy_screen.jpg', 'SpeakEasy_Table_and_Chairs.jpg', 'SpeakEasy_walls.jpg', 'TZ_blockchain_01.jpg', 'TZ_blockchain_02.jpg', 'TZ_blockchain_19.jpg', 'TZ_blockchain_20.jpg', 'TZ_Curved_screens_01.jpg', 'TZ_Curved_screens_02.jpg', 'TZ_Curved_screens_03.jpg', 'TZ_Curved_screens_04.jpg', 'TZ_Curved_screens_05.jpg', 'TZ_Curved_screens_06.jpg', 'TZ_Floor.jpg', 'TZ_mirror_wall.jpg', 'TZ_murals_01.jpg', 'TZ_outer_walls.jpg', 'TZ_pillar_monitors_01.jpg', 'TZ_pillar_monitors_02.jpg', 'TZ_pillar_monitors_03.jpg', 'TZ_pillar_monitors_04.jpg', 'TZ_Projectors.jpg', 'TZ_rafters.jpg', 'TZ_signage.jpg', 'TZ_wall_monitors_01.jpg', 'TZ_wall_monitors_02.jpg', 'TZ_wall_monitors_03.jpg', 'TZ_wall_monitors_04.jpg', 'TZ_wall_monitors_05.jpg', 'TZ_wall_monitors_06.jpg', 'TZ_wall_monitors_07.jpg', 'TZ_wall_monitors_08.jpg', 'VR_Bar_back_wall_fix.jpg', 'VR_Bar_Direction_Graphic.jpg', 'VR_Bar_display01.jpg', 'VR_Bar_Floor.jpg', 'VR_Bar_floor_lights.jpg', 'VR_Bar_furniture.jpg', 'VR_Bar_Inner_walls.jpg', 'VR_Bar_Outer_walls.jpg', 'VR_Bar_screens01.jpg', 'VR_Bar_screens02.jpg', 'VR_Bar_screens03.jpg', 'VR_Bar_screens04.jpg', 'VR_Bar_shooters.png', 'VR_Bar_Wall_fix.jpg', 'VR_Bar_yellow_Arches.jpg']
     for(var i = 0; i < models.length; i++){
@@ -1582,7 +1628,7 @@ function makeSpecialMaterial(name){
             }
         }
     }
-    else if(name.includes('ey_verse_screen')||name.includes('Forum_Screens_3')||name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen')){
+    else if(name.includes('ey_verse_screen')||name.includes('Forum_Screens_3')||name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen')||name.includes('VR_Bar_screens04')||name.includes('VR_Bar_screens03')){
         if(name.includes('SpeakEasy_screen_frame')){
             return null;
         }
@@ -1629,11 +1675,17 @@ function beginVideo(mesh){
     var svideomaterial = new THREE.MeshBasicMaterial( { map: svideotexture } );
     mesh.material = svideomaterial;
     video.play();
-    console.log("before " + VideoScreensGlow);
-    if(VideoScreensGlow.includes(mesh)){
-    VideoScreensGlow.splice(mesh, 1);
+    console.log("before " + VideoScreensGlow.toString());
+    for(var i = 0; i < VideoScreensGlow.length; i++){
+        console.log(VideoScreensGlow[i].name)
     }
-    console.log("after " + VideoScreensGlow);
+    if(VideoScreensGlow.includes(mesh)){
+        VideoScreensGlow.splice(VideoScreensGlow.indexOf(mesh), 1);
+    }
+    console.log("after " + VideoScreensGlow.toString());
+    for(var i = 0; i < VideoScreensGlow.length; i++){
+        console.log(VideoScreensGlow[i].name)
+    }
     sounds[videoindexes[mesh.name]].play();
 }
 
@@ -1687,20 +1739,20 @@ function addInteract(bakedMesh){
         collision = bakedMesh;
         
     }
-    else if(name.includes('ey_verse_screen')||name.includes('Forum_Screens_1')||name.includes('Forum_Screens_3')||name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen')){
+    else if(name.includes('ey_verse_screen')||name.includes('Forum_Screens_1')||name.includes('Forum_Screens_3')||name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen')||name.includes('VR_Bar_screens04')||name.includes('VR_Bar_screens03')){
         if(name.includes('SpeakEasy_screen_frame')){
             return null;
         }
         
         VideoScreens.push(bakedMesh);
         if(!(name.includes('Forum_Screens_1')&&browser!='Edge')){
-            if(!(name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen'))){
+            //if(!(name.includes('Market_waterfall_screen_AI')||name.includes('SpeakEasy_screen'))){
                 VideoScreensGlow.push(bakedMesh);
-            }
+            //}
             console.log("glow name " + name);
         }
         if(browser!='Edge'){
-            if(!name.includes('Forum_Screens_3')){
+            if(!(name.includes('Forum_Screens_3')||name.includes('VR_Bar_screens04')||name.includes('VR_Bar_screens03'))){
                 addSound(bakedMesh);
             }
         }
