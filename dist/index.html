@@ -21,7 +21,7 @@
 </video>
 <video id="beatboxer" muted crossorigin="anonymous" style="display:none;"
         type="video/mp4"
-        src="./exports/videos/BeatboxFlip.mp4" controls="false" autoplay="true" loop="true" codecs="avc1.42E01E, mp4a.40.2">
+        src="./exports/videos/BeatBoxFlip.mp4" controls="false" autoplay="true" loop="true" codecs="avc1.42E01E, mp4a.40.2">
 </video>
 <video id="robot" muted crossorigin="anonymous" style="display:none;"
         type="video/mp4"
@@ -49,22 +49,22 @@
 <script type="module" src="test.js"> </script>
 <div id="loadingScreen" style="position:absolute;top:0px;right:0px;bottom:0px;left:0px;">
   <img src="./exports/ui/white.jpeg" style="position:absolute;z-index:0;height:100%;width:100%">
-  <img src="./exports/ui/eylogo2.jpg" alt="EY Logo" style="position: relative; width:160px;height:100px">
-  <h1 style="position: relative; text-align:center; font-family:EY-Font; background-color:white;">Welcome To Innovation Realized '22<br><br><br></h1>
+  <img src="./exports/ui/eylogo2.jpg" alt="EY Logo" style="position: relative; width:8%;left:2%;top:2%;z-index:9999999">
+  <h1 style="position: relative; text-align:center; font-family:EY-Font; background-color:white;">Welcome to Innovation Realized '22<br><br><br></h1>
 
   <div class="img-block" style="margin-left: 3%; margin-right: 3%;">
     <a> 
-        <span>Explore experience<br>Use your keyboard to walk around</span>
-        <img class="aboutimage" src="./exports/ui/controls1.png"> 
+        <strong>Explore experience</strong><span><br><br>Use your keyboard or <br>arrow keys to walk around</span>
+        <img class="aboutimage" src="./exports/ui/controls1a.jpg"> 
       </a>
     <a> 
-      
-        <span>Experience content<br>Click the location map to explore the areas<br>Or click on glowing objects</span>
-        <img class="aboutimage" src="./exports/ui/controls2b.jpg"> 
+      <strong>Look around</strong><span><br><br>Click the controller arrows to look around<br>(e.g up, down, left and right)</span>
+      <img class="aboutimage" src="./exports/ui/controls3a.jpg">   
       </a>
     <a>
-      <span>Look around<br>Click the controller arrows to look around</span>
-      <img class="aboutimage" src="./exports/ui/controls3.png"> <br><br>
+      
+      <strong>Explore content</strong><span><br><br>You can use the location map to navigate to available content<br>or click on glowing objects.</span>
+        <img class="aboutimage" src="./exports/ui/controls2c.jpg">  <br><br>    
     </a>
   </div>
 
@@ -95,14 +95,48 @@
    
 
 <img id ="controller" src="./exports/ui/IRController.png" style="visibility:hidden; position:absolute;bottom:5%;right:5%;width:15%;z-index: 9999;background-color: transparent;opacity:0.8;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
-<img id="return" src="./exports/ui/MapButton.jpg" style="visibility:hidden;position: absolute; bottom:2%;left:2%;width:8%;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
-<img id="controlbutton" src="./exports/ui/CheckControls.jpg" style="visibility:hidden;position: absolute; bottom:2%;left:12%;width:8%;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+<img id="return" src="./exports/ui/MapButtoni.jpg" style="visibility:hidden;position: absolute; bottom:2%;left:2%;width:8%;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+<img id="controlbutton" src="./exports/ui/CheckControlsi.jpg" style="visibility:hidden;position: absolute; bottom:2%;left:12%;width:8%;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
 
-<img id="controldisplay" src="./exports/ui/LoadingScreenFinal.jpg" style="visibility:hidden;position: absolute; height:80%;width:80%;left:10%;top:10%;z-index:99;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
+<img id="controldisplay" src="./exports/ui/controlscreen.jpg" style="visibility:hidden;position: absolute;width:80%;left:10%;top:20%;z-index:99;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
 <img id="xbutton" src="./exports/buttons/xbutton.png" style="visibility:hidden;position: absolute; width:5%;left:3%;top:3%;z-index:999;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">
 
-<div id="tooltip" class="tooltip" style="visibility: false; position: absolute; z-index: 9999; width: 300px; background: #0f0f0f; color: white; opacity: 0.75;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;"></div>
+<div id="tooltip" class="tooltip" style="visibility: false;font-family:EY-Font; font-size: 1.4vw; position: absolute; z-index: 9999; width: 400px; background: #0f0f0f; color: white; opacity: 0.75;-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;"></div>
 <canvas id="three" class="webgl" style="visibility: false; position: fixed;top: 0;left: 0;outline: none;"></canvas>
+
+
+<div id="slideviewer" style="visibility:hidden;display:flex;position:absolute;width:100%;height:100%;align-items: center">
+  <img src="./exports/ui/blacksquare.jpg" style="position:absolute;width:100%;height:100%;z-index:99999999998">
+  <img id="slide" src="./exports/slides/ai/ai_01.jpg" style="position:absolute;left:5%;width:90%;align-items: center;z-index:99999999999">
+  <img id="backbutton" src="./exports/buttons/backb.jpg" style="position:absolute;left:0;width:5%;align-items: center;z-index:99999999999">
+  <img id="nextbutton" src="./exports/buttons/nextb.jpg" style="position:absolute;left:95%;width:5%;align-items: center;z-index:99999999999">
+  <img id="slidexbutton" class='slidexbutton' src="./exports/buttons/xbutton.png" style="position:absolute;left:0;width:5%;top:0;z-index:99999999999">
+  <img id="contactbutton" src="./exports/buttons/contactbuttoni.jpg" style="visibility: hidden;position:absolute;left:0;width:10%;top:0;z-index:99999999999">
+</div>
+
+<div id="fourviewer" style="visibility:hidden;display:flex;position:absolute;width:100%;height:100%;align-items: center">
+  <img src="./exports/ui/blacksquare.jpg" style="position:absolute;width:100%;height:100%;z-index:99999999998">
+  <img id="slide1" class='slidescreen' src="" style="position:absolute;left:5%;top:0;width:40%;align-items: center;z-index:99999999999">
+  <img id="slide2" class='slidescreen' src="" style="position:absolute;left:55%;top:0;width:40%;align-items: center;z-index:99999999999">
+  <img id="slide3" class='slidescreen' src="" style="position:absolute;left:5%;top:52%;width:40%;align-items: center;z-index:99999999999">
+  <img id="slide4" class='slidescreen' src="" style="position:absolute;left:55%;top:52%;width:40%;align-items: center;z-index:99999999999">
+  <img id="fourslidexbutton" class='slidexbutton' src="./exports/buttons/xbutton.png" style="position:absolute;left:0;width:2%;top:0;z-index:99999999999">
+ 
+</div>
+
+<div id="sixviewer" style="visibility:hidden;display:flex;position:absolute;width:100%;height:100%;align-items: center">
+  <img src="./exports/ui/blacksquare.jpg" style="position:absolute;width:100%;height:100%;z-index:99999999998">
+  <img id="slide1a" class='slidescreen' src="" style="position:absolute;left:2%;top:0;width:30%;align-items: center;z-index:99999999999">
+  <img id="slide2a" class='slidescreen' src="" style="position:absolute;left:35%;top:0;width:30%;align-items: center;z-index:99999999999">
+  <img id="slide3a" class='slidescreen' src="" style="position:absolute;left:68%;top:0;width:30%;align-items: center;z-index:99999999999">
+  <img id="slide4a" class='slidescreen' src="" style="position:absolute;left:2%;top:52%;width:30%;align-items: center;z-index:99999999999">
+  <img id="slide5a" class='slidescreen' src="" style="position:absolute;left:35%;top:52%;width:30%;align-items: center;z-index:99999999999">
+  <img id="slide6a" class='slidescreen' src="" style="position:absolute;left:68%;top:52%;width:30%;align-items: center;z-index:99999999999">
+  <img id="sixslidexbutton" class='slidexbutton' src="./exports/buttons/xbutton.png" style="position:absolute;left:0;width:2%;top:0;z-index:99999999999">
+ 
+</div>
+
+
 
 
 <!--position: absolute;width: 200px;height: 200px;bottom: 100;right: 100;background-color: transparent;opacity: 0.5;-->

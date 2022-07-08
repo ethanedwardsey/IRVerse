@@ -31,9 +31,22 @@ body
   left:0;
   /*background:rgba(255,255,255,0.5);*/
   padding:5px;
-  font-size:1.4vw;
+  font-size:1.1vw;
   color:#000;
   font-weight:700;
+  text-align:center;
+  font-family: EY-Font;
+}
+.img-block a strong{
+  position:absolute;
+  width:100%;
+  top:0;
+  left:0;
+  /*background:rgba(255,255,255,0.5);*/
+  padding:5px;
+  font-size:1.5vw;
+  color:#000;
+  font-weight:1000;
   text-align:center;
   font-family: EY-Font;
 }
@@ -49,26 +62,48 @@ body
   width:33%;
   /*margin:0 10px;*/
 }
+.instrheadings{
+  position:absolute;
+  width:100%;
+  top:0;
+  left:0;
+  /*background:rgba(255,255,255,0.5);*/
+  padding:5px;
+  font-size:5.4vw;
+  color:#000;
+  font-weight:700;
+  text-align:center;
+  font-family: EY-Font;
+}
 .btn {
   display: inline-block;
   padding: 15px 26px;
   background-color: white;
   color: #2e2e38;
   border: 1px solid #2e2e38;
-  font-weight: 700;
   line-height: 24px;
   position: relative; 
   visibility:hidden; 
-  bottom: 7%; 
-  width: 125px ;
-  height: 20px;
+  bottom: 20px; 
+  width: 225px ;
+  height: 24px;
   z-index:8789;
-  font-size: 10px; 
-  font-family:EY-Font-Bold;
+  font-weight: 700;
+  font-size:16px;
+  font-family:EY-Font;
   text-decoration: none
   
 }
 .btn:hover{
   background-color: #2e2e38;
   color: white;
+}
+.slidexbutton:hover{
+  -webkit-filter: invert(1);
+   filter: invert(1)
+}
+
+.slidescreen:hover{
+  -webkit-filter: brightness(150%);
+  filter: brightness(120%);
 }

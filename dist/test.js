@@ -84,6 +84,7 @@ var sounds = [];
 var soundsadded = 0;
 var soundsToAdd = 1;
 
+var slidedir = true;
 var animatecount;
 
 var actualSlideMode = false;
@@ -97,7 +98,7 @@ let yellowColor = new THREE.Color( 0xffe600 );
 
 var monitorsangles = { 'TZ_wall_monitors_01': -Math.PI/2,  'TZ_wall_monitors_02': -Math.PI/2, 'TZ_wall_monitors_03': -Math.PI, 'TZ_wall_monitors_04': -Math.PI, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': -Math.PI, 'TZ_blockchain_02': Math.PI/2, 'TZ_blockchain_19': Math.PI/2, 'TZ_blockchain_20': -Math.PI, 'TZ_wall_monitors_05': -Math.PI, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': Math.PI/2, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': -Math.PI/2, 'TZ_pillar_monitors_04': -Math.PI, 'CR_2035_screen': 0, 'Forum_Screens_2': -Math.PI/2, 'Forum_Screens_3':-Math.PI/2};
 
-var videosounds = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'RobotAudio.mp3', 'SpeakEasy_screen':'BeatboxAudio.mp3'};
+var videosounds = {'ey_verse_screen': 'EYVerse.mp3', 'Forum_Screens_1': 'HighlightsAudio.mp3', 'Market_waterfall_screen_AI': 'RobotAudio.mp3', 'SpeakEasy_screen':'BeatBoxAudio.mp3'};
 var playtextures = {'ey_verse_screen': 'EYVersePlayTexture.jpg', 'Forum_Screens_1': 'HighlightsPlay.jpg', 'Forum_Screens_3': 'CarminePlayButton.jpg', 'Market_waterfall_screen_AI': 'RobotPlay.jpg', 'SpeakEasy_screen':'BeatboxPlay.jpg', 'VR_Bar_screens04': 'BeatboxPlay.jpg', 'VR_Bar_screens03': 'RobotPlay.jpg'};
 var videoindexes = {'ey_verse_screen': 0, 'Forum_Screens_1': 1, 'Market_waterfall_screen_AI': 3, 'SpeakEasy_screen': 2, 'Market_screens_01':4, 'Market_screens_02':5};
 var videobegunstate = [false, true, false, false, false, false];
@@ -111,7 +112,7 @@ var contactSlides = {'TZ_wall_monitors_01': 1,  'TZ_wall_monitors_02': 1, 'TZ_wa
 var slidePos = {'TZ_wall_monitors_01': 1,  'TZ_wall_monitors_02': 0, 'TZ_wall_monitors_03': 2, 'TZ_wall_monitors_04': 0, 'TZ_wall_monitors_08': 0, 'TZ_blockchain_01': 1, 'TZ_blockchain_02': 0, 'TZ_blockchain_19': 1, 'TZ_blockchain_20': 0, 'TZ_wall_monitors_05': 0, 'TZ_wall_monitors_06': 0, 'TZ_wall_monitors_07': 0, 'TZ_pillar_monitors_01': 0, 'TZ_pillar_monitors_02': 0, 'TZ_pillar_monitors_03': 0, 'TZ_pillar_monitors_04': 0, 'CR_2035_screen': 0, 'Forum_Screens_2': 0, 'Purple_pod_screen_1':0, 'Purple_pod_screen_2':0, 'Purple_pod_screen_3':0,'Purple_pod_screen_4':0, 'Purple_pod_screen_main':0, "IZ_screen_1":0, 'IZ_screen_2':0, 'IZ_screen_3':0,'IZ_screen_4':0,'IZ_screen_main':0, 'infinite_possibilities_screen_1':0, 'infinite_possibilities_screen_2':0, 'infinite_possibilities_screen_3':0, 'infinite_possibilities_screen_4':0, 'infinite_possibilities_screen_005': 0, 'infinite_possibilities_screen_006': 0, 'infinite_possibilities_screen_main':0, 'Market_waterfall_screen_Gil_1': 0, 'Market_waterfall_screen_Gil_2': 0};
 var contactEmails = {'TZ_wall_monitors_01': 'daniel.krauss@de.ey.com',  'TZ_wall_monitors_02': 'michael.kanazawa@ey.com', 'TZ_wall_monitors_03': 'steve.basili@ey.com', 'TZ_wall_monitors_04': 'tonny.dekker@nl.ey.com, brad.artigue@ey.com', 'TZ_wall_monitors_08': '', 'TZ_blockchain_01': 'edwina.fitzmaurice@ey.com', 'TZ_blockchain_02': 'paul.brody@ey.com', 'TZ_blockchain_19': 'beatriz.sanzsaiz@es.ey.com', 'TZ_blockchain_20': 'miroslaw.ryba@pl.ey.com', 'TZ_wall_monitors_05': 'richard.watson@au.ey.com', 'TZ_wall_monitors_06': 'lbuchanan@uk.ey.com', 'TZ_wall_monitors_07': 'Oliver.Jones@uk.ey.com', 'TZ_pillar_monitors_01': '', 'TZ_pillar_monitors_02': 'michael.kanazawa@ey.com', 'TZ_pillar_monitors_03': '', 'TZ_pillar_monitors_04': '', 'CR_2035_screen': 'orlan.boston@ey.com, lisa.lindstrom@doberman.ey.com', 'Forum_Screens_2': '', 'Purple_pod_screen_1':'Adrian.Slobin@ey.com', 'Purple_pod_screen_2':'Kamran.Malik@au.ey.com', 'Purple_pod_screen_3':'Rachel.Hall@ey.com, aloha.mcbride@ey.com','Purple_pod_screen_4':'Roselyn.Feinsod@ey.com', 'Purple_pod_screen_main':'', "IZ_screen_1":'Nicola.Morini.Bianzino@eyg.ey.com', 'IZ_screen_2':'abaldwin@uk.ey.com', 'IZ_screen_3':'','IZ_screen_4':'','IZ_screen_main':'', 'infinite_possibilities_screen_1':'Kristina.Rogers1@ey.com, Rob.Dongoski@parthenon.ey.com', 'infinite_possibilities_screen_2':'edwina.fitzmaurice@ey.com', 'infinite_possibilities_screen_3':'Greg.Sarafin@ey.com, Jeff.Wray@parthenon.ey.com', 'infinite_possibilities_screen_4':'Adlai.Goldberg@ey.com', 'infinite_possibilities_screen_005': 'savarley@uk.ey.com', 'infinite_possibilities_screen_006': 'Janet.Balis@ey.com', 'infinite_possibilities_screen_main':'', 'Market_waterfall_screen_Gil_1': 'gil.forer@ey.com', 'Market_waterfall_screen_Gil_2': 'gil.forer@ey.com'};
 var cmpositions = [[23.516043701171875, 1.13, 19.438042068481444], [23.356043701171875, 1.13, 19.438042068481444], [23.636043701171875, 1.07, 19.438042068481444]];
-
+var htmlpos= [[64, 72], [85, 90], [45, 87]]
 
 
 var mouseoverText = {'IZ_map_button_01': 'Enter the new EY Metaverse',
@@ -124,7 +125,7 @@ var mouseoverText = {'IZ_map_button_01': 'Enter the new EY Metaverse',
 'IZ_map_button_08': 'Workshop highlights on why settle for moon when there are new galaxies to explore?, what tech@speed means to you?, sustainability strategy and actions, and navigating your transformation in transitional times',
 'IZ_map_button_09': 'A video performances of beat boxer and robot playing music',
 'IZ_map_button_010': 'o	A conversation with Carmine Di Sibio, Global Chairman and CEO, EY on the CEO 360: from strategy to transformation and beyond.\no A video on Innovation Realized 2022 highlights.\no Dr. Parag Khanna, Managing Partner provides insights on the Geopolitical marketplace.',
-'IZ_map_button_011': 'o	A walkthrough on top ten key highlights of Innovation Realized 2022\no Watch the performances of:\n	   o Harry Yeff (Reeps 100) who is a London born artist, founder and technologist, utilizing an almost inhuman vocal rang to drive his performative digital and physical artworks.\n	o And Shimon an improvising robotic marimba player that uses artificial intelligence to improvise with human musicians, leading to novel musical experiences and outcomes.'
+'IZ_map_button_011': 'A walkthrough on top ten key highlights of Innovation Realized 2022\nWatch the performances of:\n	   o Harry Yeff (Reeps 100) who is a London born artist, founder and technologist, utilizing an almost inhuman vocal rang to drive his performative digital and physical artworks.\n	o And Shimon an improvising robotic marimba player that uses artificial intelligence to improvise with human musicians, leading to novel musical experiences and outcomes.'
 
 }
 var browser = "";
@@ -223,7 +224,9 @@ function init() {
  */
 //loadFullModels();
 loadVideos();
-loadBSlides();
+//loadBSlides();
+addListeners();
+loadHTMLSlides();
 loadAllModels();
 addLights();
 
@@ -302,7 +305,8 @@ addLights();
 
             case 'Escape':
                 if(slideMode){
-                    exitSlideMode();
+                    //exitSlideMode();
+                    exitSlideModeHTML();
                 }
                 else if(controlShowMode){
                     closeControls();
@@ -426,7 +430,7 @@ function animate() {
     if(loaded){
         
         if(slideMode){
-            SlideInteract();
+            //SlideInteract();
         } 
         else if(controlShowMode){
 
@@ -475,18 +479,31 @@ function onWindowResize(){
     let height = window.innerHeight;
 
     if(slideMode){
-        pcamera.aspect = width / height;
-        pcamera.updateProjectionMatrix();
+        //pcamera.aspect = width / height;
+        //pcamera.updateProjectionMatrix();
+        //camera.aspect = 2.0678513731825525;
+        //camera.updateProjectionMatrix();
+
     }
     else{
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
+        //camera.aspect = width / height;
+        //camera.updateProjectionMatrix();
+        //ocamera.aspect = 2.0678513731825525;
+        //ocamera.aspect.updateProjectionMatrix();
     }
-
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
     // Update renderer
     renderer.setSize(width, height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    console.log("resize!");
+    //console.log("resize!");
+    //console.log(width);
+
+    if(document.getElementById("contactbutton").style.visibility=='visible'){
+        var cmpos = htmlpos[slidePos[slideMesh.name]];
+        document.getElementById("contactbutton").style.top = (50+(cmpos[1]-50)*(window.innerWidth/1280)) + "%"
+        console.log("top is " + (50+(cmpos[1]-50)*(window.innerWidth/1280)) + "based on " + cmpos[1])
+    }
 
     //Reset OCamera
     //ocamera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 1000 );
@@ -508,6 +525,7 @@ console.log("huh")
 
 
 function handleMove(time){
+    //console.log(camera.position.x + " " + camera.position.y);
     if(click&&!buttonClicked){
         console.log("casting!");
         //switchCamera(false);
@@ -528,20 +546,27 @@ function handleMove(time){
         //console.log(TZmaps);
         const bintersects = clickraycaster.intersectObjects( TZmaps.concat(SplitScreens) );
         if(bintersects.length>0){
-        //for ( let i = 0; i < bintersects.length; i ++ ) {
-            //console.log("logging object")
-            //console.log(bintersects[i]);
-            //console.log(bintersects[i].object.position);
-            //console.log(bintersects[i].object.rotation);
             if(SplitScreens.includes(bintersects[0].object)){
-                //console.log("It's a 4 boy")
+                if(bintersects[0].object.name.includes('IZ_screen')){
+                    enterSlideModeHTMLFour(0);
+                }
+                if(bintersects[0].object.name.includes('Purple_pod_')){
+                    enterSlideModeHTMLFour(1);
+
+                }
+                if(bintersects[0].object.name.includes('infinite_possibilities_screen')){
+                    enterSlideModeHTMLSix();
+                }
+
+                /*
                 console.log(bintersects[0].object.name)
                 if(bintersects[0].object.name.includes('IZ_screen')){
                     console.log(IZMainScreen);
                     var a = 3*Math.PI/4;
                     //console.log("a is " + a)
-                    displaySlides(IZMainScreen.position, a, 2.75, 2, true);
-                    slideMesh = IZMainScreen;
+                    //displaySlides(IZMainScreen.position, a, 2.75, 2, true);
+                    enterSlideModeHTMLFour(0);
+                    //slideMesh = IZMainScreen;
                 }
                 if(bintersects[0].object.name.includes('Purple_pod_')){
                     var a = 0;
@@ -553,16 +578,18 @@ function handleMove(time){
                 if(bintersects[0].object.name.includes('infinite_possibilities_screen')){
                     var a = 0;
                     //console.log("Purple boy")
-                    displaySlides(SpaceMainScreen.position, a, 3.75, 2.85, true);
-                    slideMesh = SpaceMainScreen;
-
+                    //displaySlides(SpaceMainScreen.position, a, 3.75, 2.85, true);
+                    //slideMesh = SpaceMainScreen;
+                    enterSlideModeHTMLFour(1);
                 }
+                */
 
             }
             else{
                 console.log("object name " + bintersects[0].object.name);
                 currentSlide = 0;
                 slides = slideDecks[slideIndices[bintersects[0].object.name]];
+                /*
                 var dist = 1.5;
                 var mul = 1;
                 if(bintersects[0].object.name=='TZ_wall_monitors_04'){
@@ -581,15 +608,17 @@ function handleMove(time){
                     dist = 1.9;
                     mul = 1.35;
                 }
+                */
                 //displaySlides(bintersects[0].object.position, monitorsangles[bintersects[0].object.name], dist, mul, false);
                 slideMesh = bintersects[0].object;
-                displaySlideScreen();
+                //displaySlideScreen();
+                enterSlideModeHTML();
             }
                 
                 
                 //console.log(slideMesh);
                 //console.log(bintersects[i]);
-                switchCamera(false);
+                //switchCamera(false);
                 //console.log("hi blockchain")
             
         //}
@@ -601,13 +630,13 @@ function handleMove(time){
                 var oname = sintersects[0].object.name;
                 //Check whether it's the carmine video
                 if(oname.includes('Forum_Screens_3')){
-                    window.open('./videos/carmine/index.html', '_blank');
+                    window.open('https://players.brightcove.net/1066292269001/default_default/index.html?videoId=6309243972112', '_blank');
                 }
                 else if(oname.includes('VR_Bar_screens04')){
-                    window.open('./videos/beatboxer/index.html', '_blank');
+                    window.open('https://players.brightcove.net/1066292269001/default_default/index.html?videoId=6309252763112', '_blank');
                 }
                 else if(oname.includes('VR_Bar_screens03')){
-                    window.open('./videos/robot/index.html', '_blank');
+                    window.open(' https://players.brightcove.net/1066292269001/default_default/index.html?videoId=6309251095112', '_blank');
                 }
                 //Check whether browser is Edge
                 else if(browser=='Edge'){
@@ -619,10 +648,10 @@ function handleMove(time){
                         window.open('./videos/highlights/index.html', '_blank');
                     }
                     else if(oname=='Market_waterfall_screen_AI'){
-                        window.open('./videos/robot/index.html', '_blank');
+                        window.open('https://players.brightcove.net/1066292269001/default_default/index.html?videoId=6309251095112', '_blank');
                     }
                     else if(oname=='SpeakEasy_screen'){
-                        window.open('./videos/beatboxer/index.html', '_blank');
+                        window.open('https://players.brightcove.net/1066292269001/default_default/index.html?videoId=6309252763112', '_blank');
                     }
                 }
                 //If it is not Edge, check whether a video is already playing
@@ -673,19 +702,6 @@ function handleMove(time){
         moveForward = false;
     }
 
-    //braycaster.direction = -fraycaster.direction;
-    //braycaster.setFromCamera(new Vector2(0, 0), camera);
-
-    /*
-    backwards raycasting
-    braycaster.set(camera.position, -fraycaster.direction)
-    
-    const bcoll = braycaster.intersectObjects( [collision] );
-    if(bcoll.length>0){
-        console.log(bcoll)
-        moveBackward = false;
-    }
-*/
 
         //Controls stuff
 
@@ -697,7 +713,12 @@ function handleMove(time){
         const delta = ( time - prevTime ) / 2000;
 
 
-
+        if((velocity.z>0&&velocity.z<0.001)||velocity.z<0&&velocity.z>-0.001){
+            velocity.z = 0;
+        }
+        if((velocity.x>0&&velocity.x<0.001)||velocity.x<0&&velocity.x>-0.001){
+            velocity.x = 0;
+        }
         velocity.x -= velocity.x * 10.0 * delta;
         velocity.z -= velocity.z * 10.0 * delta;
         camVelocity.x -= camVelocity.x * 10.0 * delta;
@@ -763,10 +784,25 @@ function handleMove(time){
             console.log(clickmovepoint.z - curPos.z);
         }
 
-
+        //Prevent huge burst
+        if(velocity.z>5){
+            velocity.z=5;
+        }
+        if(velocity.z<-5){
+            velocity.z=-5;
+        }
+        if(velocity.x>5){
+            velocity.x=5;
+        }
+        if(velocity.x<-5){
+            velocity.x=-5;
+        }
 
         controls.moveForward( - velocity.z * delta );
         controls.moveRight( - velocity.x * delta );
+        //console.log((- velocity.z * delta) + " " + ( - velocity.x * delta))
+
+        
 
         controls.getObject().position.y += ( velocity.y * delta ); // new behavior
         if ( controls.getObject().position.y < 1.5 ) {
@@ -834,6 +870,7 @@ function teleport(name){
 
 
         //No y because height shouldn't be changed
+        console.log("teleport")
         camera.position.x = newPos.x;
         camera.position.z = newPos.z;
         const neuler = new Euler( 0, newRot, 0, 'YXZ' );
@@ -953,7 +990,9 @@ function slideClick(currentIntersect){
             slides=slideDecks[slideIndices[currentIntersect.object.name]];
             currentSlide = 0;
             actualSlideMode = true;
-            displaySlideScreen();
+            //displaySlideScreen();
+            enterSlideModeHTML();
+            switchCamera(true);
 
 
             /*
@@ -990,7 +1029,7 @@ function toolTipper(){
         var mouseY = ((pointer.y-1)/-2)*window.innerHeight;
 
         tooltip.style.visibility = "visible";
-        tooltip.style.left = mouseX + "px";
+        tooltip.style.left = (mouseX+10) + "px";
         tooltip.style.top = mouseY + "px";
         //tooltip.style.display = "none"
         //console.log("Hi!")
@@ -1182,10 +1221,99 @@ function loadBSlides(){
     //slides[2] = textureLoader.load('/exports/slides/slide3.png')
 }
 
+function loadHTMLSlides(){
+    var slidesslides = []
+    //0
+    slidesslides.push(['./exports/slides/blockchain/blockchain_01.jpg', './exports/slides/blockchain/blockchain_02.jpg', './exports/slides/blockchain/blockchain_03.jpg', './exports/slides/blockchain/blockchain_04.jpg', './exports/slides/blockchain/blockchain_05.jpg', './exports/slides/blockchain/blockchain_06.jpg', './exports/slides/blockchain/blockchain_07.jpg', './exports/slides/blockchain/blockchain_08.jpg', './exports/slides/blockchain/blockchain_09.jpg', './exports/slides/blockchain/blockchain_10.jpg', './exports/slides/blockchain/blockchain_11.jpg', './exports/slides/blockchain/blockchain_12.jpg', './exports/slides/blockchain/blockchain_13.jpg', './exports/slides/blockchain/blockchain_14.jpg', './exports/slides/blockchain/blockchain_15.jpg', './exports/slides/blockchain/blockchain_16.jpg', './exports/slides/blockchain/blockchain_17.jpg', './exports/slides/blockchain/blockchain_18.jpg', './exports/slides/blockchain/blockchain_19.jpg', './exports/slides/blockchain/blockchain_20.jpg'])
+    //1
+    slidesslides.push(['./exports/slides/ai/ai_01.jpg', './exports/slides/ai/ai_02.jpg', './exports/slides/ai/ai_03.jpg', './exports/slides/ai/ai_04.jpg', './exports/slides/ai/ai_05.jpg', './exports/slides/ai/ai_06.jpg', './exports/slides/ai/ai_07.jpg', './exports/slides/ai/ai_08.jpg', './exports/slides/ai/ai_09.jpg', './exports/slides/ai/ai_10.jpg', './exports/slides/ai/ai_11.jpg', './exports/slides/ai/ai_12.jpg', './exports/slides/ai/ai_13.jpg'])
+    //2
+    slidesslides.push(['./exports/slides/cyber/cyber_1.jpg', './exports/slides/cyber/cyber_2.jpg', './exports/slides/cyber/cyber_3.jpg', './exports/slides/cyber/cyber_4.jpg', './exports/slides/cyber/cyber_5.jpg', './exports/slides/cyber/cyber_6.jpg'])
+    //3
+    slidesslides.push(['./exports/slides/innovation/innovation_01.jpg', './exports/slides/innovation/innovation_02.jpg', './exports/slides/innovation/innovation_03.jpg', './exports/slides/innovation/innovation_04.jpg', './exports/slides/innovation/innovation_05.jpg', './exports/slides/innovation/innovation_06.jpg', './exports/slides/innovation/innovation_07.jpg', './exports/slides/innovation/innovation_08.jpg', './exports/slides/innovation/innovation_09.jpg', './exports/slides/innovation/innovation_10.jpg', './exports/slides/innovation/innovation_11.jpg', './exports/slides/innovation/innovation_12.jpg', './exports/slides/innovation/innovation_13.jpg'])
+    //4
+    slidesslides.push(['./exports/slides/iot/iot_01.jpg', './exports/slides/iot/iot_02.jpg', './exports/slides/iot/iot_03.jpg', './exports/slides/iot/iot_04.jpg', './exports/slides/iot/iot_05.jpg', './exports/slides/iot/iot_06.jpg', './exports/slides/iot/iot_07.jpg', './exports/slides/iot/iot_08.jpg', './exports/slides/iot/iot_09.jpg', './exports/slides/iot/iot_10.jpg', './exports/slides/iot/iot_11.jpg', './exports/slides/iot/iot_12.jpg'])
+    //5
+    slidesslides.push(['./exports/slides/transform/transform_01.jpg', './exports/slides/transform/transform_02.jpg', './exports/slides/transform/transform_03.jpg', './exports/slides/transform/transform_04.jpg', './exports/slides/transform/transform_05.jpg', './exports/slides/transform/transform_06.jpg', './exports/slides/transform/transform_07.jpg', './exports/slides/transform/transform_08.jpg', './exports/slides/transform/transform_09.jpg', './exports/slides/transform/transform_10.jpg', './exports/slides/transform/transform_11.jpg'])
+    //6
+    slidesslides.push(['./exports/slides/arttech/Slide1.JPG', './exports/slides/arttech/Slide2.JPG', './exports/slides/arttech/Slide3.JPG', './exports/slides/arttech/Slide4.JPG'])
+    //7
+    slidesslides.push(['./exports/slides/future/future_01.jpg', './exports/slides/future/future_02.jpg', './exports/slides/future/future_03.jpg', './exports/slides/future/future_04.jpg', './exports/slides/future/future_05.jpg', './exports/slides/future/future_06.jpg', './exports/slides/future/future_07.jpg', './exports/slides/future/future_08.jpg', './exports/slides/future/future_09.jpg', './exports/slides/future/future_10.jpg', './exports/slides/future/future_11.jpg', './exports/slides/future/future_12.jpg', './exports/slides/future/future_13.jpg', './exports/slides/future/future_14.jpg', './exports/slides/future/future_15.jpg', './exports/slides/future/future_16.jpg']);
+    //8
+    slidesslides.push(['./exports/slides/ddmaster/dd_01.jpg', './exports/slides/ddmaster/dd_02.jpg', './exports/slides/ddmaster/dd_03.jpg', './exports/slides/ddmaster/dd_04.jpg', './exports/slides/ddmaster/dd_05.jpg', './exports/slides/ddmaster/dd_06.jpg', './exports/slides/ddmaster/dd_07.jpg', './exports/slides/ddmaster/dd_08.jpg', './exports/slides/ddmaster/dd_09.jpg', './exports/slides/ddmaster/dd_10.jpg', './exports/slides/ddmaster/dd_11.jpg', './exports/slides/ddmaster/dd_12.jpg', './exports/slides/ddmaster/dd_13.jpg', './exports/slides/ddmaster/dd_14.jpg', './exports/slides/ddmaster/dd_15.jpg', './exports/slides/ddmaster/dd_16.jpg', './exports/slides/ddmaster/dd_17.jpg', './exports/slides/ddmaster/dd_18.jpg', './exports/slides/ddmaster/dd_19.jpg', './exports/slides/ddmaster/dd_20.jpg', './exports/slides/ddmaster/dd_21.jpg', './exports/slides/ddmaster/dd_22.jpg', './exports/slides/ddmaster/dd_23.jpg', './exports/slides/ddmaster/dd_24.jpg', './exports/slides/ddmaster/dd_25.jpg', './exports/slides/ddmaster/dd_26.jpg', './exports/slides/ddmaster/dd_27.jpg', './exports/slides/ddmaster/dd_28.jpg', './exports/slides/ddmaster/dd_29.jpg', './exports/slides/ddmaster/dd_30.jpg', './exports/slides/ddmaster/dd_31.jpg', './exports/slides/ddmaster/dd_32.jpg', './exports/slides/ddmaster/dd_33.jpg', './exports/slides/ddmaster/dd_34.jpg', './exports/slides/ddmaster/dd_35.jpg', './exports/slides/ddmaster/dd_36.jpg', './exports/slides/ddmaster/dd_37.jpg', './exports/slides/ddmaster/dd_38.jpg', './exports/slides/ddmaster/dd_39.jpg', './exports/slides/ddmaster/dd_40.jpg', './exports/slides/ddmaster/dd_41.jpg', './exports/slides/ddmaster/dd_42.jpg', './exports/slides/ddmaster/dd_43.jpg', './exports/slides/ddmaster/dd_44.jpg', './exports/slides/ddmaster/dd_45.jpg', './exports/slides/ddmaster/dd_46.jpg', './exports/slides/ddmaster/dd_47.jpg', './exports/slides/ddmaster/dd_48.jpg', './exports/slides/ddmaster/dd_49.jpg', './exports/slides/ddmaster/dd_50.jpg', './exports/slides/ddmaster/dd_51.jpg', './exports/slides/ddmaster/dd_52.jpg', './exports/slides/ddmaster/dd_53.jpg', './exports/slides/ddmaster/dd_54.jpg', './exports/slides/ddmaster/dd_55.jpg', './exports/slides/ddmaster/dd_56.jpg', './exports/slides/ddmaster/dd_57.jpg', './exports/slides/ddmaster/dd_58.jpg', './exports/slides/ddmaster/dd_59.jpg', './exports/slides/ddmaster/dd_60.jpg', './exports/slides/ddmaster/dd_61.jpg', './exports/slides/ddmaster/dd_62.jpg', './exports/slides/ddmaster/dd_63.jpg', './exports/slides/ddmaster/dd_64.jpg', './exports/slides/ddmaster/dd_65.jpg', './exports/slides/ddmaster/dd_66.jpg', './exports/slides/ddmaster/dd_67.jpg', './exports/slides/ddmaster/dd_68.jpg', './exports/slides/ddmaster/dd_69.jpg', './exports/slides/ddmaster/dd_70.jpg', './exports/slides/ddmaster/dd_71.jpg', './exports/slides/ddmaster/dd_72.jpg', './exports/slides/ddmaster/dd_73.jpg', './exports/slides/ddmaster/dd_74.jpg', './exports/slides/ddmaster/dd_75.jpg', './exports/slides/ddmaster/dd_76.jpg', './exports/slides/ddmaster/dd_77.jpg', './exports/slides/ddmaster/dd_78.jpg', './exports/slides/ddmaster/dd_79.jpg', './exports/slides/ddmaster/dd_80.jpg']);
+    //9
+    slidesslides.push(['./exports/slides/idmaster/id_01.jpg', './exports/slides/idmaster/id_02.jpg', './exports/slides/idmaster/id_03.jpg', './exports/slides/idmaster/id_04.jpg', './exports/slides/idmaster/id_05.jpg', './exports/slides/idmaster/id_06.jpg', './exports/slides/idmaster/id_07.jpg', './exports/slides/idmaster/id_08.jpg', './exports/slides/idmaster/id_09.jpg', './exports/slides/idmaster/id_10.jpg', './exports/slides/idmaster/id_11.jpg', './exports/slides/idmaster/id_12.jpg', './exports/slides/idmaster/id_13.jpg', './exports/slides/idmaster/id_14.jpg', './exports/slides/idmaster/id_15.jpg', './exports/slides/idmaster/id_16.jpg', './exports/slides/idmaster/id_17.jpg', './exports/slides/idmaster/id_18.jpg', './exports/slides/idmaster/id_19.jpg', './exports/slides/idmaster/id_20.jpg', './exports/slides/idmaster/id_21.jpg', './exports/slides/idmaster/id_22.jpg', './exports/slides/idmaster/id_23.jpg', './exports/slides/idmaster/id_24.jpg', './exports/slides/idmaster/id_25.jpg', './exports/slides/idmaster/id_26.jpg']);
+    //10
+    slidesslides.push(['./exports/slides/customercentric/Slide1.JPG', './exports/slides/customercentric/Slide2.JPG', './exports/slides/customercentric/Slide3.JPG', './exports/slides/customercentric/Slide4.JPG', './exports/slides/customercentric/Slide5.JPG', './exports/slides/customercentric/Slide6.JPG']);
+    //11
+    slidesslides.push(['./exports/slides/dreamgap/Slide1.JPG', './exports/slides/dreamgap/Slide2.JPG', './exports/slides/dreamgap/Slide3.JPG', './exports/slides/dreamgap/Slide4.JPG']);
+    //12
+    slidesslides.push(['./exports/slides/dynamicrisk/Slide1.JPG', './exports/slides/dynamicrisk/Slide2.JPG', './exports/slides/dynamicrisk/Slide3.JPG', './exports/slides/dynamicrisk/Slide4.JPG', './exports/slides/dynamicrisk/Slide5.JPG']);
+    //13
+    slidesslides.push(['./exports/slides/hybridwork/Slide1.JPG', './exports/slides/hybridwork/Slide2.JPG', './exports/slides/hybridwork/Slide3.JPG', './exports/slides/hybridwork/Slide4.JPG', './exports/slides/hybridwork/Slide5.JPG']);
+    //14
+    slidesslides.push(['./exports/slides/innovationscale/Slide1.JPG', './exports/slides/innovationscale/Slide2.JPG', './exports/slides/innovationscale/Slide3.JPG', './exports/slides/innovationscale/Slide4.JPG', './exports/slides/innovationscale/Slide5.JPG', './exports/slides/innovationscale/Slide6.JPG']);
+    //15
+    slidesslides.push(['./exports/slides/personalizedcare/Slide1.JPG', './exports/slides/personalizedcare/Slide2.JPG', './exports/slides/personalizedcare/Slide3.JPG', './exports/slides/personalizedcare/Slide4.JPG', './exports/slides/personalizedcare/Slide5.JPG']);
+    //16
+    slidesslides.push(['./exports/slides/regeninnovation/Slide1.JPG', './exports/slides/regeninnovation/Slide2.JPG', './exports/slides/regeninnovation/Slide3.JPG', './exports/slides/regeninnovation/Slide4.JPG', './exports/slides/regeninnovation/Slide5.JPG']);
+    //17
+    slidesslides.push(['./exports/slides/skillsrequirements/Slide1.JPG', './exports/slides/skillsrequirements/Slide2.JPG', './exports/slides/skillsrequirements/Slide3.JPG', './exports/slides/skillsrequirements/Slide4.JPG']);
+    //18
+    slidesslides.push(['./exports/slides/sustainfood/Slide1.JPG', './exports/slides/sustainfood/Slide2.JPG', './exports/slides/sustainfood/Slide3.JPG', './exports/slides/sustainfood/Slide4.JPG', './exports/slides/sustainfood/Slide5.JPG', './exports/slides/sustainfood/Slide6.JPG']);
+    //19
+    slidesslides.push(['./exports/slides/sustainstrategy/Slide1.JPG', './exports/slides/sustainstrategy/Slide2.JPG', './exports/slides/sustainstrategy/Slide3.JPG', './exports/slides/sustainstrategy/Slide4.JPG', './exports/slides/sustainstrategy/Slide5.JPG']);
+    //20
+    slidesslides.push(['./exports/slides/techatspeed/Slide1.JPG', './exports/slides/techatspeed/Slide2.JPG', './exports/slides/techatspeed/Slide3.JPG', './exports/slides/techatspeed/Slide4.JPG']);
+    //21
+    slidesslides.push(['./exports/slides/transformationtransition/Slide1.JPG', './exports/slides/transformationtransition/Slide2.JPG', './exports/slides/transformationtransition/Slide3.JPG', './exports/slides/transformationtransition/Slide4.JPG', './exports/slides/transformationtransition/Slide5.JPG']);
+    //22
+    slidesslides.push(['./exports/slides/innovationsg/Slide1.JPG', './exports/slides/innovationsg/Slide2.JPG', './exports/slides/innovationsg/Slide3.JPG', './exports/slides/innovationsg/Slide4.JPG', './exports/slides/innovationsg/Slide5.JPG', './exports/slides/innovationsg/Slide6.JPG', './exports/slides/innovationsg/Slide7.JPG', './exports/slides/innovationsg/Slide8.JPG', './exports/slides/innovationsg/Slide9.JPG']);
+    //23
+    slidesslides.push(['./exports/slides/technologysg/Slide1.JPG', './exports/slides/technologysg/Slide2.JPG', './exports/slides/technologysg/Slide3.JPG', './exports/slides/technologysg/Slide4.JPG', './exports/slides/technologysg/Slide5.JPG', './exports/slides/technologysg/Slide6.JPG', './exports/slides/technologysg/Slide7.JPG', './exports/slides/technologysg/Slide8.JPG', './exports/slides/technologysg/Slide9.JPG', './exports/slides/technologysg/Slide910.JPG', './exports/slides/technologysg/Slide911.JPG', './exports/slides/technologysg/Slide912.JPG', './exports/slides/technologysg/Slide913.JPG', './exports/slides/technologysg/Slide914.JPG', './exports/slides/technologysg/Slide915.JPG'])
+    //24
+    slidesslides.push(['./exports/slides/transformationsg/Slide1.JPG', './exports/slides/transformationsg/Slide2.JPG', './exports/slides/transformationsg/Slide3.JPG', './exports/slides/transformationsg/Slide4.JPG', './exports/slides/transformationsg/Slide5.JPG', './exports/slides/transformationsg/Slide6.JPG', './exports/slides/transformationsg/Slide7.JPG', './exports/slides/transformationsg/Slide8.JPG', './exports/slides/transformationsg/Slide9.JPG', './exports/slides/transformationsg/Slide910.JPG', './exports/slides/transformationsg/Slide911.JPG']);
+    //25
+    slidesslides.push(['./exports/slides/transformbusiness/Slide1.JPG', './exports/slides/transformbusiness/Slide2.JPG', './exports/slides/transformbusiness/Slide3.JPG', './exports/slides/transformbusiness/Slide4.JPG']);
+    //26
+    slidesslides.push(['./exports/slides/metaversecloud/Slide1.JPG', './exports/slides/metaversecloud/Slide2.JPG', './exports/slides/metaversecloud/Slide3.JPG', './exports/slides/metaversecloud/Slide4.JPG']);
+    //27
+    slidesslides.push(['./exports/slides/arttechinnovation/Slide1.JPG', './exports/slides/arttechinnovation/Slide2.JPG', './exports/slides/arttechinnovation/Slide3.JPG', './exports/slides/arttechinnovation/Slide4.JPG']);
+    //28
+    slidesslides.push(['./exports/slides/ecosystems/Slide1.JPG', './exports/slides/ecosystems/Slide2.JPG', './exports/slides/ecosystems/Slide3.JPG', './exports/slides/ecosystems/Slide4.JPG', './exports/slides/ecosystems/Slide5.JPG', './exports/slides/ecosystems/Slide6.JPG', './exports/slides/ecosystems/Slide7.JPG', './exports/slides/ecosystems/Slide8.JPG']);
+    //29
+    slidesslides.push(['./exports/slides/IRHighlights/Slide1.JPG', './exports/slides/IRHighlights/Slide2.JPG', './exports/slides/IRHighlights/Slide3.JPG', './exports/slides/IRHighlights/Slide4.JPG', './exports/slides/IRHighlights/Slide5.JPG', './exports/slides/IRHighlights/Slide6.JPG']);
+    //30
+    slidesslides.push(['./exports/slides/DataTransformation/Slide1.JPG', './exports/slides/DataTransformation/Slide2.JPG', './exports/slides/DataTransformation/Slide3.JPG', './exports/slides/DataTransformation/Slide4.JPG']);
+    //31
+    slidesslides.push(['./exports/slides/pandemicendemic/Slide1.JPG', './exports/slides/pandemicendemic/Slide2.JPG', './exports/slides/pandemicendemic/Slide3.JPG', './exports/slides/pandemicendemic/Slide4.JPG']);
+    //32
+    slidesslides.push(['./exports/slides/McgrathCEO360/Slide1.JPG', './exports/slides/McgrathCEO360/Slide2.JPG', './exports/slides/McgrathCEO360/Slide3.JPG']);
+    //33
+    slidesslides.push(['./exports/slides/metaverse/Slide1.JPG', './exports/slides/metaverse/Slide10.JPG', './exports/slides/metaverse/Slide11.JPG', './exports/slides/metaverse/Slide12.JPG', './exports/slides/metaverse/Slide2.JPG', './exports/slides/metaverse/Slide3.JPG', './exports/slides/metaverse/Slide4.JPG', './exports/slides/metaverse/Slide5.JPG', './exports/slides/metaverse/Slide6.JPG', './exports/slides/metaverse/Slide7.JPG', './exports/slides/metaverse/Slide8.JPG', './exports/slides/metaverse/Slide9.JPG']);
+
+    for(var i = 0; i < slidesslides.length; i++){
+        var newDeck = []
+
+        for(var j = 0; j < slidesslides[i].length; j++){
+           
+            //console.log(slidesslides[i][j])
+            newDeck.push(slidesslides[i][j]);
+        }
+        slideDecks.push(newDeck);
+        firstSlides.push(makeLambertTexture(slidesslides[i][0]))
+        //console.log("deck pushed" + newDeck.length)
+    }
+    //slides[0] = textureLoader.load('/exports/slides/slide1.png')
+    //slides[1] = textureLoader.load('/exports/slides/slide2.png')
+    //slides[2] = textureLoader.load('/exports/slides/slide3.png')
+}
+
 
 function switchCamera(p){
     if(p){
         camera = pcamera;
+        //camera.position.set(pcamera.position);
         slidecammode = false;
         
     }
@@ -1194,6 +1322,7 @@ function switchCamera(p){
             pcamera = camera;
         }
         camera = ocamera;
+        //camera.position.set(ocamera.position)
         slidecammode = true;
     }
 }
@@ -1292,6 +1421,230 @@ function displaySlideScreen(){
 
     updateSlideScreen();
 
+}
+
+
+function exitSlideModeHTML(){
+    console.log("exit")
+    slideMode = false;
+    actualSlideMode = false;
+    document.getElementById("slideviewer").style.visibility = "hidden";
+    document.getElementById("fourviewer").style.visibility = "hidden";
+    document.getElementById("sixviewer").style.visibility = "hidden";
+    document.getElementById("nextbutton").style.visibility = "hidden";
+    document.getElementById("backbutton").style.visibility = "hidden";
+    document.getElementById("contactbutton").style.visibility = "hidden";
+    document.getElementById("slidexbutton").style.visibility = "hidden";
+    document.getElementById("return").style.visibility = "visible";
+    document.getElementById("controlbutton").style.visibility = "visible";
+    document.getElementById("controller").style.visibility = "visible";
+}
+
+function enterSlideModeHTML(){
+    slides = slideDecks[slideIndices[slideMesh.name]];
+    updateSlideScreenHTML();
+    slideMode = true;
+    actualSlideMode = true;
+    document.getElementById("slidexbutton").style.visibility = "visible";
+    document.getElementById("slideviewer").style.visibility = "visible";
+    document.getElementById("return").style.visibility = "hidden";
+    document.getElementById("controlbutton").style.visibility = "hidden";
+    document.getElementById("controller").style.visibility = "hidden";
+}
+
+function enterSlideModeHTMLFour(ind){
+    slideMode = true;
+    document.getElementById("fourviewer").style.visibility = "visible";
+    if(ind==0){
+        document.getElementById("slide1").src = slideDecks[slideIndices['IZ_screen_1']][0];
+        document.getElementById("slide1").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('IZ_screen_1');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+        document.getElementById("slide2").src = slideDecks[slideIndices['IZ_screen_2']][0];
+        document.getElementById("slide2").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('IZ_screen_2');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+        document.getElementById("slide3").src = slideDecks[slideIndices['IZ_screen_3']][0];
+        document.getElementById("slide3").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('IZ_screen_3');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+        document.getElementById("slide4").src = slideDecks[slideIndices['IZ_screen_4']][0];
+        document.getElementById("slide4").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('IZ_screen_4');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+    }
+    else if(ind==1){
+        document.getElementById("slide1").src = slideDecks[slideIndices['Purple_pod_screen_1']][0];
+        document.getElementById("slide1").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('Purple_pod_screen_1');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+        document.getElementById("slide2").src = slideDecks[slideIndices['Purple_pod_screen_2']][0];
+        document.getElementById("slide2").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('Purple_pod_screen_2');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+        document.getElementById("slide3").src = slideDecks[slideIndices['Purple_pod_screen_3']][0];
+        document.getElementById("slide3").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('Purple_pod_screen_3');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        })
+        document.getElementById("slide4").src = slideDecks[slideIndices['Purple_pod_screen_4']][0];
+        document.getElementById("slide4").addEventListener('click', function( event ){
+            slideMesh = scene.getObjectByName('Purple_pod_screen_4');
+            document.getElementById("fourviewer").style.visibility = "hidden";
+            enterSlideModeHTML();
+        }) 
+    }
+}
+
+function enterSlideModeHTMLSix(){
+    slideMode = true;
+    document.getElementById("sixviewer").style.visibility = "visible";
+    document.getElementById("slide1a").src = slideDecks[slideIndices['infinite_possibilities_screen_1']][0];
+    document.getElementById("slide1a").addEventListener('click', function( event ){
+        slideMesh = scene.getObjectByName('infinite_possibilities_screen_1');
+        document.getElementById("sixviewer").style.visibility = "hidden";
+        enterSlideModeHTML();
+    })
+    document.getElementById("slide2a").src = slideDecks[slideIndices['infinite_possibilities_screen_2']][0];
+    document.getElementById("slide2a").addEventListener('click', function( event ){
+        slideMesh = scene.getObjectByName('infinite_possibilities_screen_2');
+        document.getElementById("sixviewer").style.visibility = "hidden";
+        enterSlideModeHTML();
+    })
+    document.getElementById("slide4a").src = slideDecks[slideIndices['infinite_possibilities_screen_3']][0];
+    document.getElementById("slide4a").addEventListener('click', function( event ){
+        slideMesh = scene.getObjectByName('infinite_possibilities_screen_3');
+        document.getElementById("sixviewer").style.visibility = "hidden";
+        enterSlideModeHTML();
+    })
+    document.getElementById("slide5a").src = slideDecks[slideIndices['infinite_possibilities_screen_4']][0];
+    document.getElementById("slide5a").addEventListener('click', function( event ){
+        slideMesh = scene.getObjectByName('infinite_possibilities_screen_4');
+        document.getElementById("fourviewer").style.visibility = "hidden";
+        enterSlideModeHTML();
+    }) 
+    document.getElementById("slide3a").src = slideDecks[slideIndices['infinite_possibilities_screen_005']][0];
+    document.getElementById("slide3a").addEventListener('click', function( event ){
+        slideMesh = scene.getObjectByName('infinite_possibilities_screen_005');
+        document.getElementById("sixviewer").style.visibility = "hidden";
+        enterSlideModeHTML();
+    })
+    document.getElementById("slide6a").src = slideDecks[slideIndices['infinite_possibilities_screen_006']][0];
+    document.getElementById("slide6a").addEventListener('click', function( event ){
+        slideMesh = scene.getObjectByName('infinite_possibilities_screen_006');
+        document.getElementById("fourviewer").style.visibility = "hidden";
+        enterSlideModeHTML();
+    }) 
+}
+
+function incrementSlide(){
+    changeSlideHTML(true);
+}
+function decreaseSlide(){
+    changeSlideHTML(false);
+}
+function changeSlideHTML(plus){
+    if(plus){
+        if(currentSlide<(slides.length-1)){
+            currentSlide++;
+        }
+    }
+    else{
+        if(currentSlide>0){
+            currentSlide--;
+        }
+    }
+    updateSlideScreenHTML();
+}
+
+function addListeners(){
+    document.getElementById("nextbutton").addEventListener('click', incrementSlide)
+    document.getElementById("nextbutton").addEventListener('mouseover',  function( event ) {
+        document.getElementById("nextbutton").src = './exports/buttons/nextbblack.jpg' 
+        
+    })
+    document.getElementById("nextbutton").addEventListener('mouseout',  function( event ) {
+        document.getElementById("nextbutton").src = './exports/buttons/nextb.jpg' 
+        
+    })
+    document.getElementById("backbutton").addEventListener('click', decreaseSlide)
+    document.getElementById("backbutton").addEventListener('mouseover',  function( event ) {
+        document.getElementById("backbutton").src = './exports/buttons/backbblack.jpg' 
+        
+    })
+    document.getElementById("backbutton").addEventListener('mouseout',  function( event ) {
+        document.getElementById("backbutton").src = './exports/buttons/backb.jpg' 
+        
+    })
+    document.getElementById("contactbutton").addEventListener('click', contactPerson)
+    document.getElementById("slidexbutton").addEventListener('click', exitSlideModeHTML)
+    document.getElementById("fourslidexbutton").addEventListener('click', exitSlideModeHTML)
+    document.getElementById("sixslidexbutton").addEventListener('click', exitSlideModeHTML)
+}
+
+function updateSlideScreenHTML(){
+    console.log('slide is ' + currentSlide)
+    document.getElementById("slide").src = slides[currentSlide];
+    var nm = true;
+    var bm = true;
+    var cm = false;
+    if(currentSlide==slides.length-1){
+        nm = false;
+        bm = true;
+    }
+    if(currentSlide==0){
+        nm = true;
+        bm = false;
+        cm = false;
+    }
+    if(currentSlide == slides.length - Math.min((1+contactSlides[slideMesh.name]), 3)||(currentSlide==2)&&slideMesh.name=='infinite_possibilities_screen_3'){
+        console.log('contact')
+        cm = true;
+        var cmpos = htmlpos[slidePos[slideMesh.name]];
+        console.log("left is " + cmpos[0] + " top is " + (window.innerWidth/1280));
+        document.getElementById("contactbutton").style.left = cmpos[0] + "%"
+        document.getElementById("contactbutton").style.top = 50+(cmpos[1]-50)*(window.innerWidth/1280) + "%"
+    }
+
+    if(nm){
+        document.getElementById("nextbutton").style.visibility = "visible"
+    }
+    else{
+        document.getElementById("nextbutton").style.visibility = "hidden"
+    }
+    if(bm){
+        document.getElementById("backbutton").style.visibility = "visible"
+    }
+    else{
+        document.getElementById("backbutton").style.visibility = "hidden"
+    }
+    if(cm){
+        document.getElementById("contactbutton").style.visibility = "visible"
+    }
+    else{
+        document.getElementById("contactbutton").style.visibility = "hidden"
+    }
+}
+
+function contactPerson(){
+    var maillink = 'mailto:' + contactEmails[slideMesh.name];
+    if(slideMesh.name=='infinite_possibilities_screen_3'&&currentSlide==3){
+        maillink = 'mailto:Juan.Uro@parthenon.ey.com, edwina.fitzmaurice@ey.com';
+    }
+    window.open(maillink , '_blank');
 }
 
 function updateSlideScreen(){
